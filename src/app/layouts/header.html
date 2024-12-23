@@ -1,0 +1,374 @@
+﻿<div class="z-40 shadow-sm dark bg-white dark:bg-[#0e1726] dark:text-white-dark" [ngClass]="{ 'dark text-white-dark': store.semidark && store.menu === 'horizontal'}">
+    <div class="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-[#0e1726]">
+        <div class="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
+            <a routerLink="/dashboard" class="main-logo flex shrink-0 items-center">
+                <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.svg" alt="" />
+                <span
+                    class="hidden align-middle text-2xl font-semibold transition-all duration-300 dark:text-white-light md:inline ltr:ml-1.5 rtl:mr-1.5">
+                    360restoran
+                </span>
+            </a>
+
+            <a href="javascript:;"
+                class="collapse-icon flex flex-none rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6] lg:hidden ltr:ml-2 rtl:mr-2"
+                (click)="storeData.dispatch({type: 'toggleSidebar'})">
+                <icon-menu class="h-5 w-5" />
+            </a>
+        </div>
+        <div class="hidden sm:block ltr:mr-2 rtl:ml-2">
+            <ul class="flex items-center space-x-2 dark:text-[#d0d2d6] rtl:space-x-reverse">
+                <li>
+                    <a routerLink="/apps/calendar"
+                        class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60">
+                        <icon-calendar />
+                    </a>
+                </li>
+
+                <li>
+                    <a routerLink="/apps/todolist"
+                        class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60">
+                        <icon-clipboard-text  />
+                    </a>
+                </li>
+                <li *ngIf="userRole === 'admin' || userRole === 'Destek'">
+                    <a routerLink="/apps/chat"
+                        class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60">
+                        <icon-chat-dot />
+                    </a>
+                </li>
+                <li *ngIf="userRole === 'admin' || userRole === 'Destek'">
+                    <a routerLink="/apps/permission"
+                        class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60">
+                        <icon-settings />
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div
+            class="flex items-center space-x-1.5 dark:text-[#d0d2d6] sm:flex-1 lg:space-x-2 ltr:ml-auto ltr:sm:ml-0 rtl:mr-auto rtl:space-x-reverse sm:rtl:mr-0">
+            <div class="sm:ltr:mr-auto sm:rtl:ml-auto">
+                <form
+                class="absolute inset-x-0 top-1/2 z-10 mx-4 hidden -translate-y-1/2 sm:relative sm:top-0 sm:mx-0 sm:block sm:translate-y-0"
+                [ngClass]="{ '!block': search }" (submit.prevent)="search = false">
+                <div class="relative">
+                    <input type="text"
+                        [(ngModel)]="searchQueryinpu"
+                        [ngModelOptions]="{ standalone: true }"
+                        (input)="onSearchQueryChanged()"
+                        class="peer form-input bg-gray-100 placeholder:tracking-widest sm:bg-transparent ltr:pl-9 ltr:pr-9 ltr:sm:pr-4 rtl:pl-9 rtl:pr-9 rtl:sm:pl-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="{{ 'search' | translate }}..." />
+                    <button type="button"
+                        class="absolute inset-0 h-9 w-9 appearance-none peer-focus:text-primary ltr:right-auto rtl:left-auto">
+                        <icon-search class="mx-auto"></icon-search>
+                    </button>
+                    <!-- Autocomplete List -->
+                    <ul
+                        class="absolute z-10 w-full bg-white border border-gray-200 shadow-lg mt-2 dark:bg-gray-700 dark:border-gray-600"
+                        *ngIf="filteredPages.length > 0">
+                        <li
+                            *ngFor="let page of filteredPages"
+                            (click)="selectPage(page)"
+                            class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                            {{ page.name }}
+                        </li>
+                    </ul>
+                </div>
+            </form>
+            </div>
+            <div *ngIf="userRole === 'Destek'" class="mb-4">
+
+                <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        (change)="onDataChange($event)"
+                        [(ngModel)]="selectedData">
+                  <option *ngFor="let item of specialDataList" [value]="item._id">
+                    {{item.kullaniciAdi}}
+                  </option>
+                </select>
+              </div>
+            <div>
+                <a href="javascript:;" *ngIf="store.theme === 'light'"
+                    class="flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]"
+                    (click)="storeData.dispatch({type: 'toggleTheme', payload:'dark'})">
+                    <icon-sun />
+                </a>
+                <a href="javascript:;" *ngIf="store.theme === 'dark'"
+                    class="flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]"
+                    (click)="storeData.dispatch({type: 'toggleTheme', payload:'system'})">
+                    <icon-moon />
+                </a>
+                <a href="javascript:;" *ngIf="store.theme === 'system'"
+                    class="flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]"
+                    (click)="storeData.dispatch({type: 'toggleTheme', payload:'light'})">
+                    <icon-laptop />
+                </a>
+            </div>
+
+            <div>
+                <a href="javascript:;"
+                   class="flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary
+                          dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]"
+                   (click)="toggleFullScreen()"
+                   title="Tam Ekran">
+                   <svg
+                   xmlns="http://www.w3.org/2000/svg"
+                   class="h-5 w-5"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   aria-hidden="true"
+               >
+                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3" />
+               </svg>
+                </a>
+            </div>
+
+            <div class="dropdown shrink-0">
+                <div hlMenu>
+                    <button type="button" hlMenuButton
+                        class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]">
+                        <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="flag"
+                            class="h-5 w-5 rounded-full object-cover" />
+                    </button>
+                    <ul *hlMenuItems @toggleAnimation
+                        class="top-11 grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:-right-14 sm:ltr:-right-2 rtl:-left-14 sm:rtl:-left-2 dark:bg-gray-800 dark:border dark:border-white-light/10 dark:divide-white-light/10">
+                        <li *ngFor="let item of store.languageList;">
+                            <button *hlMenuItem="let menuItem" type="button" class="w-full hover:text-primary flex items-center p-2 rounded-md dark:hover:bg-gray-700"
+                                [ngClass]="{ 'bg-primary/10 text-primary': translate.currentLang === item.code }"
+                                (click)="changeLanguage(item)">
+                                <img class="h-5 w-5 rounded-full object-cover"
+                                    [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                                <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+    <!-- Sohbet Paneli -->
+<div class="dropdown shrink-0">
+    <div>
+        <button (click)="toggleLiveChat()"
+            class="fixed bottom-4 right-4 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-dark z-50">
+            <icon-chat-dot />
+            {{ 'LIVE_SUPPORT' | translate }}
+        </button>
+
+        <ng-container *ngIf="isLiveChatOpen">
+            <div class="fixed bottom-16 right-4 w-72 h-96 bg-white dark:bg-gray-800 dark:text-white p-4 shadow-lg rounded-lg z-50 flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-lg font-bold">{{ 'LIVE_SUPPORT_CHAT' | translate }}</h3>
+                    <button (click)="toggleLiveChat()" class="hover:text-primary">
+                        <icon-chat-notification />
+                    </button>
+                </div>
+
+                <div class="h-64 overflow-y-auto p-2 border-b dark:border-white-light/10" id="chatBox">
+                    <!-- Sohbetteki Mesajları Göster -->
+                    <div *ngFor="let message of liveChatMessages" class="mb-2" [ngClass]="{'text-right': message.isUser, 'text-left': !message.isUser}">
+                        <div [ngClass]="{'text-right': message.isUser, 'text-left': !message.isUser}" class="text-xs font-semibold text-gray-500 dark:text-gray-300">
+                            <span>{{ message.senderName }}</span>
+                        </div>
+                        <p [ngClass]="{'bg-primary text-white': message.isUser, 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white': !message.isUser}"
+                           class="inline-block p-2 rounded-md my-1 max-w-xs">
+                            {{ message.text }}
+                        </p>
+                        <div [ngClass]="{'text-right': message.isUser, 'text-left': !message.isUser}" class="text-xs text-gray-400 mt-1 dark:text-gray-300">
+                            <span>{{ getTimeAgo(message.createdAt) }}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="isWaitingForSupport()" class="text-center text-sm text-gray-500 mt-4 dark:text-gray-300">
+                        {{ 'WAITING_FOR_SUPPORT' | translate }}
+                    </div>
+                </div>
+
+                <div class="flex items-center mt-4">
+                    <input [(ngModel)]="liveChatMessage" type="text" class="flex-grow p-2 border rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        placeholder="{{ 'TYPE_YOUR_MESSAGE' | translate }}" (keyup.enter)="sendLiveChatMessage()" />
+                    <button (click)="sendLiveChatMessage()" class="ml-2 p-2 bg-primary text-white rounded-md hover:bg-primary-dark">
+                        <icon-send />
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+
+            <div class="dropdown shrink-0">
+                <div hlMenu>
+                    <button type="button" hlMenuButton
+                    class="relative block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 dark:text-[#d0d2d6]">
+                <icon-bell-bing></icon-bell-bing>
+
+                <span *ngIf="notifications.length > 0" class="absolute top-0 flex h-3 w-3 ltr:right-0 rtl:left-0">
+                    <span
+                        class="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-success/50 opacity-75 ltr:-left-[3px] rtl:-right-[3px]"></span>
+                    <span class="relative inline-flex h-[6px] w-[6px] rounded-full bg-success"></span>
+                </span>
+            </button>
+                    <ul *hlMenuItems @toggleAnimation
+                    class="top-11 w-[300px] divide-y !py-0 text-dark dark:text-white-dark dark:text-white-light/90 dark:bg-gray-800 dark:divide-white-light/10 ltr:-right-2 rtl:-left-2">
+                    <li>
+                        <div class="flex items-center justify-between px-4 py-2 font-semibold">
+                            <h4 class="text-lg dark:text-white-light">{{ 'notifications' | translate }}</h4>
+                            <span *ngIf="notifications.length" class="badge bg-primary/80">{{notifications.length + ' New'}}</span>
+                        </div>
+                    </li>
+                    <li *ngFor="let notification of notifications" class="dark:text-white-light/90">
+                        <div class="group flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <div class="grid place-content-center rounded">
+                                <div class="relative h-12 w-12">
+                                    <img class="h-12 w-12 rounded-full object-cover"
+                                        [src]="'/assets/images/' + notification.profileImage" alt="" />
+                                    <span class="absolute bottom-0 right-[6px] block h-2 w-2 rounded-full bg-success"></span>
+                                </div>
+                            </div>
+                            <div class="flex flex-auto ltr:pl-3 rtl:pr-3">
+                                <div class="ltr:pr-3 rtl:pl-3">
+                                    <h6 [innerHTML]="notification.message" class="dark:text-white-light"></h6>
+                                    <span class="block text-xs font-normal text-gray-500 dark:text-gray-400">{{notification.createdAt | date:'short'}}</span>
+                                </div>
+                                <button type="button"
+                                    class="text-neutral-300 opacity-0 hover:text-danger group-hover:opacity-100 ltr:ml-auto rtl:mr-auto"
+                                    (click)="removeNotification(notification._id)">
+                                    <icon-x-circle />
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                    <li *ngIf="!notifications.length">
+                        <div class="!grid min-h-[200px] place-content-center text-lg hover:!bg-transparent dark:text-white-light">
+                            <div class="mx-auto mb-4 rounded-full text-primary ring-4 ring-primary/30">
+                                <icon-info-circle [fill]="true" class="h-10 w-10" />
+                            </div>
+                            No data available.
+                        </div>
+                    </li>
+                </ul>
+
+                </div>
+            </div>
+
+            <div class="dropdown shrink-0">
+                <div hlMenu class="!block">
+                    <button type="button" hlMenuButton class="group relative block">
+                        <img class="h-9 w-9 rounded-full object-cover group-hover:saturate-100"
+                            [src]="userAvatar ? ('data:image/jpeg;base64,' + userAvatar) : '/assets/images/profile-34.jpeg'"
+                            alt="Profile Picture" />
+                    </button>
+                    <ul *hlMenuItems @toggleAnimation
+                        class="top-11 w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:right-0 rtl:left-0 dark:bg-gray-800 dark:divide-white-light/10">
+                        <li>
+                            <div class="flex items-center px-4 py-4">
+                                <div class="flex-none">
+                                    <img class="h-10 w-10 rounded-md object-cover"
+                                        [src]="userAvatar ? ('data:image/jpeg;base64,' + userAvatar) : '/assets/images/profile-34.jpeg'"
+                                        alt="Profile Picture" />
+                                </div>
+                                <div class="truncate ltr:pl-4 rtl:pr-4">
+                                    <h4 class="text-base dark:text-white-light">
+                                        {{userName}}<span
+                                            class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">{{userPaketbilgisi}}</span>
+                                    </h4>
+                                    <a class="text-black/60 hover:text-primary dark:text-white-light/60 dark:hover:text-white"
+                                        href="javascript:;">
+                                        {{userEmail}}
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a routerLink="/users/profile" *hlMenuItem="let menuItem" class="dark:hover:text-white flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <icon-user class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                {{ 'profileheader' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/apps/mailbox" *hlMenuItem="let menuItem" class="dark:hover:text-white flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <icon-mail class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                {{ 'inbox' | translate }}
+                            </a>
+                        </li>
+                        <li (click)="navigateToLockScreen()">
+                            <a class="dark:hover:text-white flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <icon-lock-dots class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                {{ 'lockscreen' | translate }}
+                            </a>
+                        </li>
+                        <li class="border-t border-white-light dark:border-white-light/10">
+                            <a routerLink="/#/auth/cover-login" (click)="logout()" *hlMenuItem="let menuItem"
+                                class="!py-3 text-danger flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <icon-logout class="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
+                                {{ 'signout' | translate }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="horizontal-menu hidden border-t border-[#ebedf2] bg-white px-6 py-1.5 font-semibold text-black dark:border-[#191e3a] dark:bg-[#0e1726] dark:text-white-dark lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse">
+        <li  class="menu nav-item dark:text-white-dark">
+            <a  *ngIf="userRole === 'admin' || userRole === 'Destek'  || userRole === 'User'"  href="javascript:;"  class="nav-link dark:hover:text-white">
+                <div class="flex items-center">
+                    <icon-menu-dashboard class="shrink-0" />
+                    <span class="px-2">{{ 'dashboard' | translate }}</span>
+                </div>
+                <div class="right_arrow">
+                    <icon-caret-down />
+                </div>
+            </a>
+            <ul *ngIf="userRole === 'admin' || userRole === 'Destek' || userRole === 'User'" class="sub-menu dark:bg-gray-800 dark:text-white-light dark:border-white-light/10">
+                <li *ngIf="userRole === 'admin' || userRole === 'Destek' || userRole === 'User'">
+                    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dark:hover:bg-gray-700 dark:hover:text-white">{{ 'sales' | translate }}</a>
+                </li>
+                <li *ngIf="userRole === 'admin' || userRole === 'Destek'   || userRole === 'User'">
+                    <a routerLink="/analytics" routerLinkActive="active" class="dark:hover:bg-gray-700 dark:hover:text-white">{{ 'analytics' | translate }}</a>
+                </li>
+                <li *ngIf="userRole === 'admin' || userRole === 'Destek'  || userRole === 'User'">
+                    <a routerLink="/finance" routerLinkActive="active" class="dark:hover:bg-gray-700 dark:hover:text-white">{{ 'finance' | translate }}</a>
+                </li>
+
+            </ul>
+        </li>
+
+        <ng-container *ngFor="let modulObj of modulesData">
+            <li class="menu nav-item relative dark:text-white-dark">
+                <a href="javascript:;" class="nav-link dark:hover:text-white">
+                    <div class="flex items-center">
+                        <icon-menu-apps class="shrink-0" />
+                        <span class="px-2">{{ modulObj.modul.name }}</span>
+                    </div>
+                    <div class="right_arrow">
+                        <icon-caret-down />
+                    </div>
+                </a>
+                <ul class="sub-menu dark:bg-gray-800 dark:text-white-light dark:border-white-light/10">
+                    <ng-container *ngFor="let altModulObj of modulObj.altModuller">
+                        <li class="relative dark:text-white-light">
+                            <a href="javascript:;" class="dark:hover:bg-gray-700 dark:hover:text-white">
+                                {{ altModulObj.altModul.name }}
+                                <div class="-rotate-90 ltr:ml-auto rtl:mr-auto rtl:rotate-90">
+                                    <icon-caret-down />
+                                </div>
+                            </a>
+                            <ul class="absolute top-0 z-[10] hidden min-w-[180px] rounded bg-white p-0 py-2 text-dark shadow dark:bg-gray-800 dark:text-white-dark ltr:left-[95%] rtl:right-[95%] dark:border dark:border-white-light/10">
+                                <ng-container *ngFor="let sayfa of altModulObj.sayfalar">
+                                    <li>
+                                        <a [routerLink]="'/apps/' + sayfa.kod" routerLinkActive="active"
+                                           class="block py-1 dark:hover:bg-gray-700 dark:hover:text-white">
+                                           {{ sayfa.name}}
+                                        </a>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </li>
+                    </ng-container>
+                </ul>
+            </li>
+        </ng-container>
+    </ul>
+
+</div>

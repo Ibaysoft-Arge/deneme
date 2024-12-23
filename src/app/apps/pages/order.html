@@ -1,0 +1,294 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-gray-900">
+    <!-- İşlem Butonları Paneli -->
+    <div class="w-[90px] bg-gradient-to-b from-purple-800 to-purple-600 text-white flex flex-col justify-between rounded-l-xl
+        dark:from-purple-900 dark:to-purple-700 dark:text-white">
+        <app-button-panel [source]="source" [siparisListesi]="siparisListesi" [id]="id" [cluster]="cluster" [store]="store"
+            (customerOrderWindowRequested)="openCustomerOrderWindowKullanKullanma()"
+            (hesapFisiRequest)="clickhesapFisiRequest()" (kuponRequest)="applyCoupon()">
+        </app-button-panel>
+    </div>
+
+
+    <!-- Sipariş Özeti Paneli -->
+    <app-siparis-ozeti [orderItems]="orderItems" [orderSource]="mockOrderSource" [tableInfo]="mockTableInfo"
+        [customerInfo]="mockCustomerInfo" [orderDate]="mockOrderDate" [orderTime]="mockOrderTime"
+        [totalAmount]="totalAmount" [orderNo]="orderNo" [orderUname]="orderUname" [isFullyPaid]="isFullyPaid"
+        (removeItem)="removeFromOrder($event)" (applyDiscount)="applyDiscount($event)"
+        (OdemeAlOrder)="odemeAlRequested()" (OnaylaOrder)="OnaylaOrder($event)"
+        (EditOrderItem)="EditOrderItem($event.item, $event.index)" class="dark:bg-gray-800 dark:text-gray-200">
+    </app-siparis-ozeti>
+
+
+    <!-- Ürün Listesi -->
+    <div *ngIf="(groupedProducts$ | async) as groupedProducts"
+        class="flex-1 bg-white dark:bg-gray-900 p-4 overflow-y-auto text-gray-700 dark:text-gray-200">
+        <div *ngIf="showPaymentTypes" class="mb-4">
+            <!-- Vazgeç Butonu -->
+            <div class="flex items-center justify-between mb-4" *ngIf="!orderCompleted">
+                <h4 class="font-semibold text-lg dark:text-gray-100">Ödeme Tipleri</h4>
+                <button class="btn btn-outline-secondary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                    (click)="openPartialPaymentModal()">Ödemeyi Böl</button>
+                <button class="btn btn-outline-secondary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                    (click)="showPaymentTypes = false">Vazgeç</button>
+            </div>
+
+            <ngx-custom-modal #partialPaymentModal customClass="modal-top large-modal">
+                <ng-template #modalHeader>
+                    <div class="flex items-center justify-between border-b pb-2 mb-2 dark:border-gray-700">
+                        <h5 class="text-lg font-bold dark:text-gray-100">Kısmi Ödeme Al</h5>
+                        <button type="button"
+                            class="text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                            (click)="closePartialPaymentModal()">Kapat</button>
+                    </div>
+                </ng-template>
+
+                <ng-template #modalBody>
+                    <table class="w-full text-sm mb-4 border-collapse dark:text-gray-200">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2 text-left">Ürün</th>
+                                <th class="p-2 text-right">Toplam</th>
+                                <th class="p-2 text-right">Bu Ödeme</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Burada orderItems yerine getNotFullyPaidItems() kullandık -->
+                            <tr *ngFor="let item of getNotFullyPaidItems()" class="border-b dark:border-gray-700">
+                                <td class="p-2">{{ item.urunAdi }}</td>
+                                <td class="p-2 text-right">{{ calculateOrderItemTotal(item) | dynamicCurrency }}</td>
+                                <td class="p-2 text-right">
+                                    <input type="number"
+                                        class="form-input w-20 text-right border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                        [(ngModel)]="item.partialPayment" (input)="calculatePartialTotal()"
+                                        [max]="item.miktar" [min]="0">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="mb-4">
+                        <label class="font-medium mb-1 block dark:text-gray-200">Toplam Kısmi Ödeme Miktarı (Elle
+                            Gir):</label>
+                        <input type="number"
+                            class="form-input w-1/2 text-right border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            [(ngModel)]="manualPartialAmount" (input)="onManualPartialInput()">
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="font-medium mb-2 dark:text-gray-200">Ödeme Tipi Seç</h6>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <div *ngFor="let odeme of paymentTypes" (click)="selectPartialPaymentType(odeme)" [ngClass]="{
+                                    'border p-2 text-center rounded cursor-pointer transition-colors duration-200':
+                                      true,
+                                    'hover:border-blue-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200':
+                                      selectedPartialPaymentType?.odemeAdi !== odeme.odemeAdi,
+                                    'border-blue-500 bg-blue-600 text-white':
+                                      selectedPartialPaymentType?.odemeAdi === odeme.odemeAdi
+                                 }">
+                                {{ odeme.odemeAdi }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flex items-center justify-between mt-4 dark:text-gray-200">
+                        <div>
+                            <span class="font-bold">Seçilen Kısmi Ödeme Toplamı:</span> {{ partialPaymentTotal |
+                            currency:'TRY' }}
+                        </div>
+                        <div>
+                            <p *ngIf="partialPaymentTotal > totalAmount" class="text-red-500 text-sm">
+                                Toplam ödemeyi geçemezsiniz!
+                            </p>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #modalFooter>
+                    <button type="button"
+                        class="btn btn-outline-secondary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 mr-2"
+                        (click)="closePartialPaymentModal()">Vazgeç</button>
+                    <button type="button" class="btn btn-primary"
+                        [disabled]="partialPaymentTotal <= 0 || partialPaymentTotal > totalAmount || !selectedPartialPaymentType"
+                        (click)="confirmPartialPayment()">Onayla</button>
+                </ng-template>
+            </ngx-custom-modal>
+
+            <p *ngIf="loadingPaymentTypes" class="italic text-gray-500 mb-2 dark:text-gray-400">Ödeme tipleri
+                yükleniyor...</p>
+
+                <div *ngIf="!loadingPaymentTypes" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+
+                    <div *ngFor="let odeme of paymentTypes" (click)="selectPaymentType(odeme)"
+                        class="p-4 bg-white dark:bg-gray-800 shadow rounded-lg relative cursor-pointer hover:shadow-lg transition-transform duration-200 flex flex-col items-center dark:text-gray-200 dark:border-gray-600">
+                        <h4 class="text-lg font-bold text-gray-800 dark:text-gray-200">{{ odeme.odemeAdi }}</h4>
+                    </div>
+
+                </div>
+
+
+            <div *ngIf="!loadingPaymentTypes" class="mt-12">
+                <h4 class="text-lg font-semibold mb-2 dark:text-gray-100">Yapılan Ödemeler</h4>
+                <table class="w-full text-sm dark:text-gray-200">
+                    <thead>
+                        <tr class="border-b dark:border-gray-700">
+                            <th class="py-1 text-left">Ödeme Tipi</th>
+                            <th class="py-1 text-center">Cihaz</th>
+                            <th class="py-1 text-center">Tutar</th>
+                            <th class="py-1 text-center">Açıklama</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let odeme of currentOrderGelen?.odemeler" class="border-b dark:border-gray-700">
+                            <td class="py-1">{{ getOdemeTipiNameById(odeme.odemeTipi) }}</td>
+                            <td class="py-1 text-center">{{ odeme.cihaz }}</td>
+                            <td class="py-1 text-center">{{ odeme.tutar | number:'1.2-2' }} TL</td>
+                            <td class="py-1 text-center">{{ odeme.aciklama || '-' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Eğer showPaymentTypes false ise ürünler -->
+        <app-product-list *ngIf="!showPaymentTypes" [groupedProducts]="groupedProducts"
+            (productClick)="openProductDetailsModal($event)" class="dark:text-gray-200">
+        </app-product-list>
+    </div>
+
+    <ngx-custom-modal #productDetailsModal customClass="modal-top extra-large-modal">
+        <ng-template #modalHeader>
+            <div class="flex items-center justify-between border-b pb-2 mb-2 dark:border-gray-700">
+                <h5 class="text-capitalize text-lg font-bold dark:text-gray-100">
+                    {{ productTitle | titlecase }}
+                </h5>
+            </div>
+        </ng-template>
+
+        <ng-template #modalBody>
+            <div *ngIf="!selectedProduct" class="text-center dark:text-gray-200">
+                <p>Yükleniyor...</p>
+            </div>
+            <div *ngIf="selectedProduct" class="grid grid-cols-1 md:grid-cols-2 gap-4 dark:text-gray-200">
+                <div class="ng-tns-c217723269-10 flex items-center justify-center">
+                    <img *ngIf="selectedProduct.urunResmi" [src]="getImageUrl(selectedProduct)" alt="Ürün Resmi"
+                        class="w-auto h-full object-cover" />
+                    <p *ngIf="!selectedProduct.urunResmi" class="text-gray-500 dark:text-gray-400">Resim Yok</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold dark:text-white">{{ selectedProduct.urunAdi | titlecase }}</h3>
+                    <p>Kategori: {{ urunKategoriAdi }}</p>
+                    <p>Alt Kategori: {{ urunAltKategoriAdi }}</p>
+                    <p>Fiyat:</p>
+                    <p class="mt-2">
+                        <span *ngIf="selectedProduct?.isOzelFiyat" class="text-gray-400 line-through mr-2">
+                            {{ selectedProduct.standartFiyat | dynamicCurrency }}
+                        </span>
+                        <span *ngIf="selectedProduct?.calculatedPrice" class="text-green-600 font-semibold">
+                            {{ (selectedProduct.calculatedPrice ?? 0) | dynamicCurrency }}
+                        </span>
+                        <span *ngIf="!selectedProduct?.isOzelFiyat && !selectedProduct.calculatedPrice"
+                            class="text-gray-600 dark:text-gray-300">
+                            {{ selectedProduct.standartFiyat | dynamicCurrency }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div *ngIf="(selectedProduct?.items?.length ?? 0) > 0; else noItems" class="mt-4">
+                <div class="flex items-left justify-left text-gray-700 dark:text-gray-200">
+                    <icon-archive class="mr-2"></icon-archive>
+                    <h4 class="text-lg font-medium">İçerdikleri</h4>
+                </div>
+                <ul class="list-disc ml-5 space-y-6">
+                    <li *ngFor="let item of selectedProduct.items" class="flex flex-col space-y-4">
+                        <app-item [item]="item" [product]="selectedProduct"
+                            (selectionChangeEvent)="onItemSelectionChange($event)">
+                        </app-item>
+                    </li>
+                </ul>
+            </div>
+
+            <ng-template #noItems>
+                <p class="dark:text-gray-300">Bu ürün için alt ürün yok.</p>
+            </ng-template>
+        </ng-template>
+
+        <ng-template #modalFooter>
+            <button type="button"
+                class="btn btn-outline-secondary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                (click)="closeProductDetailsModal()">
+                Kapat
+            </button>
+            <button type="button" class="btn btn-primary" [disabled]="loadingProductDetails"
+                (click)="addToOrderFromModal()">
+                Sepete Ekle
+            </button>
+        </ng-template>
+    </ngx-custom-modal>
+
+    <ngx-custom-modal #couponModal customClass="modal-top extra-large-modal">
+        <ng-template #modalHeader>
+            <div class="flex items-center justify-between border-b pb-2 mb-2 dark:border-gray-700">
+                <h5 class="text-capitalize text-lg font-bold dark:text-gray-100">Kuponlar</h5>
+                <button type="button"
+                    class="text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                    (click)="closeCouponModal()">
+                    Kapat
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #modalBody>
+            <div class="p-4 space-y-4 dark:text-gray-200">
+                <div class="flex items-center space-x-2">
+                    <input type="text" [(ngModel)]="couponCode"
+                        class="border rounded p-2 w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        placeholder="Kupon Kodu">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                        (click)="confirmApplyCoupon()">
+                        Uygula
+                    </button>
+                </div>
+
+                <div>
+                    <h6 class="text-md font-semibold mb-2 dark:text-gray-200">Uygulanan Kuponlar</h6>
+                    <div *ngIf="selectedCoupons && selectedCoupons.length > 0; else noCoupons">
+                        <ul class="space-y-2">
+                            <li *ngFor="let coupon of selectedCoupons; let i = index"
+                                class="flex items-center justify-between p-2 bg-gray-100 rounded dark:bg-gray-800 dark:border-gray-600">
+                                <div>
+                                    <span class="font-bold">{{ coupon.kod }}</span> -
+                                    <span>{{ coupon.kuponTipi }} ({{ coupon.indirimMiktari }})</span>
+                                </div>
+                                <button class="text-red-600 underline" (click)="removeCoupon(i)">Sil</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <ng-template #noCoupons>
+                        <p class="text-gray-500 italic dark:text-gray-400">Henüz kupon eklenmedi.</p>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #modalFooter>
+            <button type="button"
+                class="btn btn-outline-secondary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                (click)="closeCouponModal()">
+                Kapat
+            </button>
+        </ng-template>
+    </ngx-custom-modal>
+
+    <!-- Kategoriler -->
+    <div *ngIf="!orderCompleted" class="panel w-[200px] bg-gray-800 text-white p-4 space-y-4 rounded-r-xl overflow-y-auto
+        dark:bg-gray-900 dark:text-gray-200 border-l border-gray-700">
+        <app-kategoriler [categories]="categories" [selectedCategory]="selectedCategory"
+            (categorySelected)="filterByCategory($event)">
+        </app-kategoriler>
+    </div>
+</div>

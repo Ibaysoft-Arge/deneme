@@ -1,0 +1,137 @@
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen p-4">
+    <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">{{ 'dashboard' | translate }}</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2 text-black dark:text-white">
+            <span>{{ 'finance' | translate }}</span>
+        </li>
+    </ul>
+
+    <!-- Filtreleme Alanı -->
+    <div class="mt-4 mb-5 p-4 bg-white dark:bg-[#1f2937] rounded shadow-md">
+        <div class="flex items-end flex-wrap gap-4">
+
+            <!-- Periyot Seçimi (Günlük/Aylık) -->
+            <div>
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'periodtype' | translate }}</label>
+                <select class="form-select w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" [(ngModel)]="periodType" (ngModelChange)="onPeriodTypeChange($event)">
+                    <option value="daily">{{ 'daily' | translate }}</option>
+                    <option value="monthly">{{ 'monthly' | translate }}</option>
+                </select>
+            </div>
+
+            <!-- Günlük ise tek tarih, aylık ise iki tarih seçimi -->
+            <div *ngIf="periodType === 'daily'">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'date' | translate }}</label>
+                <input type="date" [(ngModel)]="selectedDate" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+            </div>
+
+            <div *ngIf="periodType === 'monthly'" class="flex items-end gap-4">
+                <div>
+                    <label class="block mb-1 font-medium text-black dark:text-white">{{ 'startdate' | translate }}</label>
+                    <input type="date" [(ngModel)]="startDate" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-black dark:text-white">{{ 'enddate' | translate }}</label>
+                    <input type="date" [(ngModel)]="endDate" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+                </div>
+            </div>
+
+            <!-- Mağaza Seçimi (multiple) -->
+            <div class="flex-1 min-w-[200px]">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'selectstoreoptional' | translate }}</label>
+                <ng-select [items]="stores"
+                           bindLabel="magazaAdi"
+                           bindValue="_id"
+                           [(ngModel)]="selectedStores"
+                           [multiple]="true"
+                           placeholder="{{ 'choosestoreorleaveitempty' | translate }}"
+                           class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                </ng-select>
+            </div>
+
+            <!-- Apply Butonu -->
+            <button (click)="fetchData()" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white rounded py-2 px-4">
+                {{ 'apply' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Yükleniyor durumu -->
+    <div *ngIf="isLoading" class="text-center py-4 text-gray-500 dark:text-gray-400">
+        {{ 'Loading' | translate }}...
+    </div>
+
+    <!-- Veri yok -->
+    <div *ngIf="!isLoading && (!storeRevenues || storeRevenues.length === 0)" class="text-center py-4 text-gray-500 dark:text-gray-400">
+        {{ 'selectfiltersapply' | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && storeRevenues && storeRevenues.length > 0">
+        <!-- Toplam Ciro Kartı -->
+        <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="panel bg-gradient-to-r from-cyan-500 to-cyan-400 text-white p-4 rounded shadow">
+                <h5 class="font-semibold text-lg">{{ 'totalrevenue' | translate }}</h5>
+                <div class="text-3xl font-bold mt-2">{{ toplamCiro | number:'1.2-2' }} TL</div>
+            </div>
+
+            <div class="panel bg-gradient-to-r from-blue-500 to-blue-400 text-white p-4 rounded shadow">
+                <h5 class="font-semibold text-lg">{{ 'numberofpaymenttypes' | translate }}</h5>
+                <div class="text-3xl font-bold mt-2">{{ storeRevenues.length }}</div>
+            </div>
+
+            <div class="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400 text-white p-4 rounded shadow">
+                <h5 class="font-semibold text-lg">{{ 'highestrevenue' | translate }}</h5>
+                <div class="text-3xl font-bold mt-2">
+                    {{ maxCiroStore?.toplamCiro | number:'1.2-2' }} TL
+                </div>
+                <div>{{ maxCiroStore?.odemeTipiBilgi?.odemeAdi }}</div>
+            </div>
+
+            <div class="panel bg-gradient-to-r from-violet-500 to-violet-400 text-white p-4 rounded shadow">
+                <h5 class="font-semibold text-lg">{{ 'lowestrevenue' | translate }}</h5>
+                <div class="text-3xl font-bold mt-2">
+                    {{ minCiroStore?.toplamCiro | number:'1.2-2' }} TL
+                </div>
+                <div>{{ minCiroStore?.odemeTipiBilgi?.odemeAdi }}</div>
+            </div>
+        </div>
+
+        <!-- Ödeme Tipi Bazlı Ciro Tablosu -->
+        <div class="panel p-4 bg-white dark:bg-[#1f2937] rounded shadow">
+            <h5 class="text-lg font-semibold mb-2 text-black dark:text-white">{{ 'revenuebypaymenttype' | translate }}</h5>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+                    <thead>
+                        <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+                            <th class="py-1 font-semibold text-left">{{ 'paymenttype' | translate }}</th>
+                            <th class="py-1 font-semibold text-center">{{ 'revenue' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of storeRevenues" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="py-1 font-medium">{{ item.odemeTipiBilgi?.odemeAdi || 'N/A' }}</td>
+                            <td class="py-1 text-center font-medium">{{ item.toplamCiro | number:'1.2-2' }} TL</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Grafik: Ödeme Tipi Dağılımı -->
+        <div class="panel p-4 mt-6 bg-white dark:bg-[#1f2937] rounded shadow">
+            <h5 class="text-lg font-semibold mb-2 text-black dark:text-white">{{ 'paymenttypedistribution' | translate }}</h5>
+            <div style="width:300px;height:300px;">
+                <apx-chart
+                    [series]="ciroChart.series"
+                    [chart]="ciroChart.chart"
+                    [labels]="ciroChart.labels"
+                    [legend]="ciroChart.legend"
+                    [dataLabels]="ciroChart.dataLabels"
+                    [colors]="ciroChart.colors">
+                </apx-chart>
+            </div>
+        </div>
+    </div>
+</div>

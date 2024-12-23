@@ -1,0 +1,12 @@
+<h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'Kategoriler' | translate }}</h3>
+<div
+  *ngFor="let category of categories"
+  (click)="selectCategory(category)"
+  class="w-full p-3 pl-6 text-center font-medium cursor-pointer transition-all duration-200 text-sm rounded-r-full"
+  [ngClass]="{
+    'bg-white dark:bg-black text-gray-800 dark:text-gray-200 -ml-4 pl-6 pr-4': selectedCategory?.kategoriId === category.kategoriId,
+    'bg-gray-800 dark:bg-gray-700 text-gray-200': selectedCategory?.kategoriId !== category.kategoriId
+  }"
+>
+  {{ category.kategoriAdi | capitalize }}
+</div>

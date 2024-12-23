@@ -1,0 +1,436 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <div class="mb-5">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'receivingnote' | translate }}</h5>
+    </div>
+
+    <!-- Giris İrsaliye Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+        <!-- Ürün Ekleme Accordion Başlangıcı -->
+        <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+            <button type="button"
+                class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+                [ngClass]="{ '!text-primary': isEditing }" (click)="isFormOpen = !isFormOpen">
+                <!-- İkon veya Başlık -->
+                <icon-plus class="h-5 w-5 shrink-0 text-primary ltr:mr-2 rtl:ml-2"></icon-plus>
+                {{ isEditing ? ('editreceivingnote' | translate) : ('addreceivingnote' | translate) }}
+                <div class="ltr:ml-auto rtl:mr-auto" [ngClass]="{ 'rotate-180': isFormOpen }">
+                    <!-- Aşağı Ok İkonu -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </button>
+
+            <div [@slideDownUp]="!isFormOpen" class="accordion-content">
+                <div
+                    class="space-y-2 border-t border-[#d3d3d3] p-4 text-white-dark dark:text-gray-200 dark:border-[#1b2e4b]">
+
+                    <!-- Sekme Başlangıcı -->
+                    <div class="mb-5">
+                        <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <a id="step2" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                                (click)="setActiveTab('genel')">
+                                {{ 'generalinformation' | translate }}
+                            </a>
+                            <a *ngIf="isEditing" id="step3" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('items') }"
+                                (click)="setActiveTab('items')">
+                                {{ 'items' | translate }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bilgiler Sekmesi -->
+                    <div *ngIf="isActiveTab('genel')">
+                        <form [formGroup]="irsaliyeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">
+                                    {{ 'documentserial' | translate }}
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <div class="flex items-center space-x-2">
+                                    <!-- Input -->
+                                    <input type="text" formControlName="evrakSeri"
+                                        class="form-input mt-1 block flex-grow rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600"
+                                        readonly />
+                                    <!-- Button -->
+                                    <button type="button" class="btn btn-secondary px-3 py-1" (click)="openIrsaliyeSelectionModal()">
+                                        {{ 'search' | translate }}
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">
+                                    {{ 'documentserialno' | translate }}
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="text" formControlName="evrakSeriNo"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600"
+                                    readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">{{ 'description' |
+                                    translate }}</label>
+                                <textarea formControlName="aciklama"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">{{ 'invoiceno' |
+                                    translate }}</label>
+                                <input type="text" formControlName="faturaNo"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">{{ 'invoiceserial' |
+                                    translate }}</label>
+                                <input type="text" formControlName="faturaSeri"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">{{ 'invoicedate' |
+                                    translate }}</label>
+                                <input type="date" formControlName="faturaTarih"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600"
+                                    [value]="formatDate(irsaliyeForm.get('FaturaTarih')?.value)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">
+                                    {{ 'waybillno' | translate }}
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="text" formControlName="irsaliyeNo"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">
+                                    {{ 'waybillserialno' | translate }}
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="text" formControlName="irsaliyeSeriNo"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium dark:text-white-light cursor-pointer">
+                                    {{ 'waybilldate' | translate }}
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="date" formControlName="irsaliyeTarih"
+                                    class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600"
+                                    [value]="formatDate(irsaliyeForm.get('irsaliyeTarih')?.value)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="block text-sm font-semibold mb-2 dark:text-white-light cursor-pointer">{{
+                                    'shippingdealer' | translate }}</label>
+                                <ng-select [items]="magazalar" bindLabel="magazaAdi" bindValue="_id"
+                                    formControlName="gonderenMagaza" placeholder="{{ 'choosestore' | translate }}"
+                                    class="w-full dark:bg-gray-700 dark:text-white-light dark:border-gray-600">
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div
+                                            class="dark:bg-gray-800 dark:text-white-light px-2 py-1 hover:bg-gray-700 hover:cursor-pointer rounded-md transition">
+                                            <span>{{ item.magazaAdi }}</span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="dark:text-white-light">{{ item.magazaAdi }}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="block text-sm font-semibold mb-2 dark:text-white-light cursor-pointer">{{
+                                    'supplierselection' | translate }}</label>
+                                <ng-select [items]="cariler" bindLabel="cariAdi" bindValue="_id"
+                                    formControlName="cari" placeholder="{{ 'choosestore' | translate }}"
+                                    class="w-full dark:bg-gray-700 dark:text-white-light dark:border-gray-600">
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div
+                                            class="dark:bg-gray-800 dark:text-white-light px-2 py-1 hover:bg-gray-700 hover:cursor-pointer rounded-md transition">
+                                            <span>{{ item.cariAdi }}</span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="dark:text-white-light">{{ item.cariAdi }}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </form>
+
+                        <!-- Kaydet ve Sıfırla Butonları -->
+                        <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+                            <button type="button" class="btn btn-success px-6 py-2 flex items-center"
+                                (click)="onSubmit()" [disabled]="irsaliyeForm.invalid">
+                                <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                                {{ isEditing ? ('update' | translate) : ('save' | translate) }}
+                            </button>
+                            <button type="button" class="btn btn-secondary px-6 py-2 flex items-center"
+                                (click)="resetForm()">
+                                <icon-refresh class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-refresh>
+                                {{ 'clearForm' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Öğeler (Malzemeler) Sekmesi -->
+                    <div *ngIf="isActiveTab('items')">
+                        <!-- Ürün Öğeleri Formu -->
+                        <div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow mt-6">
+
+                            <!-- SKU Formunun container div'i -->
+                            <div class="border p-4 rounded-md mb-4" [formGroup]="skuForm">
+                                <h5 class="text-lg font-semibold dark:text-white-light mb-2">{{ 'productinformation' | translate }}</h5>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                                    <div class="form-group flex items-center gap-4">
+                                        <div class="flex-1">
+                                            <label class="font-medium dark:text-white-light cursor-pointer">{{ 'productname' | translate }}</label>
+                                            <input type="text" formControlName="stokName"
+                                                class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                                        </div>
+                                        <div *ngIf="!isEditingSku">
+                                            <button type="button" class="btn btn-primary mt-7" 
+                                                (click)="openSkuSelectionModal(skuForm)">
+                                                {{ 'choosesku' | translate }}
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- miktar -->
+                                    <div class="form-group">
+                                        <label class="font-medium dark:text-white-light cursor-pointer">{{ 'amount' | translate }}</label>
+                                        <input type="number" formControlName="miktar"
+                                            class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                                    </div>
+
+                                    
+
+                                    <!-- iskontooran -->
+                                    <div class="form-group">
+                                        <label class="font-medium dark:text-white-light cursor-pointer">{{ 'discountrate' | translate }}</label>
+                                        <input type="number" formControlName="iskontooran"
+                                            class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                                    </div>
+
+                                    <!-- birimFiyat -->
+                                    <div class="form-group">
+                                        <label class="font-medium dark:text-white-light cursor-pointer">{{ 'unitprice' | translate }}</label>
+                                        <input type="number" formControlName="birimFiyat"
+                                            class="form-input mt-1 block w-full rounded-md dark:bg-gray-700 dark:text-white-light dark:border-gray-600" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- SKU EKLE BUTONU -->
+                            <div class="mb-5 flex justify-end items-center">
+                                <button type="button" class="btn btn-success px-6 py-2 flex items-center"
+                                    (click)="addItem()">
+                                    <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                                    {{isEditingSku ? 'Sku Düzenle': 'Sku Ekle'}}
+                                </button>
+                            </div>
+
+                            <!-- Arama ve Pasif Gösterme -->
+                            <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+                                <h5 class="text-lg font-semibold dark:text-white-light">{{ 'skulist' | translate }}</h5>
+                                <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                                    <!-- Arama Alanı -->
+                                    <input [(ngModel)]="searchTerm" type="text"
+                                        placeholder="{{ 'search' | translate }}..."
+                                        class="form-input w-64 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                        (input)="applyFilter()" />
+
+                                    <!-- Pasifleri Göster Checkbox -->
+                                    <div class="flex items-center gap-2">
+                                        <label class="text-sm font-medium dark:text-white-light">{{ 'showpassives' |
+                                            translate }}</label>
+                                        <label class="relative h-4 w-8">
+                                            <input type="checkbox"
+                                                class="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                [(ngModel)]="showPassive" (change)="applyFilter()" />
+                                            <span
+                                                class="block h-full rounded-full bg-[#ebedf2] dark:bg-gray-600 before:absolute before:bottom-0.5 before:left-0.5 before:h-3 before:w-3 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-4"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SKU Listesi -->
+                            <div id="step6" class="datatable bg-white dark:bg-gray-700 rounded-md">
+                                <ng-datatable [rows]="filteredSkus" [columns]="cols" [sortable]="true"
+                                    [search]="searchTerm" [pageSize]="itemsPerPage" [stickyHeader]="true"
+                                    class="whitespace-nowrap"
+                                    firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ...>...</svg>'
+                                    lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ...>...</svg>'
+                                    previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ...>...</svg>'
+                                    nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ...>...</svg>'>
+
+                                    <ng-template slot="actions" let-value="data">
+                                        
+                                        <div class="flex items-center gap-2 justify-start">
+                                            <button type="button" class="btn btn-danger rounded-full" (click)="deleteSku(value)">
+                                                <icon-trash class="h-5 w-5 shrink-0"></icon-trash>
+                                            </button>
+                                            <button type="button" class="btn btn-warning rounded-full" (click)="editSKU(value)">
+                                                <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                </ng-datatable>
+                            </div>
+                        </div>
+
+                        <!-- Kaydet Butonu (SKU) -->
+                        <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+                            <button type="button" class="btn btn-success px-6 py-2 flex items-center"
+                                (click)="onSubmitSku()" [disabled]="irsaliyeForm.invalid">
+                                <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                                {{ isEditing ? ('update' | translate) : ('save' | translate) }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SKU Modal -->
+    <ngx-custom-modal #modalSku customClass="modal-top extra-large-modal">
+        <ng-template #modalHeader>
+            <div>
+                {{ ('choosesku' | translate) }}
+            </div>
+        </ng-template>
+
+        <ng-template #modalBody>
+            <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                <input type="text" [(ngModel)]="modalSearchTerm" (input)="onSearchTermChange($event)"
+                    placeholder="{{ 'search' | translate }}"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white mb-3" />
+                <div *ngIf="isLoading" class="text-center">
+                    <span>{{ 'loading' | translate }}...</span>
+                </div>
+
+                <div *ngIf="!isLoading">
+                    <table class="table-auto w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-600">
+                        <thead class="bg-gray-100 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'productname' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'category' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'subcategory' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">
+                                    {{ currentItemType === 'SKU' ? 'SKU Code' : 'Description' }}
+                                </th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of skuList" class="border-b border-gray-200 dark:border-gray-500">
+                                <td class="px-4 py-2 text-black dark:text-white">{{ item.urunAdi }}</td>
+                                <td class="px-4 py-2 text-black dark:text-white">{{ item.kategori?.ad || '-' }}</td>
+                                <td class="px-4 py-2 text-black dark:text-white">{{ item.altKategori?.ad || '-' }}</td>
+                                <td class="px-4 py-2 text-black dark:text-white">
+                                    {{ currentItemType === 'SKU' ? item.skuKod : item.aciklama || '-' }}
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    <button class="btn btn-primary" (click)="selectItem(item, modalSku)">
+                                        {{ 'select' | translate }}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="skuList.length === 0">
+                                <td colspan="5" class="text-center py-4 text-black dark:text-white">
+                                    {{ 'noitemsfound' | translate }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #modalFooter>
+            <button type="button" class="btn btn-outline-danger" (click)="modalSku.close()">{{ 'discard' | translate }}</button>
+        </ng-template>
+    </ngx-custom-modal>
+
+    <!-- İrsaliye Modal -->
+    <ngx-custom-modal #modalIrsaliye customClass="modal-top extra-large-modal">
+        <ng-template #modalHeader>
+            <div>
+                {{ 'selectdeliverynote' | translate }}
+            </div>
+        </ng-template>
+
+        <ng-template #modalBody>
+            <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                <!-- Arama Kutusu -->
+                <input type="text" [(ngModel)]="modalSearchTermIrsaliye" (input)="onSearchTermChangeIrsaliye($event)"
+                    placeholder="{{ 'search' | translate }}"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white mb-3" />
+
+                <!-- Yükleniyor Durumu -->
+                <div *ngIf="isLoading" class="text-center">
+                    <span>{{ 'Loading' | translate }}...</span>
+                </div>
+
+                <!-- Tablo -->
+                <div *ngIf="!isLoading">
+                    <table class="table-auto w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-600">
+                        <thead class="bg-gray-100 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'waybillno' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'waybilldate' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'status' | translate }}</th>
+                                <th class="px-4 py-2 text-black dark:text-white">{{ 'actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let irsaliye of irsaliyeler"
+                                class="border-b border-gray-200 dark:border-gray-500">
+                                <td class="px-4 py-2 text-black dark:text-white">{{ irsaliye.irsaliyeNo }}</td>
+                                <td class="px-4 py-2 text-black dark:text-white">{{ irsaliye.irsaliyeTarih |
+                                    date:'dd/MM/yyyy' }}</td>
+                                <td class="px-4 py-2 text-black dark:text-white">{{ irsaliye.statu || '-' }}</td>
+                                <td class="px-4 py-2 text-center">
+                                    <button class="btn btn-primary" (click)="selectIrsaliye(irsaliye, modalIrsaliye)">
+                                        {{ 'select' | translate }}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="irsaliyeler.length === 0">
+                                <td colspan="6" class="text-center py-4 text-black dark:text-white">
+                                    {{ 'noitemsfound' | translate }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #modalFooter>
+            <button type="button" class="btn btn-outline-danger" (click)="modalIrsaliye.close()">
+                {{ 'discard' | translate }}
+            </button>
+        </ng-template>
+    </ngx-custom-modal>
+</div>

@@ -1,0 +1,214 @@
+<head>
+    <!-- Other head content -->
+    <link rel="stylesheet" href="/assets/css/about.css">
+</head>
+
+<!-- Header -->
+<header class="w-full p-4 metallic-purple text-white flex justify-between items-center relative">
+    <!-- Logo -->
+    <a routerLink="/" class="w-32 flex items-center justify-center">
+        <img src="/assets/images/auth/logo-white.svg" alt="Logo" class="w-full" />
+    </a>
+
+    <!-- Navbar (left side) -->
+    <nav class="flex space-x-6 items-center">
+        <div class="dropdown shrink-0">
+            <div hlMenu>
+                <button type="button" hlMenuButton
+                    class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/80 transition-colors ease-in-out hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 mr-3">
+                    <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="flag"
+                        class="h-6 w-6 rounded-full object-cover" />
+                </button>
+                <ul *hlMenuItems @toggleAnimation
+                    class="top-11 grid w-[280px] grid-cols-2 gap-2 px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:-right-14 sm:ltr:-right-2 rtl:-left-14 sm:rtl:-left-2">
+                    <li *ngFor="let item of store.languageList;">
+                        <button *hlMenuItem="let menuItem" type="button" class="w-full hover:text-primary"
+                            [ngClass]="{ 'bg-primary/10 text-primary': translate.currentLang === item.code }"
+                            (click)="changeLanguage(item)">
+                            <img class="h-5 w-5 rounded-full object-cover"
+                                [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                            <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a routerLink="/auth/landing"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'home' | translate }}
+        </a>
+        <!-- Navbar Links -->
+        <a routerLink="/auth/about"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'about' | translate }}
+        </a>
+        <a routerLink="/auth/services"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'services' | translate }}
+        </a>
+        <a routerLink="/auth/contact"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'contact' | translate }}
+        </a>
+        <button routerLink="/#/auth/cover-login"
+            class="btn btn-success custom-button transition-all duration-300 ease-in-out transform hover:scale-105">
+            {{ 'loginn' | translate }}
+        </button>
+    </nav>
+</header>
+
+<!-- Slider Image Section -->
+<div class="slider-container relative">
+    <div class="aboutus-container text-center">
+        <h1>HAKKIMIZDA</h1>
+    </div>
+    <img src="/assets/images/aboutus2.jpg" alt="Slider Image" loading="eager" class="slider-image">
+    <!-- Eklenen Fotoğraf -->
+    <div class="centered-image-container">
+        <img src="/assets/images/people.png" alt="Centered Image" class="centered-image">
+    </div>
+</div>
+
+
+<!-- flex container -->
+<div
+    class="flex items-center justify-center prose bg-[#f1f2f3] px-4 py-0 sm:px-8 sm:py-16 rounded max-w-full dark:bg-[#1b2e4b] dark:text-white-light mt-0">
+    <!-- left side content -->
+    <div class="w-2/3 pr-4">
+        <h1 class="text-center"> Yazılımda Yenilik ve Güvenin Adı: İbaysoft Yazılım A.Ş. ve easycoPro</h1>
+        <p class="lead mt-3 mb-4 dark:text-white-light text-center">
+            %100 Türk sermayesi ile kurulan ve Avrupa Birliği’ne yazılım geliştirip teslim eden ilk ve tek Türk firması
+            olan İbaysoft Yazılım A.Ş., TÜBİTAK Ar-Ge merkezli bir kuruluş olarak teknoloji dünyasında önemli bir konuma
+            sahiptir. İbaysoft’un güçlü markalarından biri olan easycoPro, son teknoloji Java platformu üzerinde
+            geliştirilmiş olup yiyecek ve içecek sektöründe faaliyet gösteren işletmelerin A’dan Z’ye tüm teknolojik
+            ihtiyaçlarını karşılayan bir otomasyon sistemidir.
+
+            Gelişen teknolojiyi ve yenilikçi bakış açısını benimseyen İbaysoft, faaliyet gösterdiği sektörlerde iş
+            süreçlerini kolaylaştırmaya yönelik çözümler sunmaktadır. Kocaeli Kaya Şirketler Topluluğu üyesi olan firma,
+            2013 yılından bu yana MS SQL veri tabanları üzerinde çalışmalarını sürdürerek işletmelerin verimliliğini
+            artırmaya yönelik projeler geliştirmektedir.
+        </p>
+
+        <hr class="my-4 dark:border-[#191e3a]">
+    </div>
+
+</div>
+
+<div class="small-headings-section w-full bg-white flex justify-center items-center">
+    <div class="flex flex-wrap justify-center w-3/4 p-4 space-y-6 md:space-y-0 md:space-x-6">
+        <div class="text-block w-full md:w-1/4">
+            <div class="relative">
+                <img src="/assets/images/quality.png" alt="Kalite Politikamız" class="heading-image mx-auto mb-4">
+                <h4 class="text-lg font-bold text-gray-800 text-center underline">
+                    Kalite Politikamız
+                </h4>
+            </div>
+            <p class="text-gray-600 text-lg">
+                Yüksek kaliteli ürünler ve yenilikçi yazılım çözümleri sunarak, müşterilerimizin taleplerini en verimli
+                şekilde karşılıyoruz. Amacımız, her zaman güvenilir ve işlevsel çözümlerle sektördeki en iyi hizmeti
+                sağlamaktır.
+            </p>
+        </div>
+        <div class="text-block w-full md:w-1/4">
+            <div class="relative">
+                <img src="/assets/images/flag.png" alt="Misyonumuz" class="heading-image mx-auto mb-4">
+                <h4 class="text-lg font-bold text-gray-800 text-center underline">
+                    Misyonumuz
+                </h4>
+            </div>
+            <p class="text-gray-600 text-lg">
+                Dünya genelindeki en ileri teknolojileri kullanarak, kaliteli, ekonomik, hızlı ve müşteri odaklı yazılım
+                çözümleri geliştirmeyi hedefliyoruz.
+            </p>
+        </div>
+        <div class="text-block w-full md:w-1/4">
+            <div class="relative">
+                <img src="/assets/images/deal.png" alt="Vizyonumuz" class="heading-image mx-auto mb-4">
+                <h4 class="text-lg font-bold text-gray-800 text-center underline">
+                    Vizyonumuz
+                </h4>
+            </div>
+            <p class="text-gray-600 text-lg">
+                Yurt içi ve yurt dışında erişilebilir, ekonomik ve kullanıcı dostu yazılım çözümleri sunarak, en yeni
+                teknolojileri entegre etmek ve geleceğin yazılım trendlerine yön vermek.
+            </p>
+        </div>
+        <div class="text-block w-full md:w-1/4">
+            <div class="relative">
+                <img src="/assets/images/dart.png" alt="Temel İlkelerimiz" class="heading-image mx-auto mb-4">
+                <h4 class="text-lg font-bold text-gray-800 text-center underline">
+                    Temel İlkelerimiz
+                </h4>
+            </div>
+            <ul class="text-gray-600 text-lg text-center">
+                <li>- Yenilikçi</li>
+                <li>- Kararlı</li>
+                <li>- Pratik</li>
+                <li>- Çözüm odaklı</li>
+                <li>- Meraklı</li>
+                <li>- Üretken</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Footer -->
+<footer style="background: linear-gradient(135deg, #5919ba, #e4075c);" class="text-white py-8 mt-16">
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- About Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">About Us</h4>
+                <p class="text-sm mb-4">We are a company dedicated to providing high-quality services with a focus on
+                    customer
+                    satisfaction. Learn more about our journey and values.</p>
+                <a href="/about" class="text-primary hover:text-[#3498db]">Learn More</a>
+            </div>
+
+            <!-- Services Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Services</h4>
+                <ul class="space-y-2">
+                    <li><a href="/services" class="hover:text-[#3498db]">Web Hosting</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">Cloud Solutions</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">VPS Hosting</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">E-commerce Solutions</a></li>
+                </ul>
+            </div>
+
+            <!-- Quick Links Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="/contact" class="hover:text-[#3498db]">Contact</a></li>
+                    <li><a href="/faq" class="hover:text-[#3498db]">FAQ</a></li>
+                    <li><a href="/privacy-policy" class="hover:text-[#3498db]">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" class="hover:text-[#3498db]">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Media Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <ul class="flex space-x-4">
+                    <li><a href="https://facebook.com" class="hover:text-[#3498db]" target="_blank"><i
+                                class="fab fa-facebook-f"></i> Facebook</a></li>
+                    <li><a href="https://twitter.com" class="hover:text-[#3498db]" target="_blank"><i
+                                class="fab fa-twitter"></i>
+                            Twitter</a></li>
+                    <li><a href="https://linkedin.com" class="hover:text-[#3498db]" target="_blank"><i
+                                class="fab fa-linkedin-in"></i> LinkedIn</a></li>
+                    <li><a href="https://instagram.com" class="hover:text-[#3498db]" target="_blank"><i
+                                class="fab fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="text-center mt-8">
+            <p class="text-sm">&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

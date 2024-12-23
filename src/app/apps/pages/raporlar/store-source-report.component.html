@@ -1,0 +1,132 @@
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-black dark:text-white">
+    <div class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl flex flex-col dark:from-purple-900 dark:to-purple-700">
+        <h3 class="text-lg font-semibold mb-4 dark:text-white"> {{ 'storeandsourcebasedreport' | translate }}</h3>
+        <!-- Mağaza Seçimi -->
+        <div class="mb-4">
+            <label class="block mb-1 font-medium dark:text-white">{{ 'selectstore' | translate }}</label>
+            <ng-select
+                [items]="stores"
+                bindLabel="magazaAdi"
+                bindValue="_id"
+                [(ngModel)]="selectedStores"
+                [multiple]="true"
+                placeholder="{{ 'choosestore' | translate }}"
+                class="w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            </ng-select>
+        </div>
+
+        <!-- Tarih Aralığı -->
+        <div class="mb-4">
+            <label class="block mb-1 font-medium dark:text-white">{{ 'startdate' | translate }}</label>
+            <input type="date" [(ngModel)]="startDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        </div>
+        <div class="mb-4">
+            <label class="block mb-1 font-medium dark:text-white">{{ 'enddate' | translate }}</label>
+            <input type="date" [(ngModel)]="endDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        </div>
+
+        <button (click)="applyFilter()" class="btn btn-primary w-full flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white">
+          {{ 'APPLY' | translate }}
+        </button>
+    </div>
+
+    <div class="flex-1 p-4 bg-white dark:bg-black overflow-y-auto">
+        <div class="flex items-center mb-4">
+            <h3 class="text-lg font-semibold mr-2 dark:text-white">{{ 'reportresults' | translate }}</h3>
+            <div *ngIf="isLoading" class="text-sm text-gray-500 ml-2 flex items-center dark:text-gray-300">
+                <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black dark:border-white !border-l-transparent mr-2"></span>
+                {{ 'Loading' | translate }}...
+            </div>
+            <div class="ml-auto flex space-x-2">
+                <button (click)="exportToExcel()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+                    Excel
+                </button>
+                <button (click)="exportAsPDFfromHTML()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+                  {{ 'pdffromhtml' | translate }}
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="!isLoading && (!storeSourcesData || storeSourcesData.length === 0)">
+            <p class="text-gray-600 dark:text-gray-300">{{ 'nodatamatchingthesecriteria' | translate }}</p>
+        </div>
+
+        <div #reportContent *ngIf="!isLoading && storeSourcesData && storeSourcesData.length > 0" class="space-y-6">
+            <div class="table-responsive">
+                <table class="table-auto w-full text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-collapse">
+                  <thead>
+                    <tr class="border-b dark:border-gray-700">
+                      <th rowspan="2" class="p-2 text-left dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">#</th>
+                      <th rowspan="2" class="p-2 text-left dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'store' | translate }}</th>
+                      <th rowspan="2" class="p-2 text-left dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'type' | translate }}</th>
+                      <th rowspan="2" class="p-2 text-right dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'totalrevenue' | translate }}</th>
+                      <th rowspan="2" class="p-2 text-right dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'totalreceipts' | translate }}</th>
+                      <th rowspan="2" class="p-2 text-right dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'basketaverage' | translate }}</th>
+                      <ng-container *ngFor="let k of distinctKaynaklar">
+                        <th class="p-2 text-center dark:bg-gray-700 dark:text-white border-r dark:border-gray-700" colspan="2">{{ k }}</th>
+                      </ng-container>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <ng-container *ngFor="let k of distinctKaynaklar">
+                        <th class="p-2 text-right dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'revenue' | translate }}</th>
+                        <th class="p-2 text-right dark:bg-gray-700 dark:text-white border-r dark:border-gray-700">{{ 'fis' | translate }}</th>
+                      </ng-container>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let group of tipGroups; let gi=index">
+                      <ng-container *ngFor="let s of group.data; let i = index;">
+                        <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700">
+                          <td class="p-2 align-top dark:text-white border-r dark:border-gray-700">{{ i + 1 }}</td>
+                          <td class="p-2 align-top dark:text-white border-r dark:border-gray-700">{{ s.magazaAdi }}</td>
+                          <td class="p-2 align-top dark:text-white border-r dark:border-gray-700">{{ s.tip }}</td>
+                          <td class="p-2 text-right align-top dark:text-white border-r dark:border-gray-700">{{ s.toplamCiro | dynamicCurrency }}</td>
+                          <td class="p-2 text-right align-top dark:text-white border-r dark:border-gray-700">{{ s.toplamFis }}</td>
+                          <td class="p-2 text-right align-top dark:text-white border-r dark:border-gray-700">{{ s.sepetOrt | dynamicCurrency }}</td>
+
+                          <ng-container *ngFor="let k of distinctKaynaklar">
+                            <ng-container *ngIf="getFoundSource(s, k) as found">
+                              <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ found.toplamCiro | dynamicCurrency }}</td>
+                              <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ found.fisAdeti }}</td>
+                            </ng-container>
+                            <ng-container *ngIf="!getFoundSource(s, k)">
+                              <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">0</td>
+                              <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">0</td>
+                            </ng-container>
+                          </ng-container>
+                        </tr>
+                      </ng-container>
+                      <!-- Alt toplam satırı her tip grubu sonunda -->
+                      <tr class="font-semibold border-t border-gray-300 dark:border-gray-700" [ngClass]="getTipRowClass(group.tip)">
+                        <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">{{ 'subtotal' | translate }} ({{ group.tip }})</td>
+                        <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">-</td>
+                        <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">{{ group.tip }}</td>
+                        <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ group.subtotal.totalCiro | dynamicCurrency }}</td>
+                        <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ group.subtotal.totalFis }}</td>
+                        <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ group.subtotal.averageBasket | dynamicCurrency }}</td>
+                        <ng-container *ngFor="let k of distinctKaynaklar">
+                          <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ group.subtotal.sources[k]?.toplamCiro || 0 | dynamicCurrency }}</td>
+                          <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ group.subtotal.sources[k]?.fisAdeti || 0 }}</td>
+                        </ng-container>
+                      </tr>
+                    </ng-container>
+
+                    <!-- Genel Toplam Satırı -->
+                    <tr class="font-semibold border-t border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-700">
+                      <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">{{ 'generaltotal' | translate }}</td>
+                      <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">-</td>
+                      <td class="p-2 text-left dark:text-white border-r dark:border-gray-700">-</td>
+                      <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ grandTotals.totalCiro | dynamicCurrency }}</td>
+                      <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ grandTotals.totalFis }}</td>
+                      <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ grandTotals.averageBasket | dynamicCurrency }}</td>
+                      <ng-container *ngFor="let k of distinctKaynaklar">
+                        <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ grandTotals.sources[k]?.toplamCiro || 0 | dynamicCurrency }}</td>
+                        <td class="p-2 text-right dark:text-white border-r dark:border-gray-700">{{ grandTotals.sources[k]?.fisAdeti || 0 }}</td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

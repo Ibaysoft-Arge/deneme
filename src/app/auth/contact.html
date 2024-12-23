@@ -1,0 +1,202 @@
+<head>
+    <!-- Other head content -->
+    <link rel="stylesheet" href="/assets/css/contact.css">
+</head>
+
+<!-- Header -->
+<header class="w-full p-4 metallic-purple text-white flex justify-between items-center">
+    <!-- Logo -->
+    <a routerLink="/" class="w-32 flex items-center justify-center">
+        <img src="/assets/images/auth/logo-white.svg" alt="Logo" class="w-full" />
+    </a>
+
+    <!-- Navbar (left side) -->
+    <nav class="flex space-x-6 items-center">
+        <div class="dropdown shrink-0">
+            <div hlMenu>
+                <button type="button" hlMenuButton
+                    class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/80 transition-colors ease-in-out hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 mr-3">
+                    <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="flag"
+                        class="h-6 w-6 rounded-full object-cover" />
+                </button>
+                <ul *hlMenuItems @toggleAnimation
+                    class="top-11 grid w-[280px] grid-cols-2 gap-2 px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:-right-14 sm:ltr:-right-2 rtl:-left-14 sm:rtl:-left-2">
+                    <li *ngFor="let item of store.languageList;">
+                        <button *hlMenuItem="let menuItem" type="button" class="w-full hover:text-primary"
+                            [ngClass]="{ 'bg-primary/10 text-primary': translate.currentLang === item.code }"
+                            (click)="changeLanguage(item)">
+                            <img class="h-5 w-5 rounded-full object-cover"
+                                [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                            <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a routerLink="/auth/landing"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'home' | translate }}
+        </a>
+        <!-- Navbar Links -->
+        <a routerLink="/auth/about"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'about' | translate }}
+        </a>
+        <a routerLink="/auth/services"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'services' | translate }}
+        </a>
+        <a routerLink="/auth/contact"
+            class="nav-link transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-gray-700">
+            {{ 'contact' | translate }}
+        </a>
+        <button routerLink="/auth/cover-login"
+            class="btn btn-success custom-button transition-all duration-300 ease-in-out transform hover:scale-105">
+            {{ 'loginn' | translate }}
+        </button>
+    </nav>
+</header>
+
+<!-- Slider Image Section -->
+<div class="slider-container relative">
+    <div class="relative w-full h-full bg-cover bg-center grid-container"
+        style="background-image: url('/assets/images/aboutus2.jpg');">
+        <!-- Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full h-full bg-black/50">
+            <!-- Block 1 -->
+            <div class="block-1 overflow-hidden px-6 py-12 sm:px-12 sm:py-16 md:px-16 md:py-24 w-full text-white">
+                <h2 class="block-title text-3xl sm:text-4xl md:text-5xl text-center">Bize Ulaşın!</h2>
+                <p class="block-text text-base sm:text-lg md:text-xl text-center mt-4">Ücretsiz demo talebi, satın alma
+                    işlemleri, kurulum süreci ve teknik destek ile ilgili sorularınız için bizimle aşağıdaki iletişim
+                    bilgileri üzerinden iletişime geçebilirsiniz veya formu doldurarak anında bize ulaşabilirsiniz.</p>
+                <p class="block-text text-base sm:text-lg md:text-xl text-center mt-2">F: 0262 335 38 74</p>
+                <p class="block-text text-base sm:text-lg md:text-xl text-center mt-2">M: info&#64;easycopro.com</p>
+                <p class="block-text font-bold text-base sm:text-lg md:text-xl text-center mt-2">Teknik Destek:</p>
+                <p class="block-text text-base sm:text-lg md:text-xl text-center mt-2">0850 303 41 03</p>
+                <!-- iframe -->
+                <div class="iframe-container mt-6">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2872.487855093427!2d29.958404275845457!3d40.76170317138625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cb391ad1ae57f1%3A0x2873c3bfccd29566!2sibaysoft!5e1!3m2!1str!2str!4v1732172036213!5m2!1str!2str"
+                        class="w-full h-[350px] sm:h-[450px] md:h-[500px]" style="border:0;" allowfullscreen=""
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- Block 2 -->
+            <div class="block-2 px-6 py-12 sm:px-12 sm:py-16 md:px-16 md:py-24 w-full text-white">
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div>
+                        <input type="text" formControlName="namesurname" placeholder="Ad Soyad*"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('namesurname')?.touched && contactForm.get('namesurname')?.invalid"
+                            class="text-red-500">
+                            Ad Soyad zorunludur.
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" formControlName="companyname" placeholder="İşletme Adı*"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('companyname')?.touched && contactForm.get('companyname')?.invalid"
+                            class="text-red-500">
+                            İşletme Adı zorunludur.
+                        </div>
+                    </div>
+                    <div>
+                        <input type="number" formControlName="phone" placeholder="Telefon Numarası*"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid"
+                            class="text-red-500">
+                            Geçerli bir telefon numarası girin.
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" formControlName="town" placeholder="Şehir*"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('town')?.touched && contactForm.get('town')?.invalid"
+                            class="text-red-500">
+                            Şehir zorunludur.
+                        </div>
+                    </div>
+                    <div>
+                        <input type="email" formControlName="email" placeholder="E-Mail Adresi*"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
+                            class="text-red-500">
+                            Geçerli bir e-posta adresi girin.
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" formControlName="description" placeholder="Açıklama"
+                            class="form-input w-full p-3 text-sm sm:text-base md:text-lg" />
+                        <div *ngIf="contactForm.get('description')?.touched && contactForm.get('description')?.invalid"
+                            class="text-red-500">
+                            
+                        </div>
+                    </div>
+                    <div class="!mt-3">
+                        <span class="text-white-dark text-sm sm:text-base md:text-lg inline-block">*Gerekli
+                            Alanlar</span>
+                    </div>
+                    <button type="submit"
+                        class="btn btn-primary !mt-6 w-full sm:w-auto md:w-auto py-3 px-6 text-sm sm:text-base md:text-lg">
+                        Gönder
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!-- Footer -->
+<footer style="background: linear-gradient(135deg, #5919ba, #e4075c);" class="footer text-white py-8">
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- About Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">About Us</h4>
+                <p class="text-sm mb-4">We are a company dedicated to providing high-quality services with a focus on
+                    customer
+                    satisfaction. Learn more about our journey and values.</p>
+                <a href="/about" class="text-primary hover:text-[#3498db]">Learn More</a>
+            </div>
+
+            <!-- Services Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Services</h4>
+                <ul class="space-y-2">
+                    <li><a href="/services" class="hover:text-[#3498db]">Web Hosting</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">Cloud Solutions</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">VPS Hosting</a></li>
+                    <li><a href="/services" class="hover:text-[#3498db]">E-commerce Solutions</a></li>
+                </ul>
+            </div>
+
+            <!-- Quick Links Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="/contact" class="hover:text-[#3498db]">Contact</a></li>
+                    <li><a href="/faq" class="hover:text-[#3498db]">FAQ</a></li>
+                    <li><a href="/privacy-policy" class="hover:text-[#3498db]">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" class="hover:text-[#3498db]">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Media Section -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-xl hover:text-[#3498db]"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-xl hover:text-[#3498db]"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-xl hover:text-[#3498db]"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-xl hover:text-[#3498db]"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,81 @@
+.menu-container {
+    text-align: center;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .logo-container {
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    max-width: 150px;
+    margin: 0 auto;
+  }
+  
+  .category-tab {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    scrollbar-width: thin; /* Mobil cihazlarda kaydırma */
+  }
+  
+  .category {
+    flex: 0 0 auto;
+    padding: 10px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .category:hover {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+  }
+  
+  .category.active {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 0 10px;
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .product-info h3 {
+    font-size: 16px;
+    margin: 10px 0 5px;
+  }
+  
+  .product-info p {
+    color: #888;
+    font-size: 14px;
+  }
+  

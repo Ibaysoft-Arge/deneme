@@ -1,0 +1,116 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-gray-900 dark:text-white">
+    <!-- Adisyonlar Paneli (Sol Taraf) -->
+    <div id="step1" class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl">
+        <h3 class="text-lg font-semibold mb-4">{{ 'bills' | translate }}</h3>
+        <div *ngFor="let adisyon of adisyonlar" class="grid grid-cols-3 gap-2 items-center mb-2">
+            <!-- Müşteri Adı ve Soyadın İlk Harfi + *** -->
+            <span
+            class="text-left hover:underline cursor-pointer"
+            (click)="goToOrderDetails(adisyon)">
+              {{ (adisyon.musteri?.ad || '') | titlecase }} {{ ((adisyon.musteri?.soyad || '') | slice:0:1)  }}***
+          </span>
+            <!-- Sipariş Saati Ortalanmış -->
+            <span class="text-center">
+                {{ adisyon.siparisTarihi | date:'shortTime' }}
+            </span>
+            <!-- Toplam Fiyat Sağa Yaslı -->
+            <span class="text-right">
+                {{ adisyon.toplamVergiliFiyat | dynamicCurrency }}
+            </span>
+        </div>
+        <div class="border-t border-white/50 mt-2 pt-2 flex justify-between items-center dark:border-white/20">
+            <span class="font-bold flex-1">{{ 'toplam' | translate }}:</span>
+            <span class="font-bold flex-1 text-right">{{ toplamTutar | dynamicCurrency }}</span>
+        </div>
+    </div>
+
+
+    <!-- Masalar Paneli (Orta Bölüm) -->
+    <div id="step2" class="flex-1 p-4 bg-white overflow-y-auto dark:bg-gray-800 dark:text-white">
+        <h1 class="text-2xl font-semibold text-gray-800 text-center dark:text-white">{{ 'takeaway' | translate }}</h1>
+
+        <div *ngIf="sayfa" class="grid grid-cols-1 gap-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md max-w-4xl mx-auto">
+            <h2 class="text-2xl font-semibold text-gray-800 text-center dark:text-white">{{ 'customerform' | translate }}</h2>
+            <form [formGroup]="customerForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Ad -->
+                <div class="form-group">
+                    <label class="font-medium text-gray-700 dark:text-gray-200">{{ 'NAME' | translate }}<span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            formControlName="ad"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-500 dark:bg-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="{{ 'entername' | translate }}"
+                        />
+                    </div>
+                </div>
+
+                <!-- Soyad -->
+                <div class="form-group">
+                    <label class="font-medium text-gray-700 dark:text-gray-200">{{ 'surname' | translate }}<span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            formControlName="soyad"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-500 dark:bg-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="{{ 'entersurname' | translate }}"
+                        />
+                    </div>
+                </div>
+
+                <!-- Telefon -->
+                <div class="form-group">
+                    <label class="font-medium text-gray-700 dark:text-gray-200">{{ 'phone' | translate }}</label>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            formControlName="telefon"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-500 dark:bg-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="{{ 'yourphonenumber' | translate }}"
+                        />
+                    </div>
+                </div>
+
+                <!-- Kaydet Butonu -->
+                <div class="form-group md:col-span-2 text-right">
+                    <button
+                        type="submit"
+                        class="btn btn-primary bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition"
+                        (click)="navigateToOrder()"
+                    >
+                    {{ 'save' | translate }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="!sayfa" class="form-group md:col-span-2 text-right">
+            <button
+                type="submit"
+                class="btn btn-primary bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition"
+                (click)="navigateToOrder()"
+            >
+            {{ 'takeneworder' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Bölge ve Mağaza Seçim Paneli (Sağ Taraf) -->
+    <div id="step3" class="w-[200px] p-4 bg-gray-800 text-white flex flex-col items-start space-y-4 relative rounded-r-xl">
+        <div class="w-full mb-4">
+            <label class="block text-sm font-semibold mb-2">{{ 'selectstore' | translate }}</label>
+            <ng-select [items]="stores" bindLabel="magazaAdi" bindValue="_id" [(ngModel)]="selectedStore"
+                (change)="onStoreChange(selectedStore)" placeholder="{{ 'choosestore' | translate }}" class="w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            </ng-select>
+        </div>
+
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Landing |  360restoran.com</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght&#64;0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght&#64;100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght&#64;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" />
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+
+
+
+    <!-- Main CSS File -->
+    <link href="/assets/css/accounting.css" rel="stylesheet">
+
+    <!-- =======================================================
+  * Template Name: iLanding
+  * Template URL: https://bootstrapmade.com/ilanding-bootstrap-landing-page-template/
+  * Updated: Nov 12 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div
+            class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+            <a href="javascript:void(0)" (click)="navigateTo('/auth/landing')"
+                class="logo d-flex align-items-center me-auto me-xl-0">
+                <img src="/assets/images/auth/logo-purple.svg" alt="Logo" style="height: 50px; width: auto;">
+            </a>
+
+            <nav id="navmenu" class="navmenu" [ngClass]="{'mobile-nav-active': isNavbarOpen}">
+                <ul>
+                    <li><a href="#" (click)="scrollToSection('hero', $event)">{{ 'home' | translate }}</a></li>
+                    <li><a href="#" (click)="scrollToSection('about', $event)">{{ 'about' | translate }}</a></li>
+                    <li><a href="#" (click)="scrollToSection('pricing', $event)">{{ 'Pricing' | translate }}</a></li>
+                    <li><a href="#" (click)="scrollToSection('testimonials', $event)">{{ 'comments' | translate }}</a>
+                    </li>
+                    <li><a href="#" (click)="scrollToSection('services', $event)">{{ 'services' | translate }}</a></li>
+                    <li><a href="#" (click)="scrollToSection('features', $event)">{{ 'features' | translate }}</a></li>
+
+                    <!-- Main Dropdown Menu -->
+                    <li class="dropdown" [ngClass]="{'active': isDropdownOpen}">
+                        <a href="javascript:void(0)" (click)="toggleDropdown()">
+                            <span>{{ 'ourmoduless' | translate }}</span>
+                            <i class="bi toggle-dropdown"
+                                [ngClass]="{'bi-chevron-down': !isDropdownOpen, 'bi-chevron-up': isDropdownOpen}"></i>
+                        </a>
+                        <ul class="dropdown-menu" *ngIf="isDropdownOpen">
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/possystem')">{{ 'possystem' |
+                                    translate }}</a>
+                            </li>
+
+                            <!-- Nested Dropdown -->
+                            <li class="dropdown" [ngClass]="{'active': isDropdownOpen2}">
+                                <a href="javascript:void(0)" (click)="toggleDropdown2()">
+                                    <span>{{ 'entegree' | translate }}</span>
+                                    <i class="bi toggle-dropdown-2"
+                                        [ngClass]="{'bi-chevron-down': !isDropdownOpen2, 'bi-chevron-up': isDropdownOpen2}"></i>
+                                </a>
+                                <ul class="dropdown-menu-2" *ngIf="isDropdownOpen2">
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/marketplaces')">{{
+                                            'pazaryerleri' |
+                                            translate }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/payment')">{{ 'odeme' |
+                                            translate }}</a>
+                                    </li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/accounting')">{{
+                                            'muhasebe' | translate
+                                            }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/ecommerce')">{{
+                                            'eticaret' | translate
+                                            }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">{{
+                                            'kurye' |
+                                            translate }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/einvoice')">{{ 'efatura'
+                                            | translate
+                                            }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/hotel')">{{ 'otel' |
+                                            translate }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/virtualpbx')">{{
+                                            'sanalsantral' |
+                                            translate }}</a></li>
+                                    <li><a href="javascript:void(0)" (click)="navigateTo('/auth/cashregisterpos')">{{
+                                            'yazarkasapos' |
+                                            translate }}</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/stockmanagement')">{{
+                                    'stockmanagement' |
+                                    translate }}</a></li>
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">{{
+                                    'kuryeapp' |
+                                    translate }}</a></li>
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/waiterapplication')">{{
+                                    'garsonapp' |
+                                    translate }}</a></li>
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/loyaltyapplication')">{{
+                                    'sadakatapp' |
+                                    translate }}</a></li>
+                            <li><a href="javascript:void(0)" (click)="navigateTo('/auth/businessmanagement')">{{
+                                    'isletmeyonetimi' |
+                                    translate }}</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" (click)="scrollToSection('contact', $event)">{{ 'contact' | translate }}</a></li>
+                </ul>
+
+                <i class="mobile-nav-toggle d-xl-none bi" [ngClass]="{'bi-list': !isNavbarOpen, 'bi-x': isNavbarOpen}"
+                    (click)="toggleNavbar()"></i>
+            </nav>
+
+
+            <div class="d-flex align-items-center">
+                <!-- Language Dropdown -->
+                <div class="dropdown shrink-0">
+                    <div hlMenu>
+                        <button type="button" hlMenuButton
+                            class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/80 transition-colors ease-in-out hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 ml-3">
+                            <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="flag"
+                                class="h-6 w-6 rounded-full object-cover" />
+                        </button>
+                        <ul *hlMenuItems @toggleAnimation
+                            class="top-11 grid w-[280px] grid-cols-2 gap-2 px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:-right-14 sm:ltr:-right-2 rtl:-left-14 sm:rtl:-left-2">
+                            <li *ngFor="let item of store.languageList;">
+                                <button *hlMenuItem="let menuItem" type="button" class="w-full hover:text-primary"
+                                    [ngClass]="{ 'bg-primary/10 text-primary': translate.currentLang === item.code }"
+                                    (click)="changeLanguage(item)">
+                                    <img class="h-5 w-5 rounded-full object-cover"
+                                        [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                                    <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <a class="btn-getstarted ml-3" href="/#/auth/cover-login"> {{ 'loginn' | translate }}</a>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <br>
+        <br>
+        <br>
+        <!-- Features Section -->
+        <section id="features" class="features section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>{{ 'accounting' | translate }}</h2>
+                <p>{{ 'accountingtitle' | translate }}</p>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+
+
+                <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
+
+                    <div class="tab-pane fade active show" id="features-tab-1">
+                        <div class="row">
+                            <div
+                                class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                                <h3>{{ 'accountingfeatures' | translate }}</h3>
+                                <!-- <p class="fst-italic">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore
+                                    magna aliqua.
+                                </p> -->
+                                <ul>
+                                    <li><i class="bi bi-check2-all"></i> <span>{{ 'accountingcontent1' | translate }}
+                                        </span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>{{ 'accountingcontent2' | translate }}
+                                        </span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>{{ 'accountingcontent3' | translate }}
+                                        </span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>{{ 'accountingcontent4' | translate }}
+
+                                        </span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>{{ 'accountingcontent5' | translate }}
+                                        </span></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                <img src="assets/img/accounting.jpg" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div><!-- End tab content item -->
+
+                    <div class="tab-pane fade" id="features-tab-2">
+                        <div class="row">
+                            <div
+                                class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                                <h3>Neque exercitationem debitis</h3>
+                                <p class="fst-italic">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore
+                                    magna aliqua.
+                                </p>
+                                <ul>
+                                    <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea
+                                            commodo consequat.</span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in
+                                            voluptate velit.</span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>Provident mollitia neque rerum asperiores
+                                            dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea
+                                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                                            trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                <img src="assets/img/features-illustration-2.webp" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div><!-- End tab content item -->
+
+                    <div class="tab-pane fade" id="features-tab-3">
+                        <div class="row">
+                            <div
+                                class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                                <h3>Voluptatibus commodi accusamu</h3>
+                                <ul>
+                                    <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea
+                                            commodo consequat.</span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in
+                                            voluptate velit.</span></li>
+                                    <li><i class="bi bi-check2-all"></i> <span>Provident mollitia neque rerum asperiores
+                                            dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</span></li>
+                                </ul>
+                                <p class="fst-italic">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore
+                                    magna aliqua.
+                                </p>
+                            </div>
+                            <div class="col-lg-6 order-1 order-lg-2 text-center">
+                                <img src="assets/img/features-illustration-3.webp" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div><!-- End tab content item -->
+
+                </div>
+
+            </div>
+
+        </section><!-- /Features Section -->
+
+        <!-- Call To Action 2 Section -->
+        <section id="call-to-action-2" class="call-to-action-2 section dark-background">
+
+            <div class="container">
+                <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="col-xl-10">
+                        <!-- <div class="text-center">
+                <h3>Call To Action</h3>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                  laborum.</p>
+                <a class="cta-btn" href="#">Call To Action</a>
+              </div> -->
+                    </div>
+                </div>
+            </div>
+
+        </section><!-- /Call To Action 2 Section -->
+
+    </main>
+    <footer id="footer" class="footer">
+
+        <div class="container footer-top">
+            <div class="row gy-4">
+                <div class="col-lg-2 col-md-6 footer-about">
+                    <a href="/auth/landing" class="logo d-flex align-items-center">
+                        <!-- <span class="sitename">iLanding</span> -->
+                        <img src="/assets/images/auth/logo-purple.svg" alt="Logo" style="height: 50px; width: auto;">
+                    </a>
+                    <div class="footer-contact pt-3">
+                        <p>Körfez Mah. Ankara Karayolu Cad. </p>
+                        <p> No:24/3 İzmit, Kocaeli</p>
+                        <p class="mt-3" style="white-space: nowrap;"><strong>{{ 'phone' | translate
+                                }}:</strong><span>+90 (850) 303
+                                41 03</span></p>
+                        <p><strong>{{ 'email' | translate }}:</strong> <span>destek&#64;İbaysoft.com.tr</span></p>
+                    </div>
+                    <div class="social-links d-flex mt-4">
+                        <a href=""><i class="bi bi-twitter-x"></i></a>
+                        <a href=""><i class="bi bi-facebook"></i></a>
+                        <a href=""><i class="bi bi-instagram"></i></a>
+                        <a href=""><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>{{ 'explore' | translate }}</h4>
+                    <ul>
+                        <li><a href="#" (click)="scrollToSection('hero', $event)">{{ 'home' | translate }}</a></li>
+                        <li><a href="#" (click)="scrollToSection('about', $event)">{{ 'about' | translate }}</a></li>
+                        <!-- <li><a href="#">{{ 'references' | translate }}</a></li> -->
+                        <!-- <li><a href="#">Blog</a></li> -->
+                        <li><a href="#" (click)="scrollToSection('contact', $event)">{{ 'contact' | translate }}</a>
+                        </li>
+                        <!-- <li><a href="#">{{ 'testapplication' | translate }}</a></li> -->
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>{{ 'ourmodules' | translate }}</h4>
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/possystem')">
+                                {{ 'possystem' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/stockmanagement')">
+                                {{ 'stockmanagement' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">
+                                {{ 'kuryeapp' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/waiterapplication')">
+                                {{ 'garsonapp' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/loyaltyapplication')">
+                                {{ 'sadakatapp' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/businessmanagement')">
+                                {{ 'isletmeyonetimi' | translate }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- <div class="col-lg-2 col-md-3 footer-links">
+              <h4>{{ 'faaliyet' | translate }}</h4>
+              <ul>
+                <li><a href="#">{{ 'zincirisletmeler' | translate }}</a></li>
+                <li><a href="#">{{ 'restoran' | translate }}</a></li>
+                <li><a href="#">{{ 'selfservis' | translate }}</a></li>
+                <li><a href="#">{{ 'perakende' | translate }}</a></li>
+                <li><a href="#">{{ 'kafe' | translate }}</a></li>
+                <li><a href="#">{{ 'pastane' | translate }}</a></li>
+                <li><a href="#">{{ 'klup' | translate }}</a></li>
+                <li><a href="#">{{ 'otel' | translate }}</a></li>
+                <li><a href="#">{{ 'universite' | translate }}</a></li>
+                <li><a href="#">{{ 'bulutmutfak' | translate }}</a></li>
+              </ul>
+            </div> -->
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>{{ 'entegre' | translate }}</h4>
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/marketplaces')">
+                                {{ 'pazaryerleri' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/payment')">
+                                {{ 'odeme' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/accounting')">
+                                {{ 'muhasebe' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/ecommerce')">
+                                {{ 'eticaret' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">
+                                {{ 'kurye' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/einvoice')">
+                                {{ 'efatura' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/hotel')">
+                                {{ 'otel' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/virtualpbx')">
+                                {{ 'sanalsantral' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="navigateTo('/auth/cashregisterpos')">
+                                {{ 'yazarkasapos' | translate }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>{{ 'politika' | translate }}</h4>
+                    <ul>
+                        <li><a href="#">{{ 'gizlilikpolitikasi' | translate }}</a></li>
+                        <li><a href="#">{{ 'satispolitikasi' | translate }}</a></li>
+                        <li><a href="#">{{ 'KVKK' | translate }}</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container copyright text-center mt-4">
+            <p>© <span></span> <strong class="px-1 sitename">easyco</strong> <span>{{ 'footerrights' | translate
+                    }}</span></p>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you've purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+                <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed By <a
+              href="https://themewagon.com">ThemeWagon</a> -->
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/php-email-form/validate.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+    <!-- Main JS File -->
+    <script src="/assets/js/main.js"></script>
+
+</body>
+
+
+</html>

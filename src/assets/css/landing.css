@@ -1,0 +1,497 @@
+/* Custom metallic purple background color */
+.metallic-purple {
+  background: linear-gradient(135deg, #5919ba, #e4075c);
+  /* Adjust the shades as needed */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  /* Optional: add a shadow for more depth */
+}
+
+.metallic-purple:hover {
+  background-color: #5a009d;
+  /* Slightly darker shade for hover effect */
+}
+
+
+
+.most-popular-banner {
+  background: linear-gradient(135deg, #5919ba, #e4075c);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+
+
+.buy-now-btn {
+  background: linear-gradient(135deg, #5919ba, #e4075c);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  transition: background 0.3s ease;
+  border: none;
+}
+
+.buy-now-btn:hover {
+  background: linear-gradient(135deg, #5919ba, #e4075c);
+  /* slightly darker for hover */
+}
+
+/* Başlangıçta navbar'ı gizle */
+.navbar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  /* Header'ın hemen altına yerleşmesi için */
+  left: 0;
+  width: 100%;
+  background-color: #ced2d1;
+  /*background-color: #6e4b8b;  /* Arka plan rengini net bir renk olarak ayarladım */
+  padding: 5px 0;
+  /* Yüksekliği azaltmak için padding'i küçülttüm */
+  opacity: 1;
+  /* Saydamlığı kaldırmak için opaklık */
+}
+
+/* Navbar'ı header üzerine gelince göster */
+header:hover .navbar {
+  display: block;
+}
+
+.navbar div {
+  display: flex;
+  /* Flexbox ile elemanları yan yana diz */
+  justify-content: center;
+  /* Orta hizalama */
+  gap: 1rem;
+  /* Bağlantılar arasındaki boşluğu ayarla */
+}
+
+/* Set the font color of navbar titles to purple */
+.navbar a {
+  padding: 5px 15px;
+  color: #110227;
+  /* Set the color to metallic purple */
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+  color: #e4075c;
+}
+
+#slider5 .swiper-slide img {
+  width: 100px;
+  /* İstediğiniz genişliği belirleyin */
+  height: 100px;
+  /* İstediğiniz yüksekliği belirleyin */
+  object-fit: cover;
+  /* Görsellerin boyutlarını sığdırmak için */
+  border-radius: 50%;
+  /* Yuvarlak yapmak için */
+  margin: 0 auto;
+  /* Görselleri ortalamak için */
+}
+
+
+#slider2 {
+  width: 100%;
+  /* Sayfa genişliğini alacak şekilde */
+  height: 500px;
+  /*slider2 img genişlik yüksekliğini sadece buradan ayarlayabilirz*/
+}
+
+#slider2 .swiper-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.mainslider {
+  width: 100%;
+  height: 50%;
+}
+
+#slider2 .swiper-slide img {
+  width: 100%;
+  /* Görselin genişliğini tam olarak slider genişliğine uyacak şekilde */
+  height: 100%;
+  /* Görselin yüksekliğini tam olarak slider yüksekliğine uyacak şekilde */
+  object-fit: cover;
+  /* Resmi, alanı tamamen kaplayacak şekilde sığdırır */
+}
+
+
+
+h1,
+.lead {
+  max-width: 800px;
+  /* Genişliği sınırlıyoruz */
+  margin: 0 auto;
+  /* Ortalamak için */
+  text-align: center;
+  /* Ortalanmış metin */
+}
+
+.lead {
+  line-height: 1.6;
+  /* Satır yüksekliğini ayarlayabilirsiniz */
+}
+
+/* .swiper {
+    height: 50%;
+  } */
+
+
+
+.custom-text {
+  max-width: 600px;
+  /* Satır genişliğini belirli bir genişlikte sınırlayın */
+  margin: 0 auto;
+  /* Ortalamayı sağlar */
+  line-height: 1.6;
+  /* Satır yüksekliğini azaltarak metni daha sıkıştırabilirsiniz */
+}
+
+.svg-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  /* Full viewport height, adjust as needed */
+  overflow: hidden;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  /* Semi-transparent effect */
+}
+
+.content-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.content1 {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  margin-top: 50px;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Semi-transparent white background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  /* Optional shadow effect */
+}
+
+@media (min-width: 640px) {
+  .content1 h2 {
+    font-size: 2.5rem;
+    /* Ekran büyükken daha büyük başlık */
+    text-align: right;
+    /* Başlığı sağa yaslar */
+    line-height: 1.4;
+    /* Satır yüksekliğini artırır */
+    word-wrap: break-word;
+    /* Uzun kelimeleri satır sonuna getirebilir */
+    overflow-wrap: break-word;
+    /* Kelimenin taşmasını engeller */
+    padding-bottom: 0.5rem;
+    /* Başlık ile metin arasına boşluk ekler */
+    margin-right: 0;
+    /* Sağdaki margin'i sıfırlar */
+  }
+
+  .content1 p {
+    text-align: right;
+    /* Paragrafı da sağa yaslar */
+    margin-right: 0;
+    /* Sağdaki margin'i sıfırlar */
+    font-size: 1.0rem;
+  }
+
+}
+
+.integrations {
+  margin-top: 50px;
+}
+
+.plansarea {
+  position: relative;
+  z-index: 0;
+  /* Lower z-index */
+}
+
+.plans {
+  position: relative;
+  z-index: 10;
+  /* Higher z-index to make sure buttons are on top */
+}
+
+.buy-now-btn {
+  position: relative;
+  z-index: 20;
+  /* Ensure button is above all other elements */
+}
+
+/* Varsayılan Düğme Stilleri */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem; /* Varsayılan dolgu */
+  font-size: 1rem; /* Varsayılan yazı boyutu */
+  border-radius: 0.5rem; /* Yuvarlatılmış köşeler */
+  transition: all 0.3s ease-in-out; /* Geçiş efektleri */
+}
+
+/* Varsayılan Ayarlar */
+svg {
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin: 0 auto; /* Yatayda ortalama */
+  transition: all 0.3s ease-in-out; /* Geçiş animasyonu */
+}
+
+.custom-button {
+  background:white; /* Metalik mor esas renk */
+  color: rgb(190, 65, 142);
+  border: none;
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+
+
+/* Responsive Ayarlar */
+@media (max-width: 1024px) {
+
+  /* Tablet görünümü */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header .logo {
+    margin-bottom: 1rem;
+  }
+
+  header nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  /* Tablet görünümü */
+  .swiper-slide .text-base {
+    font-size: 0.875rem;
+  }
+
+  .swiper-slide .btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .swiper-button-prev-ex2,
+  .swiper-button-next-ex2 {
+    width: 35px;
+    height: 35px;
+  }
+
+  .swiper-slide .absolute {
+    top: 30%;
+    left: 10%;
+  }
+
+  /* Tablet görünümü */
+  .flex {
+    flex-direction: column;
+    /* Dikey hizalama */
+  }
+
+  .flex>div {
+    width: 100%;
+    /* Tam genişlik */
+    text-align: center;
+    /* Metni ortalar */
+  }
+
+  .flex img {
+    margin-top: 1rem;
+    /* Üstüne boşluk ekler */
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem; /* Dolguyu küçült */
+    font-size: 0.9rem; /* Yazı boyutunu küçült */
+    margin-bottom: 1.5rem; /* Boşluğu artır */
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Mobil görünümü */
+  header {
+    padding: 0.5rem;
+  }
+
+  header .logo {
+    width: 6rem;
+  }
+
+  header nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  header nav .nav-link,
+  header nav .btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  header .dropdown ul {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mobil görünümü */
+  .swiper-slide .absolute {
+    top: 20%;
+    left: 5%;
+    text-align: left;
+  }
+
+  .swiper-slide .text-base {
+    font-size: 0.75rem;
+  }
+
+  .swiper-slide .btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .swiper-button-prev-ex2,
+  .swiper-button-next-ex2 {
+    width: 30px;
+    height: 30px;
+  }
+  /* Küçük tablet ve büyük mobil görünümü */
+  .flex h1 {
+    font-size: 1.5rem; /* Daha küçük başlık boyutu */
+  }
+
+  .flex p {
+    font-size: 0.875rem; /* Daha küçük metin boyutu */
+  }
+
+  .flex img {
+    width: 90%; /* Görseli küçültür */
+    margin: 0 auto; /* Ortalar */
+  }
+
+  .flex .btn {
+    font-size: 0.875rem; /* Düğme boyutunu küçültür */
+    padding: 0.5rem 1rem; /* Düğme dolgusunu ayarlar */
+  }
+  .btn {
+    padding: 0.5rem 1rem; /* Daha küçük dolgu */
+    font-size: 0.8rem; /* Daha küçük yazı boyutu */
+    margin-bottom: 2rem; /* Daha fazla boşluk */
+  }
+  svg {
+    width: 70px; /* SVG'yi küçült */
+    height: 70px;
+    margin-bottom: 1rem; /* Alt boşluk ekle */
+  }
+  .flex {
+    flex-direction: column; /* Elemanları dikey hizala */
+    text-align: center;
+  }
+  .integrations {
+    padding: 1rem;
+  }
+
+  .swiper-button-prev-ex5, 
+  .swiper-button-next-ex5 {
+    display: none; /* Mobilde düğmeleri gizle */
+  }
+
+  .swiper-pagination {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Küçük mobil görünümü */
+  .swiper-slide .absolute {
+    top: 15%;
+    left: 5%;
+    text-align: left;
+  }
+
+  .swiper-slide .text-base {
+    font-size: 0.65rem;
+  }
+
+  .swiper-slide .btn {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .swiper-button-prev-ex2,
+  .swiper-button-next-ex2 {
+    width: 25px;
+    height: 25px;
+  }
+   /* Küçük mobil görünümü */
+   .flex h1 {
+    font-size: 1.25rem; /* Başlığı daha da küçültür */
+  }
+
+  .flex p {
+    font-size: 0.75rem; /* Metni daha küçük yapar */
+  }
+
+  .flex img {
+    width: 100%; /* Görseli tam genişlik yapar */
+  }
+
+  .flex .btn {
+    font-size: 0.75rem; /* Düğmeyi küçültür */
+    padding: 0.4rem 0.8rem; /* Daha küçük dolgu */
+  }
+  .btn {
+    padding: 0.4rem 0.8rem; /* Minimum dolgu */
+    font-size: 0.7rem; /* Küçük yazı boyutu */
+    margin-bottom: 2.5rem; /* En fazla boşluk */
+  }
+  svg {
+    width: 50px; /* Daha küçük SVG */
+    height: 50px;
+  }
+}
+
+

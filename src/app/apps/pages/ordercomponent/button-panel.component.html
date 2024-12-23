@@ -1,0 +1,58 @@
+
+<div class="space-y-3 text-center py-4">
+    <button
+    ngxTippy="Bir Önceki Ekrana Git"
+    [tippyProps]="{placement: 'right'}"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs"
+        (click)="navigateBack()">
+        <icon-arrow-backward class="w-5 h-5 mb-1"></icon-arrow-backward>
+        <span>Geri</span>
+    </button>
+    <button
+    ngxTippy="Kupon"
+    [tippyProps]="{placement: 'right'}"
+    (click)="onKuponRequest()"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+        <icon-info-circle class="w-5 h-5 mb-1"></icon-info-circle>
+        <span>Kupon</span>
+    </button>
+    <button
+    ngxTippy="İade Et"
+    [tippyProps]="{placement: 'right'}"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+        <icon-arrow-left class="w-5 h-5 mb-1"></icon-arrow-left>
+        <span>İade</span>
+    </button>
+    <button
+    ngxTippy="Böl Ve Ödeme Al"
+    [tippyProps]="{placement: 'right'}"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+        <icon-pencil-paper class="w-5 h-5 mb-1"></icon-pencil-paper>
+        <span>Böl</span>
+    </button>
+    <button
+    ngxTippy="Hesap Fişi Yazdır"
+    [tippyProps]="{placement: 'right'}"
+    (click)="onHesapFisiRequest()"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+        <icon-printer class="w-5 h-5 mb-1"></icon-printer>
+        <span>H.fişi</span>
+    </button>
+    <button
+    ngxTippy="İndirim Uygula"
+    [tippyProps]="{placement: 'right'}"
+    class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+        <icon-dollar-sign-circle class="w-5 h-5 mb-1"></icon-dollar-sign-circle>
+        <span>İndirim</span>
+    </button>
+    <button
+        ngxTippy="ikinci Ekran Uygula"
+        [tippyProps]="{placement: 'right'}"
+        (click)="onOpenCustomerOrderWindow()"
+        class="flex flex-col items-center w-full py-2 hover:bg-purple-700 rounded text-xs">
+            <icon-laptop class="w-5 h-5 mb-1"></icon-laptop>
+            <span *ngIf="useSecondScreen; else useSecondScreenTemplate">ikinci Ekran kullanma</span>
+            <ng-template #useSecondScreenTemplate>ikinci Ekran Kullan</ng-template>
+        </button>
+
+</div>

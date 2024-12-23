@@ -1,0 +1,329 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <div class="mb-5">
+      <h5 class="text-lg font-semibold dark:text-white-light">{{ 'productmanagement' | translate }}</h5>
+    </div>
+
+    <!-- Ürün Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+      <!-- Ürün Ekleme Accordion Başlangıcı -->
+      <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+        <button type="button" class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+          [ngClass]="{ '!text-primary': isEditing }" (click)="isFormOpen = !isFormOpen">
+          <!-- İkon veya Başlık -->
+          <icon-plus class="h-5 w-5 shrink-0 text-primary ltr:mr-2 rtl:ml-2"></icon-plus>
+          {{ isEditing ? ('editproduct' | translate) : ('addproduct' | translate) }}
+          <div class="ltr:ml-auto rtl:mr-auto" [ngClass]="{ 'rotate-180': isFormOpen }">
+            <!-- Aşağı Ok İkonu -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </button>
+        <div [@slideDownUp]="!isFormOpen" class="accordion-content">
+          <div class="space-y-2 border-t border-[#d3d3d3] p-4 text-white-dark dark:text-gray-200 dark:border-[#1b2e4b]">
+            <!-- Sekme Başlangıcı -->
+            <div class="mb-5">
+              <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                <a id="step2" href="javascript:;"
+                  class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                  [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                  (click)="setActiveTab('genel')">
+                  {{ 'generalinformation' | translate }}
+                </a>
+                <a id="step3" href="javascript:;"
+                  class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                  [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('items') }"
+                  (click)="setActiveTab('items')">
+                  {{ 'items' | translate }}
+                </a>
+              </div>
+            </div>
+
+            <!-- Genel Bilgiler Sekmesi -->
+            <div *ngIf="isActiveTab('genel')">
+              <form [formGroup]="urunForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Ürün Adı -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'productname' | translate }}<span style="color:red;">*</span></label>
+                  <input type="text" formControlName="urunAdi"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+                <!-- Açıklama -->
+                <div class="form-group md:col-span-2">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'description' | translate }}</label>
+                  <textarea formControlName="aciklama"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="font-medium text-black dark:text-gray-200">{{ 'productprice' | translate }}<span style="color:red;">*</span></label>
+                    <input type="number" formControlName="standartFiyat"
+                      class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                  </div>
+                <!-- Kategori -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'category' | translate }}<span style="color:red;">*</span></label>
+                  <div class="flex items-center gap-2">
+                    <select formControlName="urunKategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" (change)="onKategoriChange()">
+                      <option value="">{{ 'selectcategory' | translate }}</option>
+                      <option *ngFor="let kategori of kategoriler" [value]="kategori._id">{{ kategori.ad }}</option>
+                    </select>
+                    <!-- Kategori Ekle Butonu (Yalnızca İkon) -->
+                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddKategoriModal()">
+                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                    </button>
+                  </div>
+                </div>
+                <!-- Alt Kategori -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'subcategory' | translate }}<span style="color:red;">*</span></label>
+                  <div class="flex items-center gap-2">
+                    <select formControlName="urunAltKategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                      <option value="">{{ 'selectsubcategory' | translate }}</option>
+                      <option *ngFor="let altKategori of altKategoriler" [value]="altKategori._id">{{ altKategori.ad }}</option>
+                    </select>
+                    <!-- Alt Kategori Ekle Butonu (Yalnızca İkon) -->
+                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddAltKategoriModal()">
+                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                    </button>
+                  </div>
+                </div>
+                <!-- Ürün Resmi -->
+                <div class="form-group">
+                    <label class="font-medium text-black dark:text-gray-200">{{ 'productimage' | translate }}</label>
+                    <input type="file" (change)="onFileSelected($event)" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                    <img
+                        *ngIf="previewImage"
+                        [src]="previewImage"
+                        alt="Preview"
+                        class="mt-2 max-w-[200px] h-auto rounded-md"
+                    />
+                </div>
+
+                <!-- QR Kod URL -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'qrcodeurl' | translate }}</label>
+                  <input type="text" formControlName="qrcodeUrl"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+                <!-- Barkod -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'barcode' | translate }}</label>
+                  <input type="text" formControlName="barcode"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+                <!-- Maksimum Seçim Sayısı -->
+                <div class="form-group">
+                  <label class="font-medium text-black dark:text-gray-200">{{ 'maxselection' | translate }}</label>
+                  <input type="number" formControlName="maxSecimSayisi"
+                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+              </form>
+            </div>
+
+            <!-- Öğeler Sekmesi -->
+            <div *ngIf="isActiveTab('items')">
+              <!-- Ürün Öğeleri Formu -->
+              <div [formGroup]="urunForm">
+                <div formArrayName="items">
+                  <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+                    class="card mb-4 p-4 shadow bg-white dark:bg-gray-700">
+                    <!-- Öğe Türü Seçimi -->
+                    <div class="form-group">
+                      <label class="font-medium text-black dark:text-gray-200">{{ 'itemtype' | translate }}<span style="color:red;">*</span></label>
+                      <select formControlName="tip"
+                        class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                        <option value="SKU">{{ 'sku' | translate }}</option>
+                        <option value="Recipe">{{ 'recipe' | translate }}</option>
+                        <option value="Urun">{{ 'product' | translate }}</option>
+                      </select>
+                    </div>
+                    <!-- Öğe Seçimi -->
+                    <div class="form-group">
+                      <label class="font-medium text-black dark:text-gray-200">{{ 'item' | translate }}<span style="color:red;">*</span></label>
+                      <button type="button" class="btn btn-secondary w-full" (click)="openItemSelectionModal(item)">
+                        {{ item.get('selectedItemName')?.value || ('choose' + item.get('tip')?.value) | translate }}
+                      </button>
+                    </div>
+
+                  <!-- Item Seçimi Modali -->
+                  <ngx-custom-modal #modal18 customClass="modal-top extra-large-modal">
+                    <ng-template #modalHeader>
+                        <div>
+                            {{ currentItemType === 'SKU' ? ('choosesku' | translate) : (currentItemType === 'Recipe' ? ('chooserecipe' | translate) : ('chooseproduct' | translate)) }}
+                        </div>
+                    </ng-template>
+
+                    <ng-template #modalBody>
+                        <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <input
+                                type="text"
+                                [(ngModel)]="modalSearchTerm"
+                                (input)="onSearchTermChange($event)"
+                                placeholder="{{ 'search' | translate }}"
+                                class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white mb-3"
+                            />
+                            <div *ngIf="isLoading" class="text-center">
+                                <span>{{ 'loading' | translate }}...</span>
+                            </div>
+
+                            <div *ngIf="!isLoading">
+                                <table class="table-auto w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-600">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-black dark:text-white">{{ 'productname' | translate }}</th>
+                                            <th class="px-4 py-2 text-black dark:text-white">{{ 'category' | translate }}</th>
+                                            <th class="px-4 py-2 text-black dark:text-white">{{ 'subcategory' | translate }}</th>
+                                            <th class="px-4 py-2 text-black dark:text-white">{{ currentItemType === 'SKU' ? 'SKU Code' : 'Description' }}</th>
+                                            <th class="px-4 py-2 text-black dark:text-white">{{ 'actions' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of itemList" class="border-b border-gray-200 dark:border-gray-500">
+                                            <td class="px-4 py-2 text-black dark:text-white">{{ item.urunAdi }}</td>
+                                            <td class="px-4 py-2 text-black dark:text-white">{{ item.kategori?.ad || '-' }}</td>
+                                            <td class="px-4 py-2 text-black dark:text-white">{{ item.altKategori?.ad || '-' }}</td>
+                                            <td class="px-4 py-2 text-black dark:text-white">
+                                                {{ currentItemType === 'SKU' ? item.skuKod : item.aciklama || '-' }}
+                                            </td>
+                                            <td class="px-4 py-2 text-center">
+                                                <button class="btn btn-primary" (click)="selectItem(item, modal18)">
+                                                    {{ 'select' | translate }}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="itemList.length === 0">
+                                            <td colspan="5" class="text-center py-4 text-black dark:text-white">{{ 'noitemsfound' | translate }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #modalFooter>
+                        <button type="button" class="btn btn-outline-danger" (click)="modal18.close()">Discard</button>
+
+                    </ng-template>
+                </ngx-custom-modal>
+
+                <div class="form-group">
+                    <label class="font-medium text-black dark:text-gray-200">{{ 'additionalprice' | translate }}</label>
+                    <input type="number" formControlName="ekFiyat"
+                      class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                  </div>
+
+                    <!-- Miktar -->
+                    <div class="form-group">
+                      <label class="font-medium text-black dark:text-gray-200">{{ 'quantity' | translate }}<span style="color:red;">*</span></label>
+                      <input type="number" formControlName="miktar"
+                        class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                    </div>
+                     <!-- Birim -->
+                     <div class="form-group">
+                        <label class="font-medium text-black dark:text-gray-200">{{ 'unit' | translate }}<span style="color:red;">*</span></label>
+                        <select formControlName="birim"
+                            class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                            <option value="">{{ 'chooseunit' | translate }}</option>
+                            <option *ngFor="let unit of validUnits" [value]="unit">{{ unit }}</option>
+                        </select>
+                    </div>
+                    <!-- Öğeyi Sil -->
+                    <div class="form-group flex justify-end">
+                      <button type="button" class="btn btn-danger px-4 py-2 flex items-center"
+                        (click)="removeItem(i)">
+                        <icon-trash class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-trash>
+                        {{ 'delete' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Yeni Öğe Ekle -->
+                <button type="button" class="btn btn-primary mt-4 flex items-center" (click)="addItem()">
+                  <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                  {{ 'additem' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Kaydet ve Sıfırla Butonları -->
+            <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+              <button type="button" class="btn btn-success px-6 py-2 flex items-center" (click)="onSubmit()"
+                [disabled]="urunForm.invalid">
+                <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                {{ isEditing ? ('update' | translate) : ('save' | translate) }}
+              </button>
+              <button type="button" class="btn btn-secondary px-6 py-2 flex items-center"
+                (click)="resetForm()">
+                <icon-refresh class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-refresh>
+                {{ 'clearForm' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ürün Listesi -->
+    <div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow mt-6">
+      <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'productlist' | translate }}</h5>
+
+        <!-- Arama Kutusu -->
+        <div class="flex items-center">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+            placeholder="{{ 'search' | translate }}"
+            class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+          <button type="button" class="btn btn-primary ml-2" (click)="onSearchReset()">
+            {{ 'reset' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div id="step4" class="datatable bg-white dark:bg-gray-700 rounded-md">
+        <!-- Ürünleri listeleyin -->
+        <table class="w-full border-collapse border border-gray-300 dark:border-gray-600 dark:bg-gray-600">
+          <thead class="bg-gray-100 dark:bg-gray-700">
+            <tr>
+              <th class="p-2 border-b dark:border-gray-600 text-black dark:text-white">{{ 'productname' | translate }}</th>
+              <th class="p-2 border-b dark:border-gray-600 text-black dark:text-white">{{ 'category' | translate }}</th>
+              <th class="p-2 border-b dark:border-gray-600 text-black dark:text-white">{{ 'subcategory' | translate }}</th>
+              <th class="p-2 border-b dark:border-gray-600 text-black dark:text-white">{{ 'maxselection' | translate }}</th>
+              <th class="p-2 border-b dark:border-gray-600 text-black dark:text-white">{{ 'actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let urun of urunler" class="border-b border-gray-300 dark:border-gray-500">
+              <td class="p-2 text-black dark:text-white">{{ urun.urunAdi }}</td>
+              <td class="p-2 text-black dark:text-white">{{ urun.urunKategori?.ad }}</td>
+              <td class="p-2 text-black dark:text-white">{{ urun.urunAltKategori?.ad }}</td>
+              <td class="p-2 text-black dark:text-white">{{ urun.maxSecimSayisi }}</td>
+              <td class="p-2">
+                <button type="button" class="btn btn-warning rounded-full" (click)="editUrun(urun)">
+                  <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                </button>
+                <button type="button" class="btn btn-danger rounded-full" (click)="deleteUrun(urun._id)">
+                  <icon-trash class="h-5 w-5 shrink-0"></icon-trash>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="urunler.length === 0">
+              <td colspan="5" class="p-4 text-center text-black dark:text-white">{{ 'noproductsfound' | translate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+      <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+               hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+               hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+        <icon-help-circle class="h-6 w-6"></icon-help-circle>
+      </a>
+    </div>
+</div>

@@ -1,0 +1,264 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <div class="mb-5">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'recipemanagement' | translate }}</h5>
+    </div>
+
+    <!-- Reçete Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+        <!-- Reçete Ekleme Accordion Başlangıcı -->
+        <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+            <button type="button"
+                class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+                [ngClass]="{ '!text-primary': isEditing }"
+                (click)="isFormOpen = !isFormOpen"
+            >
+                <icon-plus class="h-5 w-5 shrink-0 text-primary ltr:mr-2 rtl:ml-2"></icon-plus>
+                {{ isEditing ? ('editrecipe' | translate) : ('addrecipe' | translate) }}
+                <div class="ltr:ml-auto rtl:mr-auto" [ngClass]="{ 'rotate-180': isFormOpen }">
+                    <!-- Aşağı Ok İkonu -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </button>
+            <div [@slideDownUp]="!isFormOpen" class="accordion-content">
+                <div class="space-y-2 border-t border-[#d3d3d3] p-4 text-white-dark dark:text-gray-200 dark:border-[#1b2e4b]">
+                    <!-- Sekme Başlangıcı -->
+                    <div class="mb-5">
+                        <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <a id="step2" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                                (click)="setActiveTab('genel')">
+                                {{ 'generalinformation' | translate }}
+                            </a>
+                            <a id="step3" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('items') }"
+                                (click)="setActiveTab('items')">
+                                {{ 'items' | translate }}
+                            </a>
+                            <a id="step4" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('urunItems') }"
+                                (click)="setActiveTab('urunItems')">
+                                {{ 'variation' | translate }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bilgiler Sekmesi -->
+                    <div *ngIf="isActiveTab('genel')">
+                        <form [formGroup]="recipeForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'recipecode' | translate }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="urunKodu" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'recetename' | translate }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="urunAdi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"/>
+                            </div>
+
+                            <div class="form-group md:col-span-2">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'description' | translate }}</label>
+                                <textarea formControlName="aciklama" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'preparationtime' | translate }} ({{ 'minutes' | translate }})<span style="color:red;">*</span></label>
+                                <input type="number" formControlName="hazirlanmaSuresiDakika" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'cookingtime' | translate }} ({{ 'minutes' | translate }})<span style="color:red;">*</span></label>
+                                <input type="number" formControlName="pisirmeSuresiDakika" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'shelflife' | translate }} ({{ 'days' | translate }})<span style="color:red;">*</span></label>
+                                <input type="number" formControlName="rafOmruGun" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'category' | translate }}<span style="color:red;">*</span></label>
+                                <div class="flex items-center gap-2">
+                                    <select formControlName="kategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" (change)="onCategoryChange()">
+                                        <option value="">{{ 'choosecategory' | translate }}</option>
+                                        <option *ngFor="let kategori of kategoriler" [value]="kategori._id">{{ kategori.ad }}</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddKategoriModal()">
+                                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'subcategory' | translate }}<span style="color:red;">*</span></label>
+                                <div class="flex items-center gap-2">
+                                    <select formControlName="altKategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                        <option value="">{{ 'choosesubcategory' | translate }}</option>
+                                        <option *ngFor="let altKategori of altKategoriler" [value]="altKategori._id">{{ altKategori.ad }}</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddAltKategoriModal()">
+                                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Öğeler Sekmesi -->
+                    <div *ngIf="isActiveTab('items')">
+                        <div [formGroup]="recipeForm">
+                            <div formArrayName="items">
+                                <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="card mb-4 p-4 shadow bg-white dark:bg-gray-700">
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'itemtype' | translate }}</label>
+                                        <select formControlName="itemType" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                                            <option value="SKU">{{ 'sku' | translate }}</option>
+                                            <option value="Recipe">{{ 'recipe' | translate }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'item' | translate }}</label>
+                                        <ng-container *ngIf="item.get('itemType')?.value === 'SKU'">
+                                            <ng-select formControlName="item" [items]="skus" bindLabel="urunAdi" bindValue="_id" placeholder="{{ 'choosesku' | translate }}"
+                                                       [searchable]="true" class="mt-1 block w-full rounded-md dark:bg-gray-600 dark:text-white"></ng-select>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="item.get('itemType')?.value === 'Recipe'">
+                                            <ng-select formControlName="item" [items]="recipes" bindLabel="urunAdi" bindValue="_id" placeholder="{{ 'chooserecipe' | translate }}"
+                                                       [searchable]="true" class="mt-1 block w-full rounded-md dark:bg-gray-600 dark:text-white"></ng-select>
+                                        </ng-container>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'quantity' | translate }}</label>
+                                        <input type="number" formControlName="miktar" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'unit' | translate }}</label>
+                                        <select formControlName="birim" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                                            <option value="">{{ 'chooseunit' | translate }}</option>
+                                            <option *ngFor="let unit of validUnits" [value]="unit">{{ unit }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'unwanted' | translate }}</label>
+                                        <input type="checkbox" formControlName="istenmeyen" class="form-checkbox mt-1 dark:border-gray-600 dark:bg-gray-600" />
+                                    </div>
+                                    <div class="form-group flex justify-end">
+                                        <button type="button" class="btn btn-danger px-4 py-2 flex items-center" (click)="removeItem(i)">
+                                            <icon-trash class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-trash>
+                                            {{ 'delete' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-4 flex items-center" (click)="addItem()">
+                                <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                                {{ 'additem' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isActiveTab('urunItems')">
+                        <div [formGroup]="recipeForm">
+                            <div formArrayName="urunItems">
+                                <div *ngFor="let urunItem of urunItems.controls; let i = index" [formGroupName]="i" class="card mb-4 p-4 shadow bg-white dark:bg-gray-700">
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'product' | translate }}</label>
+                                        <select formControlName="urun" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                                            <option value="">{{ 'chooseproduct' | translate }}</option>
+                                            <option *ngFor="let urun of uruns" [value]="urun._id">{{ urun.urunAdi }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'quantity' | translate }}</label>
+                                        <input type="number" formControlName="miktar" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-medium text-black dark:text-gray-200">{{ 'unit' | translate }}</label>
+                                        <select formControlName="birim" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                                            <option value="">{{ 'chooseunit' | translate }}</option>
+                                            <option *ngFor="let unit of validUnits" [value]="unit">{{ unit }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex justify-end">
+                                        <button type="button" class="btn btn-danger px-4 py-2 flex items-center" (click)="removeUrunItem(i)">
+                                            <icon-trash class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-trash>
+                                            {{ 'delete' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-4 flex items-center" (click)="addUrunItem()">
+                                <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                                {{ 'addproduct' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+                        <button type="button" class="btn btn-success px-6 py-2 flex items-center" (click)="saveRecipe()"
+                            [disabled]="recipeForm.invalid" *ngIf="isEditing">
+                            <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                            {{ 'update' | translate }}
+                        </button>
+
+                        <button type="button" class="btn btn-success px-6 py-2 flex items-center" (click)="saveRecipe()"
+                            [disabled]="recipeForm.invalid" *ngIf="!isEditing">
+                            <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                            {{ 'save' | translate }}
+                        </button>
+
+                        <button type="button" class="btn btn-secondary px-6 py-2 flex items-center" (click)="resetForm()">
+                            <icon-refresh class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-refresh>
+                            {{ 'clearForm' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step3" class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow mt-6">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+          <h5 class="text-lg font-semibold dark:text-white-light"> {{ 'recipes' | translate }}</h5>
+          <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+            <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..."
+              class="form-input w-64 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+          </div>
+        </div>
+
+        <div class="datatable bg-white dark:bg-gray-700 rounded-md">
+          <ng-datatable [rows]="filteredRecipes" [columns]="cols" [sortable]="true" [search]="searchTerm"
+            [pageSize]="itemsPerPage" [stickyHeader]="true" class="whitespace-nowrap"
+            firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'>
+
+            <ng-template slot="actions" let-value="data">
+              <div class="flex items-center gap-2 ">
+                <button class="btn btn-danger" (click)="deleteRecipe(value._id)">
+                  <icon-trash class="h-5 w-5 shrink-0"></icon-trash>
+                </button>
+                <button type="button" class="btn btn-warning rounded-full" (click)="editRecipe(value._id)">
+                  <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                </button>
+              </div>
+            </ng-template>
+          </ng-datatable>
+        </div>
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>

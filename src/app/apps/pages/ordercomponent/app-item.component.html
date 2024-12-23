@@ -1,0 +1,157 @@
+<div *ngIf="item">
+    <!-- SKU Tipi -->
+    <ng-container *ngIf="item.tip === 'SKU'; else otherContent">
+      <div class="flex justify-between items-center py-3 px-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-none transition-colors">
+        <label class="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            [(ngModel)]="item.selected"
+            [disabled]="item.disabled ?? false"
+            (change)="onSelectionChange()"
+            class="mr-3 w-5 h-5 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <span class="text-xl font-medium dark:text-gray-100">{{ item.itemDetails?.urunAdi | titlecase }}
+            <ng-container *ngIf="item.ekFiyat && item.ekFiyat > 0">
+                <span class="text-green-600 font-bold dark:text-green-400"> +{{ item.ekFiyat | dynamicCurrency }}</span>
+              </ng-container>
+          </span>
+        </label>
+        <span class="text-lg text-gray-600 dark:text-gray-300">{{ item.miktar }} X {{ item.birim }}</span>
+      </div>
+    </ng-container>
+
+    <!-- Recipe ve Urun Tipleri -->
+    <ng-template #otherContent>
+      <!-- Recipe Tipi -->
+      <ng-container *ngIf="item.tip === 'Recipe'; else urunContent">
+        <div class="py-3 px-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-none transition-colors">
+          <div class="flex justify-between items-center">
+            <label class="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                [(ngModel)]="item.selected"
+                [disabled]="item.disabled ?? false"
+                (change)="onSelectionChange()"
+                class="mr-3 w-5 h-5 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <span class="text-xl font-medium dark:text-gray-100">{{ item.itemDetails?.urunAdi | titlecase }}</span>
+              <ng-container *ngIf="item.ekFiyat && item.ekFiyat > 0">
+                <span class="text-green-600 font-bold dark:text-green-400"> +{{ item.ekFiyat | dynamicCurrency }}</span>
+              </ng-container>
+            </label>
+            <div class="flex space-x-4">
+                <ng-container *ngIf="(item.itemDetails?.urunItems?.length ?? 0) > 0">
+              <button class="text-green-600 text-lg underline flex items-center dark:text-green-400" (click)="toggleDetailsUrunItems()">
+                  <icon-plus-circle></icon-plus-circle>Ekle
+              </button>
+                </ng-container>
+                <ng-container *ngIf="(item.itemDetails?.items?.length ?? 0) > 0">
+              <button class="text-red-600 text-lg underline flex items-center dark:text-red-400" (click)="toggleDetails()">
+                <icon-minus-circle></icon-minus-circle>Çıkart
+              </button>
+                </ng-container>
+                <span class="text-lg text-gray-600 dark:text-gray-300">{{ item.miktar }} X {{ item.birim }}</span>
+            </div>
+          </div>
+
+          <!-- Recipe ekstra ürünler -->
+          <div *ngIf="item.itemDetails?.showDetailsUrun" class="mt-4 ml-6 border-l pl-4 space-y-3 dark:border-gray-700">
+            <div *ngIf="(item.itemDetails?.urunItems?.length ?? 0) > 0; else noRecipeUrunDetails">
+              <h6 class="mb-3 text-gray-600 text-xs font-medium dark:text-gray-400">Artı Ürünler:</h6>
+              <div class="flex flex-wrap gap-4">
+                <div
+                  *ngFor="let urunItem of item.itemDetails?.urunItems || []"
+                  class="flex flex-wrap gap-4 w-full"
+                >
+                  <div
+                    *ngFor="let recipeItem of urunItem.urun?.items || []"
+                    class="inline-flex items-center border border-gray-300 rounded-lg p-2 bg-white shadow-sm hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2 w-5 h-5 dark:bg-gray-700 dark:border-gray-600"
+                      [(ngModel)]="recipeItem.selected"
+                      [disabled]="!!recipeItem.disabled"
+                      (change)="onDetailSelectionChangeeklenecek(recipeItem, item)"
+                    />
+                    <span class="text-xl font-medium dark:text-gray-100">
+                        {{recipeItem.itemId.urunAdi| titlecase }}
+                        <ng-container *ngIf="recipeItem.ekFiyat && recipeItem.ekFiyat > 0">
+                          <span class="text-green-600 font-bold dark:text-green-400"> +{{ recipeItem.ekFiyat | dynamicCurrency }}</span>
+                        </ng-container>
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noRecipeUrunDetails>
+              <p class="text-gray-400 dark:text-gray-500">Recipe içinde varyasyon yok.</p>
+            </ng-template>
+          </div>
+
+
+          <!-- Recipe istenmeyenler -->
+          <div *ngIf="item.showDetails" class="mt-4 ml-6 border-l pl-4 space-y-3 dark:border-gray-700">
+            <div *ngIf="(item.itemDetails?.items?.length ?? 0) > 0; else noRecipeDetails">
+              <h6 class="mb-3 text-gray-600 text-xs font-medium dark:text-gray-400">İstenmeyenleri İşaretleyiniz:</h6>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div
+                  *ngFor="let recipeItem of item.itemDetails?.items || []"
+                  class="border border-gray-300 rounded-lg p-4 flex flex-col items-start bg-white shadow-sm hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                >
+                  <div class="flex items-center w-full">
+                    <input
+                      type="checkbox"
+                      class="mr-3 w-5 h-5 dark:bg-gray-700 dark:border-gray-600"
+                      [(ngModel)]="recipeItem.selected"
+                      [disabled]="!!recipeItem.disabled"
+                      (change)="onDetailSelectionChangecikartilacaklar(recipeItem, item)"
+                    />
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">{{ getItemName( recipeItem) | titlecase }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noRecipeDetails>
+              <p class="text-gray-400 dark:text-gray-500">Recipe içinde detay yok.</p>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Urun Tipi -->
+      <ng-template #urunContent>
+        <div class="py-3 px-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-none transition-colors">
+          <label class="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              [(ngModel)]="item.selected"
+              [disabled]="item.disabled?? false"
+              (change)="onSelectionChange()"
+              class="mr-3 w-5 h-5 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <span class="text-xl font-medium dark:text-gray-100">
+              {{ item.itemDetails?.urunAdi | titlecase }}
+              <ng-container *ngIf="item.ekFiyat && item.ekFiyat > 0">
+                <span class="text-green-600 font-bold dark:text-green-400"> +{{ item.ekFiyat | dynamicCurrency }}</span>
+              </ng-container>
+            </span>
+          </label>
+          <span class="text-xs text-gray-400 italic dark:text-gray-500">({{ item.itemDetails?.aciklama || 'Açıklama Yok' }})</span>
+
+          <!-- Urun Alt Detaylar -->
+          <div *ngIf="(item.itemDetails?.items?.length ?? 0) > 0" class="mt-4 ml-6 border-l pl-4 space-y-3 dark:border-gray-700">
+            <h6 class="mb-3 text-gray-600 font-medium dark:text-gray-400">Alt Detaylar:</h6>
+            <ng-container *ngFor="let detail of item.itemDetails?.items || []">
+              <app-item
+                [item]="detail"
+                [parentItem]="item"
+                [product]="product"
+                (selectionChangeEvent)="onDetailSelectionChange(detail, item)"
+              ></app-item>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+</div>

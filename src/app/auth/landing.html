@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Landing | 360restoran.com</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght&#64;0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght&#64;100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght&#64;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" />
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+
+
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: iLanding
+  * Template URL: https://bootstrapmade.com/ilanding-bootstrap-landing-page-template/
+  * Updated: Nov 12 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div
+      class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img src="/assets/images/auth/logo-purple.svg" alt="Logo" style="height: 50px; width: auto;">
+      </a>
+
+      <nav id="navmenu" class="navmenu" [ngClass]="{'mobile-nav-active': isNavbarOpen}">
+        <ul>
+          <li><a href="#" (click)="scrollToSection('hero', $event)">{{ 'home' | translate }}</a></li>
+          <li><a href="#" (click)="scrollToSection('about', $event)">{{ 'about' | translate }}</a></li>
+          <li><a href="#" (click)="scrollToSection('pricing', $event)">{{ 'Pricing' | translate }}</a></li>
+          <li><a href="#" (click)="scrollToSection('testimonials', $event)">{{ 'comments' | translate }}</a></li>
+          <li><a href="#" (click)="scrollToSection('services', $event)">{{ 'services' | translate }}</a></li>
+          <li><a href="#" (click)="scrollToSection('features', $event)">{{ 'features' | translate }}</a></li>
+
+          <!-- Main Dropdown Menu -->
+          <li class="dropdown" [ngClass]="{'active': isDropdownOpen}">
+            <a href="javascript:void(0)" (click)="toggleDropdown()">
+              <span>{{ 'ourmoduless' | translate }}</span>
+              <i class="bi toggle-dropdown"
+                [ngClass]="{'bi-chevron-down': !isDropdownOpen, 'bi-chevron-up': isDropdownOpen}"></i>
+            </a>
+            <ul class="dropdown-menu" *ngIf="isDropdownOpen">
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/possystem')">{{ 'possystem' | translate }}</a>
+              </li>
+
+              <!-- Nested Dropdown -->
+              <li class="dropdown" [ngClass]="{'active': isDropdownOpen2}">
+                <a href="javascript:void(0)" (click)="toggleDropdown2()">
+                  <span>{{ 'entegree' | translate }}</span>
+                  <i class="bi toggle-dropdown-2"
+                    [ngClass]="{'bi-chevron-down': !isDropdownOpen2, 'bi-chevron-up': isDropdownOpen2}"></i>
+                </a>
+                <ul class="dropdown-menu-2" *ngIf="isDropdownOpen2">
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/marketplaces')">{{ 'pazaryerleri' |
+                      translate }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/payment')">{{ 'odeme' | translate }}</a>
+                  </li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/accounting')">{{ 'muhasebe' | translate
+                      }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/ecommerce')">{{ 'eticaret' | translate
+                      }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">{{ 'kurye' |
+                      translate }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/einvoice')">{{ 'efatura' | translate
+                      }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/hotel')">{{ 'otel' | translate }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/virtualpbx')">{{ 'sanalsantral' |
+                      translate }}</a></li>
+                  <li><a href="javascript:void(0)" (click)="navigateTo('/auth/cashregisterpos')">{{ 'yazarkasapos' |
+                      translate }}</a></li>
+                </ul>
+              </li>
+
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/stockmanagement')">{{ 'stockmanagement' |
+                  translate }}</a></li>
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">{{ 'kuryeapp' |
+                  translate }}</a></li>
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/waiterapplication')">{{ 'garsonapp' |
+                  translate }}</a></li>
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/loyaltyapplication')">{{ 'sadakatapp' |
+                  translate }}</a></li>
+              <li><a href="javascript:void(0)" (click)="navigateTo('/auth/businessmanagement')">{{ 'isletmeyonetimi' |
+                  translate }}</a></li>
+            </ul>
+          </li>
+
+          <li><a href="#" (click)="scrollToSection('contact', $event)">{{ 'contact' | translate }}</a></li>
+        </ul>
+
+        <i class="mobile-nav-toggle d-xl-none bi" [ngClass]="{'bi-list': !isNavbarOpen, 'bi-x': isNavbarOpen}"
+          (click)="toggleNavbar()"></i>
+      </nav>
+
+
+
+      <div class="d-flex align-items-center">
+        <!-- Language Dropdown -->
+        <div class="dropdown shrink-0">
+          <div hlMenu>
+            <button type="button" hlMenuButton
+              class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/80 transition-colors ease-in-out hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60 ml-3">
+              <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="flag"
+                class="h-6 w-6 rounded-full object-cover" />
+            </button>
+            <ul *hlMenuItems @toggleAnimation
+              class="top-11 grid w-[280px] grid-cols-2 gap-2 px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90 ltr:-right-14 sm:ltr:-right-2 rtl:-left-14 sm:rtl:-left-2">
+              <li *ngFor="let item of store.languageList;">
+                <button *hlMenuItem="let menuItem" type="button" class="w-full hover:text-primary"
+                  [ngClass]="{ 'bg-primary/10 text-primary': translate.currentLang === item.code }"
+                  (click)="changeLanguage(item)">
+                  <img class="h-5 w-5 rounded-full object-cover"
+                    [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                  <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Login Button -->
+        <a class="btn-getstarted ml-3" href="/#/auth/cover-login"> {{ 'loginn' | translate }}</a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
+              <div class="company-badge mb-4">
+                <i class="bi bi-gear-fill me-2"></i>
+                {{ 'managerelax' | translate }}
+              </div>
+
+              <h1 class="mb-4">
+                {{ 'easysolutionrestaurant' | translate }}<br>
+                <span class="accent-text">360restoran.com  !</span>
+              </h1>
+
+              <p class="mb-4 mb-md-5">
+                {{ 'easycointro' | translate }}
+              </p>
+
+              <div class="hero-buttons">
+                <a href="/#/auth/cover-register" class="btn btn-primary me-0 me-sm-2 mx-1">{{ 'tryitforfree' | translate
+                  }}</a>
+                <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn btn-link mt-2 mt-sm-0 glightbox">
+                  <i class="bi bi-play-circle me-1"></i>
+                  {{ 'promotionalvideo' | translate }}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="hero-image" data-aos="zoom-out" data-hero-image img-delay="300">
+              <img src="/assets/img/mac.png" style="max-width: 100%; max-height: 500px; height: auto;" alt="Hero Image"
+                class="img-fluid">
+
+
+              <img src="/assets/img/tel.png" style="max-width: 100%; max-height: 350px; height: auto;" alt="Hero Image"
+                class="customers-badge img-fluid">
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row stats-row gy-4 mt-5" data-aos="fade-up" data-aos-delay="500">
+          <div class="col-lg-3 col-md-6">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="bi bi-trophy"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ 'beattheforefront' | translate }}</h4>
+                <p class="mb-0">{{ 'witheasycorest' | translate }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="bi bi-briefcase"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ 'makebusinessplan' | translate }}</h4>
+                <p class="mb-0">{{ 'easycorestbusinessplan' | translate }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="bi bi-graph-up"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ 'multiplyyourporfits' | translate }}</h4>
+                <p class="mb-0">{{ 'witheasycorestmultiply' | translate }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="bi bi-award"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ 'letyourqualitybelasting' | translate }}</h4>
+                <p class="mb-0">{{ 'easycorestquality' | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 align-items-center justify-content-between">
+
+          <div class="col-xl-5" data-aos="fade-up" data-aos-delay="200">
+            <span class="about-meta">{{ 'ABOUT' | translate }}</span>
+            <h2 class="about-title">{{ 'aboutsubtitle' | translate }}
+            </h2>
+            <p class="about-description">{{ 'aboutcontent' | translate }}</p>
+
+            <div class="row feature-list-wrapper">
+              <div class="col-md-6">
+                <ul class="feature-list">
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'innovative' | translate }}</li>
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'determined' | translate }}</li>
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'practical' | translate }}</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <ul class="feature-list">
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'solutionoriented' | translate }}</li>
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'curious' | translate }}</li>
+                  <li><i class="bi bi-check-circle-fill"></i> {{ 'productive' | translate }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="info-wrapper">
+              <div class="row gy-4">
+                <div class="col-lg-4"> <!-- Sola hizalamak için daha dar bir sütun -->
+                </div>
+                <div class="col-lg-8"> <!-- İçeriği sağda daha fazla alan bırakacak şekilde ayarlama -->
+                  <div class="contact-info d-flex align-items-center gap-2">
+                    <i class="bi bi-telephone-fill"></i>
+                    <div>
+                      <p class="contact-label">{{ 'callus' | translate }}</p>
+                      <p class="contact-number">+90 (850) 303 41 03</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-xl-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="image-wrapper">
+              <div class="images position-relative" data-aos="zoom-out" data-aos-delay="400">
+                <img src="assets/img/Resim4.png" alt="Business Meeting" class="img-fluid main-image rounded-4">
+                <img src="assets/img/Resim2.png" alt="Team Discussion" class="img-fluid small-image rounded-4">
+              </div>
+              <div class="experience-badge floating">
+                <h3>15+ <span>{{ 'years' | translate }}</span></h3>
+                <p>{{ 'ofexperience' | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+
+
+    <!-- Features Cards Section -->
+    <section id="features-cards" class="features-cards section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-xl-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="feature-box orange">
+              <i class="bi bi-award"></i>
+              <h4>{{ 'innovative' | translate }}</h4>
+              <p>{{ 'innovativecontent' | translate }}</p>
+            </div>
+          </div><!-- End Feature Borx-->
+
+          <div class="col-xl-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="feature-box blue">
+              <i class="bi bi-patch-check"></i>
+              <h4>{{ 'productive' | translate }}</h4>
+              <p>{{ 'productivecontent' | translate }}</p>
+            </div>
+          </div><!-- End Feature Borx-->
+
+          <div class="col-xl-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="feature-box green">
+              <i class="bi bi-sunrise"></i>
+              <h4>{{ 'userfriendly' | translate }}</h4>
+              <p>{{ 'userfriendlycontent' | translate }}</p>
+            </div>
+          </div><!-- End Feature Borx-->
+
+          <div class="col-xl-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="feature-box red">
+              <i class="bi bi-shield-check"></i>
+              <h4>{{ 'highsecurity' | translate }}</h4>
+              <p>{{ 'highsecuritycontent' | translate }}</p>
+            </div>
+          </div><!-- End Feature Borx-->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Features Cards Section -->
+
+    <!-- Features 2 Section -->
+    <section id="features-2" class="features-2 section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row align-items-center">
+
+          <div class="col-lg-4">
+
+            <div class="feature-item text-end mb-5" data-aos="fade-right" data-aos-delay="200">
+              <div class="d-flex align-items-center justify-content-end gap-4">
+                <div class="feature-content">
+                  <h3>{{ 'anydevice' | translate }}</h3>
+                  <p>{{ 'anydevicecontent' | translate }}</p>
+                </div>
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-display"></i>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+            <div class="feature-item text-end mb-5" data-aos="fade-right" data-aos-delay="300">
+              <div class="d-flex align-items-center justify-content-end gap-4">
+                <div class="feature-content">
+                  <h3>{{ 'strongui' | translate }}</h3>
+                  <p>{{ 'stronguicontent' | translate }}</p>
+                </div>
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-feather"></i>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+            <div class="feature-item text-end" data-aos="fade-right" data-aos-delay="400">
+              <div class="d-flex align-items-center justify-content-end gap-4">
+                <div class="feature-content">
+                  <h3>{{ 'darklightmode' | translate }}</h3>
+                  <p>{{ 'darklightmodecontent' | translate }}</p>
+                </div>
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-eye"></i>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+          </div>
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="phone-mockup text-center">
+              <img src="assets/img/telmock.png" alt="Phone Mockup" class="img-fluid">
+            </div>
+          </div><!-- End Phone Mockup -->
+
+          <div class="col-lg-4">
+
+            <div class="feature-item mb-5" data-aos="fade-left" data-aos-delay="200">
+              <div class="d-flex align-items-center gap-4">
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-code-square"></i>
+                </div>
+                <div class="feature-content">
+                  <h3>{{ 'slidebreaksoft' | translate }}</h3>
+                  <p>{{ 'slidebreaksoftcontent' | translate }}</p>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+            <div class="feature-item mb-5" data-aos="fade-left" data-aos-delay="300">
+              <div class="d-flex align-items-center gap-4">
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-phone"></i>
+                </div>
+                <div class="feature-content">
+                  <h3>{{ 'responsivetheme' | translate }}</h3>
+                  <p>{{ 'responsivethemecontent' | translate }}</p>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+            <div class="feature-item" data-aos="fade-left" data-aos-delay="400">
+              <div class="d-flex align-items-center gap-4">
+                <div class="feature-icon flex-shrink-0">
+                  <i class="bi bi-browser-chrome"></i>
+                </div>
+                <div class="feature-content">
+                  <h3>{{ 'fitwithotherbrowser' | translate }}</h3>
+                  <p>{{ 'fitwithotherbrowsercontent' | translate }}</p>
+                </div>
+              </div>
+            </div><!-- End .feature-item -->
+
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Features 2 Section -->
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ 'Pricing' | translate }}</h2>
+        <p>{{ 'packagestitle' | translate }}</p>
+      </div><!-- End Section Title -->
+
+      <div class="container text-center my-4">
+        <div class="toggle-switch">
+          <span>{{ 'monthly' | translate }}</span>
+          <label class="switch">
+            <input type="checkbox" id="pricing-toggle" [(ngModel)]="yearlyPrice">
+            <span class="slider round"></span>
+          </label>
+          <span>{{ 'yearly' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <!-- Row with cards displayed in one line -->
+        <div class="d-flex flex-wrap justify-content-center">
+
+          <!-- Pricing Cards -->
+          <div *ngFor="let paket of paketler" class="col-lg-3 col-md-4 col-sm-6 mb-3 pricing-card-wrapper"
+            data-aos="fade-up" [attr.data-aos-delay]="paket.delay || 100">
+            <div class="pricing-card d-flex flex-column" [ngClass]="{'popular': paket.paketAdi === 'Silver Paket'}"
+              style="font-size: 0.85rem;">
+
+              <!-- Most Popular Banner -->
+              <div *ngIf="paket.paketAdi === 'Silver Paket'" class="popular-badge">
+                {{ 'mostpopular' | translate }}
+              </div>
+
+              <!-- Paket Adı -->
+              <h3 style="font-size: 1rem;">{{ paket.paketAdi }}</h3>
+
+              <!-- Paket Ücreti -->
+              <div class="price" style="font-size: 0.9rem;">
+                <span class="currency">₺</span>
+                <span class="amount">{{ yearlyPrice ? paket.yillikFiyati : paket.aylikFiyati }}</span>
+                <span class="period">/ {{ yearlyPrice ? ('yearly' | translate) : ('monthly' | translate) }}</span>
+
+              </div>
+
+              <!-- Paket Açıklaması -->
+              <p class="description" style="font-size: 0.85rem;">
+                {{ 'maximumnumberofusers' | translate }} : {{paket.kullaniciSayisi}}
+              </p>
+
+              <!-- Mağaza Sayısı -->
+              <p class="description" style="font-size: 0.85rem;">
+                {{ 'maximumnumberofstore' | translate }} : {{paket.magazaSayisi}}
+              </p>
+
+              <!-- Paket İçeriği -->
+              <h4 style="font-size: 0.95rem;">{{ 'packagecontent' | translate }}:</h4>
+              <ul *ngIf="paket.moduller" class="features-list" style="font-size: 0.8rem;">
+                <li *ngFor="let modul of paket.moduller || null">
+                  <i class="bi bi-check-circle-fill"></i>
+                  {{ modul.name }}
+                </li>
+              </ul>
+
+              <!-- Satın Al Butonu -->
+              <div class="mt-auto">
+                <button type="button" class="btn btn-primary w-100 mt-3"
+                  onclick="window.open('./#/auth/cover-register', '_blank')">
+                  {{ 'buynow' | translate }}
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- New Card for the right side -->
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-3 pricing-card-wrapper">
+            <div class="pricing-card d-flex flex-column" style="font-size: 0.85rem;">
+
+              <!-- Paket Adı -->
+              <h3 style="font-size: 1rem; text-align: center;">{{ 'chainrestaurantmanagement' | translate }}</h3>
+
+              <!-- Paket Ücreti -->
+              <div class="price" style="font-size: 0.9rem;">
+                <br>
+                <span class="currency">{{ 'letuscallyou' | translate }}</span>
+              </div>
+
+              <br>
+              <br>
+
+
+              <!-- Mağaza Sayısı -->
+              <p class="description" style="font-size: 0.85rem;">
+                {{ 'maximumnumberofstore' | translate }} : Sınırsız
+              </p>
+
+              <!-- Paket İçeriği -->
+              <h4 style="font-size: 0.95rem;">{{ 'packagecontent' | translate }}:</h4>
+              <div *ngIf="paketler">
+                <div *ngIf="paketler[2]">
+
+                  <ul *ngIf="paketler[2].moduller" class="features-list" style="font-size: 0.8rem;">
+                    <li *ngFor="let modul of paketler[2].moduller">
+                      <i class="bi bi-check-circle-fill"></i>
+                      {{ modul.name }}
+                    </li>
+                    <li>
+                      <i class="bi bi-check-circle-fill"></i>
+                      Ve daha fazlası
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+
+
+              <!-- Satın Al Butonu -->
+              <div class="mt-auto">
+                <button type="button" class="btn btn-primary w-100 mt-3"
+                  onclick="window.open('./#/auth/cover-register', '_blank')">
+                  {{ 'buynow' | translate }}
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Pricing Section -->
+
+
+    <!-- Call To Action Section -->
+    <section id="call-to-action" class="call-to-action section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row content justify-content-center align-items-center position-relative">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="display-4 mb-4">{{ 'tryitforfreetitle' | translate }}
+            </h2>
+            <!-- <p class="mb-4">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+              Donec velit neque, auctor sit amet aliquam vel</p> -->
+            <a href="/#/auth/cover-register" class="btn btn-cta">{{ 'tryitforfree' | translate }}</a>
+          </div>
+
+          <!-- Abstract Background Elements -->
+          <div class="shape shape-1">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M47.1,-57.1C59.9,-45.6,68.5,-28.9,71.4,-10.9C74.2,7.1,71.3,26.3,61.5,41.1C51.7,55.9,35,66.2,16.9,69.2C-1.3,72.2,-21,67.8,-36.9,57.9C-52.8,48,-64.9,32.6,-69.1,15.1C-73.3,-2.4,-69.5,-22,-59.4,-37.1C-49.3,-52.2,-32.8,-62.9,-15.7,-64.9C1.5,-67,34.3,-68.5,47.1,-57.1Z"
+                transform="translate(100 100)"></path>
+            </svg>
+          </div>
+
+          <div class="shape shape-2">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M41.3,-49.1C54.4,-39.3,66.6,-27.2,71.1,-12.1C75.6,3,72.4,20.9,63.3,34.4C54.2,47.9,39.2,56.9,23.2,62.3C7.1,67.7,-10,69.4,-24.8,64.1C-39.7,58.8,-52.3,46.5,-60.1,31.5C-67.9,16.4,-70.9,-1.4,-66.3,-16.6C-61.8,-31.8,-49.7,-44.3,-36.3,-54C-22.9,-63.7,-8.2,-70.6,3.6,-75.1C15.4,-79.6,28.2,-58.9,41.3,-49.1Z"
+                transform="translate(100 100)"></path>
+            </svg>
+          </div>
+
+          <!-- Dot Pattern Groups -->
+          <div class="dots dots-1">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <pattern id="dot-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="2" fill="currentColor"></circle>
+              </pattern>
+              <rect width="100" height="100" fill="url(#dot-pattern)"></rect>
+            </svg>
+          </div>
+
+          <div class="dots dots-2">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <pattern id="dot-pattern-2" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="2" fill="currentColor"></circle>
+              </pattern>
+              <rect width="100" height="100" fill="url(#dot-pattern-2)"></rect>
+            </svg>
+          </div>
+
+          <div class="shape shape-3">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M43.3,-57.1C57.4,-46.5,71.1,-32.6,75.3,-16.2C79.5,0.2,74.2,19.1,65.1,35.3C56,51.5,43.1,65,27.4,71.7C11.7,78.4,-6.8,78.3,-23.9,72.4C-41,66.5,-56.7,54.8,-65.4,39.2C-74.1,23.6,-75.8,4,-71.7,-13.2C-67.6,-30.4,-57.7,-45.2,-44.3,-56.1C-30.9,-67,-15.5,-74,0.7,-74.9C16.8,-75.8,33.7,-70.7,43.3,-57.1Z"
+                transform="translate(100 100)"></path>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Call To Action Section -->
+
+    <!-- Clients Section -->
+    <section id="clients" class="clients section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper init-swiper">
+          <div class="swiper-wrapper align-items-center">
+            <div *ngFor="let item of items" class="swiper-slide">
+              <img [src]="'/assets/img/clients/' + item" class="img-fluid" alt="" />
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </section>
+    <!-- End Clients Section -->
+
+
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ 'comments' | translate }}</h2>
+        <p>{{ 'servingbetter' | translate }}</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row g-5">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="testimonial-item">
+              <img src="assets/img/murataytar.jpeg" class="testimonial-img" alt="">
+              <h3>Murat Aytar</h3>
+              <h4>{{ 'generalmanager' | translate }}</h4>
+              <div class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>{{ 'comment1' | translate }}</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="testimonial-item">
+              <img src="assets/img/mustafagundogdu.jpeg" class="testimonial-img" alt="">
+              <h3>Mustafa Gündoğdu</h3>
+              <h4>{{ 'coordinator' | translate }}</h4>
+              <div class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>{{ 'comment2' | translate }}</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="testimonial-item">
+              <img src="assets/img/erolyolsal.jpeg" class="testimonial-img" alt="">
+              <h3>Erol Yolsal</h3>
+              <h4>{{ 'itcoordinator' | translate }}</h4>
+              <div class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>{{ 'comment3' | translate }}</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="testimonial-item">
+              <img src="assets/img/atalaykaya.jpg" class="testimonial-img" alt="">
+              <h3>Atalay Kaya</h3>
+              <h4>{{ 'chairmanoftheboard' | translate }}</h4>
+              <div class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>{{ 'comment4' | translate }}</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Testimonials Section -->
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" [attr.data-purecounter-end]="sayacbilgileri?.musteriCount || 0"
+                data-purecounter-duration="1" class="purecounter"></span>
+              <p>{{ 'ourclient' | translate }}</p>
+            </div>
+          </div><!-- End Stats Item -->
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" [attr.data-purecounter-end]="sayacbilgileri?.calisanCount || 0"
+                data-purecounter-duration="1" class="purecounter">
+              </span>
+              <p>{{ 'usercount' | translate }}</p>
+            </div>
+          </div>
+
+          <!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p>{{ 'hourssupport' | translate }}</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" [attr.data-purecounter-end]="sayacbilgileri?.completedTodoCount || 0"
+                data-purecounter-duration="1" class="purecounter"></span>
+              <p>{{ 'updates' | translate }}</p>
+            </div>
+          </div><!-- End Stats Item -->
+        </div>
+      </div>
+    </section><!-- /Stats Section -->
+
+
+    <!-- Services Section -->
+    <section id="services" class="services section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ 'services' | translate }}</h2>
+        <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row g-4">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-card d-flex">
+              <div class="icon flex-shrink-0">
+                <i class="bi bi-easel"></i>
+              </div>
+              <div>
+                <h3>{{ 'onlinesetupandlive' | translate }}</h3>
+                <p>{{ 'onlinesetupandlivecontent' | translate }}</p>
+                <!-- <a href="service-details.html" class="read-more">Read More <i class="bi bi-arrow-right"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Service Card -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-card d-flex">
+              <div class="icon flex-shrink-0">
+                <i class="bi bi-activity"></i>
+              </div>
+              <div>
+                <h3>{{ 'phoneandlivechatsupport' | translate }}</h3>
+                <p>{{ 'phoneandlivechatsupportcontent' | translate }}</p>
+                <!-- <a href="service-details.html" class="read-more">Read More <i class="bi bi-arrow-right"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Service Card -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-card d-flex">
+              <div class="icon flex-shrink-0">
+                <i class="bi bi-diagram-3"></i>
+              </div>
+              <div>
+                <h3>{{ 'stockandpricemanagement' | translate }}</h3>
+                <p>{{ 'stockandpricemanagementcontent' | translate }}
+                </p>
+                <!-- <a href="service-details.html" class="read-more">Read More <i class="bi bi-arrow-right"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Service Card -->
+
+
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-card d-flex">
+              <div class="icon flex-shrink-0">
+                <i class="bi bi-clipboard-data"></i>
+              </div>
+              <div>
+                <h3>{{ 'integrationmanagement' | translate }}</h3>
+                <p>{{ 'integrationmanagementcontent' | translate }}</p>
+                <!-- <a href="service-details.html" class="read-more">Read More <i class="bi bi-arrow-right"></i></a> -->
+              </div>
+            </div>
+          </div><!-- End Service Card -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+
+
+
+
+
+
+
+
+    <!-- Features Section -->
+    <section id="features" class="features section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ 'packagefeatures' | translate }}</h2>
+        <p>{{ 'packagefeaturestitle' | translate }}</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="d-flex justify-content-center">
+
+          <ul class="nav nav-tabs" data-aos="fade-up" data-aos-delay="100">
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="{'active': activeTab === 1}" (click)="setActiveTab(1)" data-bs-toggle="tab"
+                data-bs-target="#features-tab-1">
+                <h4>{{ 'bronzpackage' | translate }}</h4>
+              </a>
+            </li><!-- End tab nav item -->
+
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="{'active': activeTab === 2}" (click)="setActiveTab(2)" data-bs-toggle="tab"
+                data-bs-target="#features-tab-2">
+                <h4>{{ 'silverpackage' | translate }}</h4>
+              </a><!-- End tab nav item -->
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="{'active': activeTab === 3}" (click)="setActiveTab(3)" data-bs-toggle="tab"
+                data-bs-target="#features-tab-3">
+                <h4>{{ 'goldpackage' | translate }}</h4>
+              </a>
+            </li><!-- End tab nav item -->
+          </ul>
+
+
+        </div>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
+
+          <!-- Tab 1 -->
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 1}" id="features-tab-1">
+            <div class="row">
+              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                <h3>{{ 'bronzepackagefeatures' | translate }}</h3>
+                <p class="fst-italic">
+                  {{ 'bronzepackagefeaturestitle' | translate }}
+                </p>
+                <ul>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'bronzepackagecontent1' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'bronzepackagecontent2' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'bronzepackagecontent3' | translate }}</span>
+                  </li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'bronzepackagecontent4' | translate }}</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6 order-1 order-lg-2 text-center">
+                <img src="assets/img/features-illustration-2.webp" alt="Illustration for Modisit" class="img-fluid">
+              </div>
+            </div>
+          </div><!-- End tab content item -->
+
+          <!-- Tab 2 -->
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 2}" id="features-tab-2">
+            <div class="row">
+              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                <h3>{{ 'silverpackagefeatures' | translate }}</h3>
+                <p class="fst-italic">
+                  {{ 'silverpackagefeaturestitle' | translate }}
+                </p>
+                <ul>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'silverpackagecontent1' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'silverpackagecontent2' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'silverpackagecontent3' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'silverpackagecontent4' | translate }}</span>
+                  </li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'silverpackagecontent5' | translate }}</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6 order-1 order-lg-2 text-center">
+                <img src="assets/img/features-illustration-1.webp" alt="Illustration for Praesenti" class="img-fluid">
+              </div>
+            </div>
+          </div><!-- End tab content item -->
+
+          <!-- Tab 3 -->
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 3}" id="features-tab-3">
+            <div class="row">
+              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center">
+                <h3>{{ 'goldpackagefeatures' | translate }}</h3>
+                <p class="fst-italic">
+                  {{ 'goldpackagefeaturestitle' | translate }}
+                </p>
+                <ul>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent1' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent2' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent3' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent4' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent5' | translate }}</span></li>
+                  <li><i class="bi bi-check2-all"></i> <span>{{ 'goldpackagecontent6' | translate }}</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6 order-1 order-lg-2 text-center">
+                <img src="assets/img/features-illustration-3.webp" alt="Illustration for Explica" class="img-fluid">
+              </div>
+            </div>
+          </div><!-- End tab content item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Features Section -->
+
+
+    <!-- Faq Section -->
+    <section class="faq-9 faq section light-background" id="faq">
+
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-5" data-aos="fade-up">
+            <h2 class="faq-title">{{ 'faqs' | translate }}</h2>
+            <!-- <p class="faq-description">Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet
+              adipiscing sem neque sed ipsum.</p> -->
+            <div class="faq-arrow d-none d-lg-block" data-aos="fade-up" data-aos-delay="200">
+              <svg class="faq-arrow" width="200" height="211" viewBox="0 0 200 211" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M198.804 194.488C189.279 189.596 179.529 185.52 169.407 182.07L169.384 182.049C169.227 181.994 169.07 181.939 168.912 181.884C166.669 181.139 165.906 184.546 167.669 185.615C174.053 189.473 182.761 191.837 189.146 195.695C156.603 195.912 119.781 196.591 91.266 179.049C62.5221 161.368 48.1094 130.695 56.934 98.891C84.5539 98.7247 112.556 84.0176 129.508 62.667C136.396 53.9724 146.193 35.1448 129.773 30.2717C114.292 25.6624 93.7109 41.8875 83.1971 51.3147C70.1109 63.039 59.63 78.433 54.2039 95.0087C52.1221 94.9842 50.0776 94.8683 48.0703 94.6608C30.1803 92.8027 11.2197 83.6338 5.44902 65.1074C-1.88449 41.5699 14.4994 19.0183 27.9202 1.56641C28.6411 0.625793 27.2862 -0.561638 26.5419 0.358501C13.4588 16.4098 -0.221091 34.5242 0.896608 56.5659C1.8218 74.6941 14.221 87.9401 30.4121 94.2058C37.7076 97.0203 45.3454 98.5003 53.0334 98.8449C47.8679 117.532 49.2961 137.487 60.7729 155.283C87.7615 197.081 139.616 201.147 184.786 201.155L174.332 206.827C172.119 208.033 174.345 211.287 176.537 210.105C182.06 207.125 187.582 204.122 193.084 201.144C193.346 201.147 195.161 199.887 195.423 199.868C197.08 198.548 193.084 201.144 195.528 199.81C196.688 199.192 197.846 198.552 199.006 197.935C200.397 197.167 200.007 195.087 198.804 194.488ZM60.8213 88.0427C67.6894 72.648 78.8538 59.1566 92.1207 49.0388C98.8475 43.9065 106.334 39.2953 114.188 36.1439C117.295 34.8947 120.798 33.6609 124.168 33.635C134.365 33.5511 136.354 42.9911 132.638 51.031C120.47 77.4222 86.8639 93.9837 58.0983 94.9666C58.8971 92.6666 59.783 90.3603 60.8213 88.0427Z"
+                  fill="currentColor"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="col-lg-7" data-aos="fade-up" data-aos-delay="300">
+            <div class="faq-container">
+
+              <div class="faq-item faq-active">
+                <h3>{{ 'question1' | translate }}</h3>
+                <div class="faq-content">
+                  <p>{{ 'answer1' | translate }}</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3>{{ 'question2' | translate }}</h3>
+                <div class="faq-content">
+                  <p>{{ 'answer2' | translate }}</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3>{{ 'question3' | translate }}</h3>
+                <div class="faq-content">
+                  <p>{{ 'answer3' | translate }}</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3>{{ 'question4' | translate }}</h3>
+                <div class="faq-content">
+                  <p>{{ 'answer4' | translate }}</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3>{{ 'question5' | translate }}</h3>
+                <div class="faq-content">
+                  <p>{{ 'answer5' | translate }}</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- /Faq Section -->
+
+    <!-- Call To Action 2 Section -->
+    <section id="call-to-action-2" class="call-to-action-2 section dark-background">
+
+      <div class="container">
+        <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-xl-10">
+            <!-- <div class="text-center">
+              <h3>Call To Action</h3>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                laborum.</p>
+              <a class="cta-btn" href="#">Call To Action</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Call To Action 2 Section -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>{{ 'contact' | translate }}</h2>
+        <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row g-4 g-lg-5">
+          <div class="col-lg-5">
+            <div class="info-box" data-aos="fade-up" data-aos-delay="200">
+              <h3>{{ 'contactinfo' | translate }}</h3>
+              <!-- <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.
+              </p> -->
+
+              <div class="info-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon-box">
+                  <i class="bi bi-geo-alt"></i>
+                </div>
+                <div class="content">
+                  <h4>{{ 'adress' | translate }}</h4>
+                  <p>Körfez Mah. Ankara Karayolu Cad. </p>
+                  <p>No:24/3 İzmit, Kocaeli</p>
+                </div>
+              </div>
+
+              <div class="info-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon-box">
+                  <i class="bi bi-telephone"></i>
+                </div>
+                <div class="content">
+                  <h4>{{ 'phone' | translate }}</h4>
+                  <p>+90 (850) 303 41 03</p>
+                  <!-- <p>+1 6678 254445 41</p> -->
+                </div>
+              </div>
+
+              <div class="info-item" data-aos="fade-up" data-aos-delay="500">
+                <div class="icon-box">
+                  <i class="bi bi-envelope"></i>
+                </div>
+                <div class="content">
+                  <h4>{{ 'email' | translate }}</h4>
+                  <p>destek&#64;İbaysoft.com.tr</p>
+                  <!-- <p>contact&#64;example.com</p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
+              <h3>{{ 'contactus' | translate }}</h3>
+              <!-- <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.
+              </p> -->
+
+              <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                <div class="row gy-4">
+
+                  <!-- Your Name -->
+                  <div class="col-md-6">
+                    <input type="text" formControlName="namesurname" class="form-control"
+                      placeholder="{{ 'enternameadsoyad' | translate }}" />
+                    <div *ngIf="contactForm.get('namesurname')?.touched && contactForm.get('namesurname')?.invalid"
+                      class="text-red-500">
+                      {{ 'nameisrequired' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Your Company Name -->
+                  <div class="col-md-6">
+                    <input type="text" formControlName="companyname" class="form-control"
+                      placeholder="{{ 'companyname' | translate }}" />
+                    <div *ngIf="contactForm.get('companyname')?.touched && contactForm.get('companyname')?.invalid"
+                      class="text-red-500">
+                      {{ 'companynameisrequired' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Your Phone Number -->
+                  <div class="col-md-6">
+                    <input type="number" formControlName="phone" class="form-control"
+                      placeholder="{{ 'phonenumber' | translate }}" />
+                    <div *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid"
+                      class="text-red-500">
+                      {{ 'phonenumberisrequired' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Your Town -->
+                  <div class="col-md-6">
+                    <input type="text" formControlName="town" class="form-control"
+                      placeholder="{{ 'town' | translate }}" />
+                    <div *ngIf="contactForm.get('town')?.touched && contactForm.get('town')?.invalid"
+                      class="text-red-500">
+                      {{ 'townisrequired' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Your Email -->
+                  <div class="col-md-6">
+                    <input type="email" formControlName="email" class="form-control"
+                      placeholder="{{ 'youremail' | translate }}" />
+                    <div *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
+                      class="text-red-500">
+                      {{ 'pleaseenteravalidemail' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Subject -->
+                  <div class="col-12">
+                    <input type="text" formControlName="subject" class="form-control"
+                      placeholder="{{ 'subject' | translate }}" />
+                    <div *ngIf="contactForm.get('subject')?.touched && contactForm.get('subject')?.invalid"
+                      class="text-red-500">
+                      {{ 'subjectisrequired' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Message -->
+                  <div class="col-12">
+                    <textarea formControlName="message" class="form-control" rows="6"
+                      placeholder="{{ 'message' | translate }}"></textarea>
+                    <div *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
+                      class="text-red-500">
+                      {{ 'messagecannotbeempty' | translate }}
+                    </div>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-primary" [disabled]="contactForm.invalid">
+                      {{ 'sendmessage' | translate }}
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-2 col-md-6 footer-about">
+          <a href="/auth/landing" class="logo d-flex align-items-center">
+            <!-- <span class="sitename">iLanding</span> -->
+            <img src="/assets/images/auth/logo-purple.svg" alt="Logo" style="height: 50px; width: auto;">
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Körfez Mah. Ankara Karayolu Cad. </p>
+            <p> No:24/3 İzmit, Kocaeli</p>
+            <p class="mt-3" style="white-space: nowrap;"><strong>{{ 'phone' | translate }}:</strong><span>+90 (850) 303
+                41 03</span></p>
+            <p><strong>{{ 'email' | translate }}:</strong> <span>destek&#64;İbaysoft.com.tr</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>{{ 'explore' | translate }}</h4>
+          <ul>
+            <li><a href="#" (click)="scrollToSection('hero', $event)">{{ 'home' | translate }}</a></li>
+            <li><a href="#" (click)="scrollToSection('about', $event)">{{ 'about' | translate }}</a></li>
+            <!-- <li><a href="#">{{ 'references' | translate }}</a></li> -->
+            <!-- <li><a href="#">Blog</a></li> -->
+            <li><a href="#" (click)="scrollToSection('contact', $event)">{{ 'contact' | translate }}</a></li>
+            <!-- <li><a href="#">{{ 'testapplication' | translate }}</a></li> -->
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>{{ 'ourmodules' | translate }}</h4>
+          <ul>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/possystem')">
+                {{ 'possystem' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/stockmanagement')">
+                {{ 'stockmanagement' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">
+                {{ 'kuryeapp' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/waiterapplication')">
+                {{ 'garsonapp' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/loyaltyapplication')">
+                {{ 'sadakatapp' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/businessmanagement')">
+                {{ 'isletmeyonetimi' | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- <div class="col-lg-2 col-md-3 footer-links">
+          <h4>{{ 'faaliyet' | translate }}</h4>
+          <ul>
+            <li><a href="#">{{ 'zincirisletmeler' | translate }}</a></li>
+            <li><a href="#">{{ 'restoran' | translate }}</a></li>
+            <li><a href="#">{{ 'selfservis' | translate }}</a></li>
+            <li><a href="#">{{ 'perakende' | translate }}</a></li>
+            <li><a href="#">{{ 'kafe' | translate }}</a></li>
+            <li><a href="#">{{ 'pastane' | translate }}</a></li>
+            <li><a href="#">{{ 'klup' | translate }}</a></li>
+            <li><a href="#">{{ 'otel' | translate }}</a></li>
+            <li><a href="#">{{ 'universite' | translate }}</a></li>
+            <li><a href="#">{{ 'bulutmutfak' | translate }}</a></li>
+          </ul>
+        </div> -->
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>{{ 'entegre' | translate }}</h4>
+          <ul>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/marketplaces')">
+                {{ 'pazaryerleri' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/payment')">
+                {{ 'odeme' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/accounting')">
+                {{ 'muhasebe' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/ecommerce')">
+                {{ 'eticaret' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/courierapplication')">
+                {{ 'kurye' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/einvoice')">
+                {{ 'efatura' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/hotel')">
+                {{ 'otel' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/virtualpbx')">
+                {{ 'sanalsantral' | translate }}
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="navigateTo('/auth/cashregisterpos')">
+                {{ 'yazarkasapos' | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>{{ 'politika' | translate }}</h4>
+          <ul>
+            <li><a href="#">{{ 'gizlilikpolitikasi' | translate }}</a></li>
+            <li><a href="#">{{ 'satispolitikasi' | translate }}</a></li>
+            <li><a href="#">{{ 'KVKK' | translate }}</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span></span> <strong class="px-1 sitename">easyco</strong> <span>{{ 'footerrights' | translate }}</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed By <a
+          href="https://themewagon.com">ThemeWagon</a> -->
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+  <!-- Main JS File -->
+  <script src="/assets/js/main.js"></script>
+
+</body>
+
+</html>

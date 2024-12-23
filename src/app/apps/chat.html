@@ -1,0 +1,199 @@
+<div>
+    <div class="relative flex h-full gap-5 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-gray-900 dark:text-gray-200"
+        [ngClass]="{ 'min-h-[999px]': isShowChatMenu }">
+        <!-- Kullanıcı Listesi Paneli -->
+        <div class="panel absolute z-10 hidden h-full w-full max-w-xs flex-none flex-col space-y-4 overflow-hidden p-4 xl:relative xl:flex dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+            [ngClass]="{'!flex !overflow-y-auto' : isShowChatMenu}">
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-none">
+                        <img src="/assets/images/profile-34.jpeg"
+                            class="h-12 w-12 rounded-full object-cover" />
+                    </div>
+                    <div class="mx-3">
+                        <p class="mb-1 font-semibold dark:text-gray-100"> {{userName}} </p>
+                        <p class="text-xs text-white-dark dark:text-gray-400">Her zaman en iyisi sensin</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative">
+                <input type="text" class="peer form-input ltr:pr-9 rtl:pl-9 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    placeholder="{{ 'searching' | translate }}..." [(ngModel)]="searchUser" name="searchUser" />
+                <div class="absolute top-1/2 -translate-y-1/2 peer-focus:text-primary ltr:right-2 rtl:left-2 dark:text-gray-200">
+                    <icon-search />
+                </div>
+            </div>
+            <div class="h-px w-full border-b border-[#e0e6ed] dark:border-gray-600"></div>
+            <div class="!mt-0 flex-grow">
+                <ng-scrollbar class="chat-users relative h-full min-h-[100px] space-y-0.5 ltr:-mr-3 rtl:-ml-3 sm:h-[calc(100vh_-_357px)]"
+                              appearance="compact">
+                    <!-- Destek Bekleyenler Bölümü -->
+                    <h3 class="font-semibold text-xl mt-5 dark:text-gray-100">Destek Bekleyenler</h3>
+                    <ng-container *ngFor="let person of waitingForSupportUsers">
+                      <button type="button"
+                        class="flex w-full items-center justify-between rounded-md p-2 hover:bg-gray-100 hover:text-primary dark:hover:bg-[#050b14] dark:hover:text-primary"
+                        [ngClass]="{'bg-gray-100 dark:bg-[#050b14] dark:text-primary text-primary': selectedUser && selectedUser.userId === person.userId}"
+                        (click)="selectUser(person)">
+                        <div class="flex-1">
+                          <div class="flex items-center">
+                            <div class="relative flex-shrink-0">
+                              <img [src]="'/assets/images/profile-34.jpeg'" class="h-12 w-12 rounded-full object-cover" />
+                            </div>
+                            <div class="mx-3 ltr:text-left rtl:text-right">
+                              <p class="mb-1 font-semibold dark:text-gray-100">{{ person.name }}</p>
+                              <p class="max-w-[185px] truncate text-xs text-white-dark dark:text-gray-400">{{ person.preview }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="whitespace-nowrap text-xs font-semibold dark:text-gray-200">
+                          <p>{{ person.time }}</p>
+                          <span *ngIf="person.unreadMessagesCount > 0" class="text-red-500">({{ person.unreadMessagesCount }})</span>
+                        </div>
+                      </button>
+                    </ng-container>
+
+                    <!-- Aktif Sohbetler Bölümü -->
+                    <h3 class="font-semibold text-xl mt-5 dark:text-gray-100">Aktif Sohbetler</h3>
+                    <ng-container *ngFor="let person of inProgressUsers">
+                      <button type="button"
+                        class="flex w-full items-center justify-between rounded-md p-2 hover:bg-gray-100 hover:text-primary dark:hover:bg-[#050b14] dark:hover:text-primary"
+                        [ngClass]="{'bg-gray-100 dark:bg-[#050b14] dark:text-primary text-primary': selectedUser && selectedUser.userId === person.userId}"
+                        (click)="selectUser(person)">
+                        <div class="flex-1">
+                          <div class="flex items-center">
+                            <div class="relative flex-shrink-0">
+                              <img [src]="'/assets/images/profile-34.jpeg'" class="h-12 w-12 rounded-full object-cover" />
+                            </div>
+                            <div class="mx-3 ltr:text-left rtl:text-right">
+                              <p class="mb-1 font-semibold dark:text-gray-100">{{ person.name }}</p>
+                              <p class="max-w-[185px] truncate text-xs text-white-dark dark:text-gray-400">{{ person.preview }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="whitespace-nowrap text-xs font-semibold dark:text-gray-200">
+                          <p>{{ person.time }}</p>
+                          <span *ngIf="person.unreadMessagesCount > 0" class="text-red-500">({{ person.unreadMessagesCount }})</span>
+                        </div>
+                      </button>
+                    </ng-container>
+                  </ng-scrollbar>
+            </div>
+        </div>
+
+        <!-- Sohbet Paneli -->
+        <div class="panel flex-1 p-0 dark:bg-gray-800 dark:text-gray-200">
+            <ng-container *ngIf="!isShowUserChat">
+                <div class="relative flex h-full items-center justify-center p-4">
+                    <button type="button" class="absolute top-4 hover:text-primary ltr:left-4 rtl:right-4 xl:hidden dark:text-gray-200"
+                            (click)="isShowChatMenu = !isShowChatMenu">
+                        <icon-menu />
+                    </button>
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <div class="mb-8 h-[calc(100vh_-_320px)] min-h-[120px] w-[280px] text-white dark:text-gray-800 md:w-[430px]">
+                            <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" class="h-full w-full"
+                                 viewBox="0 0 891.29496 745.19434" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            </svg>
+                        </div>
+                        <p class="mx-auto flex max-w-[190px] justify-center rounded-md bg-white-dark/20 p-2 font-semibold dark:bg-gray-700 dark:text-gray-200">
+                            <icon-message class="ltr:mr-2 rtl:ml-2" />
+                            {{ 'CLICK_USER_TO_CHAT' | translate }}
+                        </p>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="isShowUserChat && selectedUser">
+                <div class="relative h-full pb-[68px]">
+                    <div class="flex items-center justify-between p-4 dark:bg-gray-700">
+                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                          <!-- Menü butonu -->
+                          <button type="button" class="hover:text-primary xl:hidden dark:text-gray-200" (click)="isShowChatMenu = !isShowChatMenu">
+                            <icon-menu />
+                          </button>
+
+                          <!-- Kullanıcı Resmi -->
+                          <div class="relative flex-none">
+                            <img [src]="'/assets/images/profile-34.jpeg'" class="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12" />
+                            <div class="absolute bottom-0 ltr:right-0 rtl:left-0">
+                              <div class="h-4 w-4 rounded-full bg-success"></div>
+                            </div>
+                          </div>
+
+                          <!-- Kullanıcı Bilgileri -->
+                          <div class="mx-3">
+                            <p class="font-semibold dark:text-gray-100">{{ selectedUser?.user?.kullaniciAdsoyad }}</p>
+                            <p class="text-xs text-white-dark dark:text-gray-400">{{ selectedUser?.active ? ('ACTIVE_NOW' | translate) : ('LAST_SEEN' | translate) + ' ' + selectedUser?.time }}</p>
+                            <p class="text-sm text-white-dark dark:text-gray-300">Paket: {{ selectedUser?.user?.paketBilgisi?.paketAdi }}</p>
+                            <p class="text-sm text-white-dark dark:text-gray-300">Telefon: {{ selectedUser?.user?.telefon }}</p>
+                            <p class="text-sm text-white-dark dark:text-gray-300">E-mail: {{ selectedUser?.user?.email }}</p>
+                          </div>
+
+                          <!-- Butonlar -->
+                          <div class="flex gap-4 items-center">
+                            <button type="button" (click)="endChat()" class="text-red-600 hover:underline dark:text-red-400">Görüşmeyi Sonlandır</button>
+                            <button type="button" (click)="startChat()" class="text-green-600 hover:underline dark:text-green-400">Destek Ol</button>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="h-px w-full border-b border-[#e0e6ed] dark:border-gray-600"></div>
+                    <ng-scrollbar #scrollable
+                                  class="chat-conversation-box relative !h-[calc(100vh_-_289px)] min-h-[300px] sm:!h-[calc(100vh_-_300px)]"
+                                  appearance="compact">
+                        <div class="space-y-5 p-4">
+                            <ng-container *ngFor="let message of messages; let i = index">
+                                <div class="flex items-start gap-3"
+                                     [ngClass]="{
+                                         'justify-end': message.isUser,
+                                         'justify-start': !message.isUser
+                                     }">
+                                    <!-- Kullanıcı veya Destek Resmi -->
+                                    <div class="flex-none" [ngClass]="{ 'order-2': message.isUser }">
+                                        <img [src]="message.isUser ? '/assets/images/profile-34.jpeg' : '/assets/images/profile-34.jpeg'"
+                                             class="h-10 w-10 rounded-full object-cover" />
+                                    </div>
+
+                                    <!-- Mesaj İçeriği -->
+                                    <div class="space-y-2">
+                                        <div class="rounded-md p-4 py-2"
+                                             [ngClass]="{
+                                                'bg-primary text-white ltr:rounded-br-none rtl:rounded-bl-none': message.isUser,
+                                                'bg-gray-100 text-black ltr:rounded-bl-none rtl:rounded-br-none dark:bg-gray-700 dark:text-gray-200': !message.isUser && !message.isRead,
+                                                'bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-100': message.isRead
+                                             }">
+                                            <p class="font-semibold">{{ message.senderName }}</p>
+                                            {{ message.messageText }}
+                                        </div>
+                                        <!-- Mesaj Zamanı -->
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ getTimeAgo(message.createdAt) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                        </div>
+                    </ng-scrollbar>
+                    <div class="absolute bottom-0 left-0 w-full p-4 dark:bg-gray-700">
+                        <div class="w-full items-center space-x-3 rtl:space-x-reverse sm:flex">
+                            <div class="relative flex-1">
+                                <input class="form-input rounded-full border-0 bg-[#f4f4f4] px-12 py-2 focus:outline-none dark:bg-gray-600 dark:text-white"
+                                       placeholder="{{ 'TYPE_A_MESSAGE' | translate }}" [(ngModel)]="textMessage"
+                                       name="textMessage" (keyup.enter)="sendMessage()" />
+                                <button type="button" class="absolute top-1/2 -translate-y-1/2 hover:text-primary ltr:left-4 rtl:right-4 dark:text-gray-200">
+                                    <icon-mood-smile />
+                                </button>
+                                <button type="button" class="absolute top-1/2 -translate-y-1/2 hover:text-primary ltr:right-4 rtl:left-4 dark:text-gray-200"
+                                        (click)="sendMessage()">
+                                    <icon-send />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,157 @@
+/* Metallic Purple Header Style */
+.metallic-purple {
+    background: linear-gradient(135deg, #5919ba, #e4075c);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .metallic-purple:hover {
+    background-color: #5a009d;
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 100%; /* Header'ın hemen altına */
+    left: 0;
+    width: 100%;
+    background-color: #ced2d1;
+    padding: 5px 0;
+  }
+  
+  header:hover .navbar {
+    display: block;
+  }
+  
+  .navbar div {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .navbar a {
+    padding: 5px 15px;
+    color: #110227;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .navbar a:hover {
+    color: #e4075c;
+  }
+  
+  /* Custom Button */
+  .custom-button {
+    background:white; /* Metalik mor esas renk */
+    color: rgb(190, 65, 142);
+    border: none;
+    transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  
+  .custom-button:hover {
+    background: linear-gradient(45deg, #d4a1ff, #800080);
+    transform: scale(1.05);
+  }
+  
+
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 1024px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    header .w-32 {
+      margin-bottom: 1rem;
+    }
+  
+    header nav {
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-start;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    header {
+      padding: 0.5rem;
+    }
+  
+    header .w-32 {
+      width: 6rem;
+    }
+  
+    header nav {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  
+    header nav .nav-link,
+    header nav .btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  
+    header .dropdown ul {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    header {
+      padding: 0.25rem;
+    }
+  
+    .slider-container .block-1,
+    .slider-container .block-2 {
+      padding: 1rem;
+    }
+  
+    .slider-container h2 {
+      font-size: 1.5rem;
+    }
+  
+    .slider-container p {
+      font-size: 0.875rem;
+    }
+  
+    .iframe-container iframe {
+      height: 300px;
+    }
+  }
+  
+  /* Additional Styling */
+  .slider-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  
+  .slider-container .block-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .slider-container .block-text {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .iframe-container {
+    border: 2px solid #5919ba;
+    border-radius: 8px;
+  }
+  
+  footer {
+    background: linear-gradient(135deg, #5919ba, #e4075c);
+  }
+  
+  footer .hover\:text-\[#3498db\]:hover {
+    color: #3498db;
+  }
+  

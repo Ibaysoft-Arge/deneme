@@ -1,0 +1,266 @@
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 bg-white text-gray-800 dark:bg-gray-900 dark:text-white">
+    <!-- Adisyonlar Paneli -->
+    <div id="step1" class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl dark:text-white dark:from-purple-900 dark:to-purple-700">
+        <h3 class="text-lg font-semibold mb-4 text-left dark:text-white">{{ 'bills' | translate }}</h3>
+        <div *ngFor="let adisyon of adisyonlar" class="grid grid-cols-3 gap-2 items-center mb-2">
+            <span class="text-left dark:text-white hover:underline cursor-pointer"
+            (click)="goToOrderDetails(adisyon)">
+                {{ (adisyon.musteri?.ad || '') | titlecase }} {{ ((adisyon.musteri?.soyad || '') | slice:0:1) }}***
+
+            </span>
+            <span class="text-center dark:text-white">{{ adisyon.siparisTarihi | date:'shortTime' }}</span>
+            <span class="text-right dark:text-white">{{ adisyon.toplamVergiliFiyat | dynamicCurrency }}</span>
+        </div>
+        <div class="border-t border-white/50 mt-2 pt-2 flex justify-between items-center dark:border-white/20">
+            <span class="font-bold flex-1 text-left dark:text-white">{{ 'toplam' | translate }}:</span>
+            <span class="font-bold flex-1 text-right dark:text-white">{{ toplamTutar | dynamicCurrency }}</span>
+        </div>
+    </div>
+
+    <div id="step3" class="flex-1 p-4 bg-white text-gray-800 overflow-y-auto dark:bg-gray-800 dark:text-white">
+        <div class="flex-1 p-4 bg-white text-gray-800 overflow-y-auto dark:bg-gray-800 dark:text-white">
+            <div class="flex items-center justify-center relative mb-6">
+                <h1 class="text-2xl font-semibold text-gray-800 dark:text-white absolute left-1/2 transform -translate-x-1/2">
+                    {{ 'packagesales' | translate }}
+                </h1>
+            </div>
+        </div>
+
+        <div class="form-group md:col-span-2 text-right bg-gray-100 text-gray-800 p-8 rounded-lg shadow-md space-y-6 dark:bg-gray-800 dark:text-white">
+            <div class="flex justify-end mb-4">
+                <button type="button"
+                    class="btn btn-primary bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition dark:hover:bg-blue-700 dark:focus:ring-blue-500"
+                    (click)="navigateToOrder()">
+                    {{ 'takeneworder' | translate }}
+                </button>
+            </div>
+
+            <form [formGroup]="customerForm" class="space-y-6">
+                <!-- Ad ve Soyad -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group text-left">
+                        <label class="font-medium text-gray-800 mb-1 block dark:text-gray-200">{{ 'NAME' | translate }}<span class="text-red-500">*</span></label>
+                        <input type="text" formControlName="ad"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                            placeholder="{{ 'entername' | translate }}" />
+                    </div>
+                    <div class="form-group text-left">
+                        <label class="font-medium text-gray-800 mb-1 block dark:text-gray-200">{{ 'surname' | translate }}<span class="text-red-500">*</span></label>
+                        <input type="text" formControlName="soyad"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                            placeholder="{{ 'entersurname' | translate }}" />
+                    </div>
+                </div>
+
+                <!-- Telefon ve Email -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group text-left">
+                        <label class="font-medium text-gray-800 mb-1 block dark:text-gray-200">{{ 'phone' | translate }}</label>
+                        <input type="text" formControlName="telefon"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                            placeholder="{{ 'yourphonenumber' | translate }}" />
+                    </div>
+                    <div class="form-group text-left">
+                        <label class="font-medium text-gray-800 mb-1 block dark:text-gray-200">{{ 'email' | translate }}<span class="text-red-500">*</span></label>
+                        <input type="email" formControlName="email"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                            placeholder="{{ 'enteryouremail' | translate }}" />
+                    </div>
+                </div>
+
+                <!-- Açıklama -->
+                <div class="form-group text-left">
+                    <label class="font-medium text-gray-800 mb-1 block dark:text-gray-200">{{ 'orderDescription' | translate }}</label>
+                    <textarea formControlName="aciklama"
+                        class="form-input mt-1 block w-full rounded-lg border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                        placeholder="{{ 'explanationregardingthecustomer' | translate }}"></textarea>
+                </div>
+
+                <!-- Adresler Başlığı ve Adres Ekle Butonu Aynı Satırda -->
+                <div class="flex items-center justify-between mt-6">
+                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-200">{{ 'adresses' | translate }}</label>
+                    <button type="button" (click)="openAddressModal(false)"
+                        class="btn btn-primary bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-600 dark:hover:bg-green-700">
+                        {{ 'addaddress' | translate }}
+                    </button>
+                </div>
+
+                <!-- Adres tablosu -->
+                <div class="form-group text-left space-y-6 mt-4">
+                    <table class="min-w-full divide-y divide-gray-300 bg-white text-gray-800 rounded-md overflow-hidden dark:bg-gray-700 dark:text-white dark:divide-gray-600 border border-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-300 dark:border-gray-600">
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">Seç</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">İl</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">İlçe</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">Mahalle</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">Yol</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">Adres</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let addr of adresler.controls; let i = index"
+                                class="border-b border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600 cursor-pointer transition"
+                                (click)="selectAddress(i)">
+                                <td class="px-4 py-2">
+                                    <input type="radio"
+                                        [checked]="selectedAddressIndex === i"
+                                        name="selectedAddress"
+                                        class="form-radio h-4 w-4 text-blue-500"
+                                        style="pointer-events: none;" />
+                                </td>
+                                <td class="px-4 py-2">{{ addr.value.il }}</td>
+                                <td class="px-4 py-2">{{ addr.value.ilce }}</td>
+                                <td class="px-4 py-2">{{ addr.value.mahalle }}</td>
+                                <td class="px-4 py-2">{{ addr.value.yolAdi }}</td>
+                                <td class="px-4 py-2">{{ addr.value.adres }}</td>
+                                <td class="px-4 py-2">
+                                    <button type="button" class="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 dark:hover:bg-yellow-700 mr-2"
+                                        (click)="openAddressModal(true,i); $event.stopPropagation()">Düzenle</button>
+                                    <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 dark:hover:bg-red-700"
+                                        (click)="deleteAddress(i); $event.stopPropagation()">Sil</button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="adresler.length === 0">
+                                <td class="px-4 py-2 text-gray-500 dark:text-gray-300" colspan="7">Hiç adres eklenmemiş.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="step2" class="w-[200px] p-4 bg-gray-800 text-white flex flex-col items-start space-y-4 relative rounded-r-xl dark:bg-gray-800 dark:text-white">
+        <div class="w-full mb-4">
+            <label class="block text-sm font-semibold mb-2 text-left dark:text-white">{{ 'selectstore' | translate }}</label>
+            <ng-select [items]="stores" bindLabel="magazaAdi" bindValue="_id" [(ngModel)]="selectedStore"
+                (change)="onStoreChange(selectedStore)" placeholder="{{ 'Mağaza Seçiniz' | translate }}" class="w-full bg-gray-700 border-gray-600 text-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            </ng-select>
+        </div>
+
+        <div class="w-full mb-4">
+            <div class="relative">
+                <ul class="bg-gray-200 shadow-md rounded-md mt-1 w-full max-h-60 overflow-y-auto border border-gray-300 z-10 dark:bg-gray-900 dark:border-gray-700">
+                    <li
+                        *ngFor="let call of phoneList"
+                        class="p-2 border-b border-gray-300 cursor-pointer bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 text-green-400"
+                        (click)="onSearchChange(call)">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-gray-800 dark:text-green-400">{{ call.phone }}</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ 'incomingcall' | translate }}</span>
+                        </div>
+                    </li>
+
+                    <li *ngIf="phoneList.length === 0" class="p-2 text-center text-gray-500 dark:text-gray-400">
+                        {{ 'listisempty' | translate }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>
+
+    <!-- Adres Modalı -->
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="showAddressModal">
+        <div class="bg-white text-gray-800 p-6 rounded-md w-full max-w-xl space-y-4 dark:bg-gray-800 dark:text-white">
+            <h2 class="text-lg font-semibold dark:text-white">{{ editingAddressIndex !== null ? 'Adres Düzenle' : 'Adres Ekle' }}</h2>
+            <form [formGroup]="addressModalForm" class="space-y-4">
+                <!-- İl, İlçe, Mahalle, Yol -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">İl<span class="text-red-500">*</span></label>
+                        <select formControlName="il" (change)="onModalIlChange()" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400">
+                            <option value="">Seçiniz</option>
+                            <option *ngFor="let item of iller" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">İlçe<span class="text-red-500">*</span></label>
+                        <select formControlName="ilce" (change)="onModalIlceChange()" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400">
+                            <option value="">Seçiniz</option>
+                            <option *ngFor="let item of modalIlceler" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">Mahalle<span class="text-red-500">*</span></label>
+                        <select formControlName="mahalle" (change)="onModalMahalleChange()" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400">
+                            <option value="">Seçiniz</option>
+                            <option *ngFor="let item of modalMahalleler" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">Yol Adı<span class="text-red-500">*</span></label>
+                        <select formControlName="yolAdi" (change)="selectModalYolFromDropdown($any($event.target).value)" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400">
+                            <option value="">Seçiniz</option>
+                            <option *ngFor="let item of modalYollar" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Yol/Sokak Arama -->
+                <div>
+                    <label class="block text-gray-800 mb-1 dark:text-gray-200">Yol/Sokak Ara</label>
+                    <input type="text" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400"
+                           placeholder="Sokak/Yol Adı yazın..."
+                           (input)="onModalYolAdiInput()" formControlName="yolAdi" />
+                    <ul *ngIf="modalYolSearchResults && modalYolSearchResults.length > 0 && modalShowYolSearchDropdown"
+                        class="mt-1 bg-white border border-gray-300 rounded-md max-h-48 overflow-y-auto dark:bg-gray-700 dark:border-gray-500">
+                        <li *ngFor="let lok of modalYolSearchResults"
+                            class="px-2 py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-white"
+                            (click)="selectModalLokasyonResult(lok)">
+                            {{ lok.yolAdi }}, {{ lok.mahalle }}, {{ lok.ilce }}, {{ lok.il }}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Adres -->
+                <div>
+                    <label class="block text-gray-800 mb-1 dark:text-gray-200">Adres</label>
+                    <textarea formControlName="adres" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400" placeholder="Adres"></textarea>
+                </div>
+
+                <!-- Adres Açıklaması -->
+                <div>
+                    <label class="block text-gray-800 mb-1 dark:text-gray-200">Adres Açıklaması</label>
+                    <input formControlName="adresAciklama" type="text" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400" placeholder="Adres Açıklaması" />
+                </div>
+
+                <!-- Posta Kodu, Ülke, Adres Tipi -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">Posta Kodu</label>
+                        <input formControlName="postaKodu" type="text" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400" placeholder="Posta Kodu" />
+                    </div>
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">Ülke</label>
+                        <input formControlName="ulke" type="text" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-500 dark:text-white dark:placeholder-gray-400" placeholder="Ülke" />
+                    </div>
+                    <div>
+                        <label class="block text-gray-800 mb-1 dark:text-gray-200">Adres Tipi</label>
+                        <select formControlName="adresTipi" class="form-input w-full rounded-md border-gray-300 bg-white text-gray-800 dark:bg-gray-700 dark:border-gray-500 dark:text-white">
+                            <option value="ev">Ev</option>
+                            <option value="iş">İş</option>
+                            <option value="diğer">Diğer</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-end space-x-2">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md dark:hover:bg-gray-700" (click)="closeAddressModal()">İptal</button>
+                <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md dark:hover:bg-blue-700" (click)="saveAddressFromModal()">Kaydet</button>
+            </div>
+        </div>
+    </div>

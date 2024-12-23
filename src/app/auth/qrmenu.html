@@ -1,0 +1,161 @@
+<div class="menu-container">
+    <!-- Logo -->
+    <div class="logo-container">
+        <img [src]="avatar ? ('data:image/jpeg;base64,' + avatar) : '/assets/images/profile-34.jpeg'" alt="Avatar" class="avatar" />
+    </div>
+</div>
+
+<!-- Kategoriler Paneli -->
+<div class="categories-panel">
+    <div
+        *ngFor="let cate of category"
+        (click)="filterByCategory(cate)"
+        class="category-item"
+        [ngClass]="{
+            'active': selectedCategory?.kategoriId === cate.kategoriId,
+            'inactive': selectedCategory?.kategoriId !== cate.kategoriId
+        }"
+    >
+        {{ cate.kategoriAdi }}
+    </div>
+</div>
+
+<!-- Ürün Listesi -->
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0">
+    <div class="flex-1 bg-white p-4 overflow-y-auto">
+        <div *ngIf="groupedProducts">
+            <div *ngFor="let group of groupedProducts | keepOriginalQr" class="mb-8">
+                <h3 class="group-title">{{ group.key }}</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div *ngFor="let product of group.value" class="product-card">
+                        <div class="product-image">
+                            <ng-container *ngIf="getImageUrl(product); else noImage">
+                                <img [src]="getImageUrl(product)" alt="Ürün Resmi" />
+                            </ng-container>
+                            <ng-template #noImage>
+                                <span class="text-gray-400 text-xs">Resim Yok</span>
+                            </ng-template>
+                        </div>
+                        <h4 class="product-name">{{ product.urunAdi }}</h4>
+                        <p class="product-price">
+                            <span *ngIf="product.isOzelFiyat" class="line-through"> {{ product.standartFiyat | dynamicqRCurrency: userID }} </span>
+                            <span *ngIf="product.isOzelFiyat" class="text-green-600"> {{ product.ozelFiyat | dynamicqRCurrency: userID }} </span>
+                            <span *ngIf="!product.isOzelFiyat"> {{ product.standartFiyat | dynamicqRCurrency: userID }} </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="logo-section">
+    <img src="/assets/images/auth/logo-purple.svg" alt="Logo" class="logo" />
+</div>
+
+<style>
+    .logo-section {
+        background-color: #343a40;
+        padding-bottom: 5px;
+        padding-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .logo-section .logo {
+        max-width: 150px;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    .menu-container {
+        padding: 20px;
+        text-align: center;
+        background-color: #f8f9fa;
+    }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .logo-container .logo {
+        max-width: 150px;
+    }
+
+    .categories-panel {
+        background-color: #343a40;
+        color: #ffffff;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+    }
+
+    .categories-panel h3 {
+        margin-right: 20px;
+    }
+
+    .category-item {
+        padding: 10px 15px;
+        margin-right: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .category-item.active {
+        background-color: #007bff;
+    }
+
+    .category-item.inactive:hover {
+        background-color: #6c757d;
+    }
+
+    .product-card {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image img {
+        max-width: 100%;
+        border-radius: 5px;
+    }
+
+    .product-name {
+        font-size: 1.1em;
+        margin: 10px 0;
+    }
+
+    .product-price {
+        font-size: 1em;
+        color: #28a745;
+    }
+
+    .group-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #343a40;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 5px;
+    }
+
+    .product-price .line-through {
+        color: #dc3545;
+        text-decoration: line-through;
+        margin-right: 5px;
+    }
+</style>

@@ -1,0 +1,197 @@
+.tippy-box[data-theme~='primary'] {
+    background-color: #4361ee;
+}
+
+.tippy-box[data-theme~='primary'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #4361ee;
+}
+
+.tippy-box[data-theme~='success'] {
+    background-color: #00ab55;
+}
+
+.tippy-box[data-theme~='success'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #00ab55;
+}
+
+.tippy-box[data-theme~='info'] {
+    background-color: #2196f3;
+}
+
+.tippy-box[data-theme~='info'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #2196f3;
+}
+
+.tippy-box[data-theme~='danger'] {
+    background-color: #e7515a;
+}
+
+.tippy-box[data-theme~='danger'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #e7515a;
+}
+
+.tippy-box[data-theme~='warning'] {
+    background-color: #e2a03f;
+}
+
+.tippy-box[data-theme~='warning'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #e2a03f;
+}
+
+.tippy-box[data-theme~='secondary'] {
+    background-color: #805dca;
+}
+
+.tippy-box[data-theme~='secondary'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #805dca;
+}
+
+.tippy-box[data-theme~='dark'] {
+    background-color: #3b3f5c;
+}
+
+.tippy-box[data-theme~='dark'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: #3b3f5c;
+}
+.drag-preview {
+    border: 2px solid #3b82f6;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    transform: scale(1.05);
+  }
+
+  /* Bırakma alanı vurgusu */
+  .cdk-drop-list-dragging {
+    border: 2px dashed #3b82f6;
+    background-color: #f9fafb;
+  }
+
+  /* Ürün hover efekti */
+  .product-item:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .product-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .product-item {
+    width: 100%; /* Grid içindeki öğenin genişliği */
+    height: auto;
+    min-height: 150px;
+  }
+
+  .cdk-drag-preview {
+    transform: scale(1.05); /* Sürükleme sırasında büyüme efekti */
+    z-index: 1000;
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0.5;
+    border: 2px dashed #ccc;
+  }
+/* Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+.introjs-skipbutton {
+    background-color: transparent !important;
+    border: none !important; /* Kenar yok */
+    color: #888 !important; /* X sembolü gri */
+    font-size: 18px !important; /* X sembolü boyutu */
+    width: 30px; /* Butonun genişliği */
+    height: 30px; /* Butonun yüksekliği */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px; /* Yuvarlatılmış köşeler */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.introjs-skipbutton:hover {
+    background-color: #FF3B30 !important; /* Hover durumunda kırmızı arka plan */
+    color: white !important; /* X sembolü beyaz olur */
+    transform: scale(1.1); /* Öne doğru hareket */
+}
+
+
+
+
+
+
+.introjs-nextbutton {
+    background: linear-gradient(to right, #f59e0b, #f97316, #ef4444) !important; /* Sarıdan turuncuya, kırmızıya geçiş */
+    color: white !important; /* Beyaz yazı */
+    border: none !important;
+    border-radius: 2px !important; /* Yuvarlatılmış köşeler */
+    padding: 4px 20px !important; /* Daha belirgin alan */
+    font-size: 14px !important; /* Yazı boyutu */
+    cursor: pointer !important;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.introjs-nextbutton:hover {
+    background: linear-gradient(to right, #f59e0b, #f97316, #ef4444) !important; /* Hover için aynı geçiş */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3) !important; /* Daha belirgin gölge */
+    transform: scale(1.1); /* Hafif büyüme efekti */
+}
+
+.introjs-prevbutton {
+    background: linear-gradient(to right, #f59e0b, #f97316, #ef4444) !important; /* Sarıdan turuncuya, kırmızıya geçiş */
+    color: white !important; /* Beyaz yazı */
+    border: none !important;
+    border-radius: 2px !important; /* Yuvarlatılmış köşeler */
+    padding: 4px 20px !important; /* Daha belirgin alan */
+    font-size: 14px !important; /* Yazı boyutu */
+    cursor: pointer !important;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.introjs-button{
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important; /* Hafif gölge */
+    text-shadow: 0px 0px 0 #fff !important;
+}
+.introjs-prevbutton:hover {
+    background: linear-gradient(to right, #f59e0b, #f97316, #ef4444) !important; /* Hover için aynı geçiş */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3) !important; /* Daha belirgin gölge */
+    transform: scale(1.1); /* Hafif büyüme efekti */
+}
+
+
+@font-face {
+    font-family: 'BCAlphapipeRBBold';
+    src: url('/assets/fonts/BCAlphapipeRBBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+<div style="min-width: 350px;"
+    class="h-full bg-gradient-to-r from-purple-800 to-purple-600 text-white flex flex-col justify-between p-4 rounded-r-xl
+           dark:from-purple-900 dark:to-purple-700 dark:text-white">
+
+    <div class="mb-4 bg-purple-800 p-4 rounded-md shadow-md dark:bg-purple-900">
+        <h3 class="text-lg font-semibold border-b border-gray-500 pb-2 mb-3 dark:border-gray-600">
+            {{ 'Sipariş Bilgisi' | translate }}
+            <span class="ml-2 text-md text-gray-300 dark:text-gray-400">({{ orderNo || 'New' }})-({{ orderSource! | capitalize}})</span>
+        </h3>
+        <div class="grid grid-cols-2 gap-y-2 text-sm dark:text-gray-200">
+
+            <!-- Eğer kaynak masa ise masa bilgisini göster -->
+            <ng-container *ngIf="orderSource === 'masa'; else otherSourceBlock">
+                <div class="flex items-center">
+                    <span class="font-bold dark:text-gray-100">{{ 'Masa' | translate }}:</span>
+                    <span class="ml-1 text-gray-300 dark:text-gray-300">
+                        {{ tableInfo?.tableName || 'Belirtilmemiş' }}
+                    </span>
+                </div>
+            </ng-container>
+
+            <!-- Diğer kaynaklar için müşteri bilgisi -->
+            <ng-template #otherSourceBlock>
+                <div class="flex items-center">
+                    <span class="font-bold dark:text-gray-100">{{ 'Müşteri' | translate }}:</span>
+                    <span class="ml-1 text-gray-300 dark:text-gray-300">
+                        <!-- Eğer customerInfo varsa onun ismini, yoksa maskelenmiş isim -->
+                        {{ displayName }}
+
+                    </span>
+                </div>
+            </ng-template>
+
+            <div class="flex items-center">
+                <span class="font-bold dark:text-gray-100">{{ 'Tarih' | translate }}:</span>
+                <span class="ml-1 text-gray-300 dark:text-gray-300">{{ orderDate || 'Belirtilmemiş' }}</span>
+            </div>
+
+            <div class="flex items-center">
+                <span class="font-bold dark:text-gray-100">{{ 'Saat' | translate }}:</span>
+                <span class="ml-1 text-gray-300 dark:text-gray-300">{{ orderTime || 'Belirtilmemiş' }}</span>
+            </div>
+
+            <div class="flex items-center col-span-2">
+                <icon-user class="w-5 h-5 mb-1"></icon-user>
+                <span class="ml-1 text-gray-300 dark:text-gray-300">{{ orderUname || 'Belirtilmemiş' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar dark:text-gray-200">
+        <h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'Sipariş Özeti' | translate }}</h3>
+
+        <div *ngFor="let item of orderItems; let i = index" class="mb-6">
+            <!-- Ürün Başlık ve Fiyat -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="font-bold text-lg dark:text-gray-100">{{ item.miktar }}x {{ item.urunAdi | capitalize }}</span>
+                </div>
+                <div>
+                    <span class="font-semibold text-yellow-400">{{ item.vergiliFiyat * item.miktar | dynamicCurrency }}</span>
+                </div>
+            </div>
+
+            <!-- Alt Detaylar -->
+            <div *ngIf="item.items?.length > 0" class="mt-2 pl-4 border-l border-gray-400 dark:border-gray-600">
+                <ul class="list-disc list-inside space-y-1">
+                    <!-- Alt ürünler -->
+                    <ng-container *ngFor="let subItem of item.items">
+                        <li *ngIf="subItem.selected">
+                            <span class="text-sm dark:text-gray-200">{{ subItem.itemDetails?.urunAdi | capitalize }}</span>
+                            <span *ngIf="subItem.ekFiyat > 0" class="text-green-400 dark:text-green-300">
+                                +{{ subItem.ekFiyat | dynamicCurrency }}
+                            </span>
+
+                            <div *ngIf="subItem.itemDetails?.urunItems?.length > 0"
+                                class="mt-2 pl-6 border-l border-gray-300 dark:border-gray-600">
+                                <app-recursive-detail-Arti [items]="subItem.itemDetails.urunItems"></app-recursive-detail-Arti>
+                            </div>
+
+                            <div *ngIf="subItem.itemDetails?.items?.length > 0"
+                                class="mt-2 pl-6 border-l border-gray-300 dark:border-gray-600">
+                                <app-recursive-detail [items]="subItem.itemDetails.items"></app-recursive-detail>
+                            </div>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+
+            <!-- İşlem Butonları -->
+            <div class="flex space-x-2 mt-2">
+                <!-- Kaldır Butonu -->
+                <button (click)="onRemoveItem(i)" ngxTippy="Ürünü Kaldır" [tippyProps]="{placement: 'right'}"
+                    class="text-red-400 hover:text-red-600 transition-colors duration-200">
+                    <icon-trash class="h-5 w-5"></icon-trash>
+                </button>
+
+                <!-- İndirim Butonu -->
+                <button (click)="onApplyDiscount(item)" ngxTippy="İndirim Uygula" [tippyProps]="{placement: 'right'}"
+                    class="text-yellow-400 hover:text-yellow-600 transition-colors duration-200">
+                    <icon-dollar-sign-circle class="h-5 w-5"></icon-dollar-sign-circle>
+                </button>
+
+                <!-- Düzenle Butonu -->
+                <button (click)="onEditOrderItem(item, i)" ngxTippy="Düzenle" [tippyProps]="{placement: 'right'}"
+                    class="text-gray-200 hover:text-white transition-colors duration-200">
+                    <icon-edit class="h-5 w-5"></icon-edit>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-4 border-t pt-4 dark:border-gray-700">
+        <div class="flex justify-between items-center dark:text-gray-200">
+            <span class="font-bold dark:text-gray-100">{{ 'TOPLAM' | translate }}</span>
+            <span class="text-lg font-bold text-yellow-400">{{ totalAmount | dynamicCurrency }}</span>
+        </div>
+        <div class="flex gap-4 mt-4">
+            <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-sm flex items-center justify-center gap-2"
+                (click)="onOnaylaOrder(orderItems)">
+                <icon-check class="h-5 w-5"></icon-check>
+                {{ 'ONAYLA' | translate }}
+            </button>
+
+            <button *ngIf="!isFullyPaid" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-sm flex items-center justify-center gap-2"
+                (click)="onOdemeAlOrder(orderItems)">
+                <icon-dollar-sign class="h-5 w-5"></icon-dollar-sign>
+                {{ 'ÖDEME AL' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

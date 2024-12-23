@@ -1,0 +1,8 @@
+{
+    "/api": {
+      "target": "https://api.easycorest.com:5555",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+  }

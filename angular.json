@@ -1,0 +1,114 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "vristo-angular": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser-esbuild",
+                    "options": {
+                        "outputPath": "dist",
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "assets": ["src/assets", "src/demo-prepare.html"],
+                        "styles": ["src/assets/css/app.css", "node_modules/intro.js/minified/introjs.min.css", "node_modules/leaflet/dist/leaflet.css"],
+                        "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js","node_modules/leaflet/dist/leaflet.js"],
+                        "allowedCommonJsDependencies": ["apexcharts", "sweetalert2", "file-saver", "quill", "quill-delta"],
+                        "baseHref": "/"
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "5mb",
+                                    "maximumError": "10mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "ssl": true,
+                        "sslKey": "c:/certifica/_.360restoran.com-key-nopass.pem",
+                        "sslCert": "c:/certifica/_.360restoran.com-fullchain.pem"
+                    },
+                    "configurations": {
+                        "production": {
+                            "buildTarget": "vristo-angular:build:production",
+                            "ssl": true,
+                            "sslKey": "c:/certifica/_.360restoran.com-key-nopass.pem",
+                            "sslCert": "c:/certifica/_.360restoran.com-fullchain.pem"
+                        },
+                        "development": {
+                            "buildTarget": "vristo-angular:build:development",
+                            "ssl": true,
+                            "sslKey": "c:/certifica/_.360restoran.com-key-nopass.pem",
+                            "sslCert": "c:/certifica/_.360restoran.com-fullchain.pem"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "buildTarget": "vristo-angular:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "assets": ["src/favicon.ico", "src/assets"],
+                        "styles": [
+                            "src/styles.css",
+                            "node_modules/intro.js/minified/introjs.min.css",
+                            "node_modules/aos/dist/aos.css",
+                            "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+                            "node_modules/glightbox/dist/css/glightbox.css"
+                        ],
+                        "scripts": ["node_modules/aos/dist/aos.js", "node_modules/glightbox/dist/js/glightbox.min.js"]
+                    }
+                }
+            }
+        }
+    },
+    "cli": {
+        "analytics": "d3036238-32fd-400d-bf35-969855dd351a"
+    }
+}

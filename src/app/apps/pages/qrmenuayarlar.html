@@ -1,0 +1,80 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel dark:bg-gray-800 dark:text-white-light">
+    <div class="mb-5">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'qrsettings' | translate }}</h5>
+    </div>
+
+    <div class="panel dark:bg-gray-800 dark:text-white-light">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+            <h5 class="text-lg font-semibold dark:text-white-light"> {{ 'magazamanagement' | translate }}</h5>
+            <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                <!-- Arama Alanı -->
+                <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..."
+                    class="form-input w-64 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+
+                <!-- Pasifleri Göster Checkbox -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium dark:text-white-light">
+                        {{ 'showpassives' | translate }}
+                    </label>
+                    <label class="relative h-4 w-8">
+                        <select class="custom_select w-full cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="selectedStatus"
+                            (change)="applyFilter()">
+                            <option value="all">{{ 'Tümü' | translate }}</option>
+                            <option value="aktif">{{ 'Aktif' | translate }}</option>
+                            <option value="pasif">{{ 'Pasif' | translate }}</option>
+                            <option value="beklemede">{{ 'Beklemede' | translate }}</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="datatable dark:text-white-light">
+            <ng-datatable [rows]="filteredMagazalar" [columns]="cols" [sortable]="true" [search]="searchTerm"
+                [pageSize]="itemsPerPage" [stickyHeader]="true" class="whitespace-nowrap"
+                firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+                nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'>
+
+                <ng-template slot="aktif" let-value="data">
+                    {{ value.statu === true ? 'Aktif' : 'Pasif' }}
+                </ng-template>
+                <ng-template slot="actions" let-value="data">
+                    <!-- rounded -->
+                    <label class="w-12 h-6 relative">
+                        <input
+                            type="checkbox"
+                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
+                            [checked]="value.acikMi"
+                            (change)="QRDurumGuncelle(value)" />
+                        <span
+                            class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:bg-primary before:transition-all before:duration-300 before:left-1 peer-checked:before:left-7">
+                        </span>
+                    </label>
+                </ng-template>
+
+                <ng-template slot="indir" let-value="data">
+                    <!-- icon -->
+                    <button type="button" class="btn btn-success dark:bg-green-600 dark:hover:bg-green-700 dark:text-white" (click)="QRIndir(value)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                </ng-template>
+            </ng-datatable>
+        </div>
+        <div class="fixed bottom-4 center-4 z-10">
+            <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                     hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                     hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+              <icon-help-circle class="h-6 w-6"></icon-help-circle>
+            </a>
+          </div>
+    
+    </div>
+</div>

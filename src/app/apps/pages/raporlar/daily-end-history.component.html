@@ -1,0 +1,110 @@
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-black dark:text-white">
+    <!-- Sol Panel -->
+    <div class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl flex flex-col dark:from-purple-900 dark:to-purple-700">
+      <h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'endofdayreporthistory' | translate }}</h3>
+      <!-- Mağaza Seçimi -->
+      <div class="mb-4">
+        <label class="block mb-1 font-medium dark:text-white">{{ 'store' | translate }}</label>
+        <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="selectedStore">
+          <option *ngFor="let s of stores" [value]="s._id">{{s.magazaAdi}}</option>
+        </select>
+      </div>
+      <!-- Başlangıç Tarihi -->
+      <div class="mb-4">
+        <label class="block mb-1 font-medium dark:text-white">{{ 'startdate' | translate }}</label>
+        <input type="date" [(ngModel)]="startDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+      </div>
+      <!-- Bitiş Tarihi -->
+      <div class="mb-4">
+        <label class="block mb-1 font-medium dark:text-white">{{ 'enddate' | translate }}</label>
+        <input type="date" [(ngModel)]="endDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+      </div>
+
+      <button (click)="getHistory()" class="btn btn-primary w-full flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white" [disabled]="isLoading">
+        {{ 'apply' | translate }}
+      </button>
+    </div>
+
+    <!-- Sağ Panel -->
+    <div class="flex-1 p-4 bg-white dark:bg-black overflow-y-auto">
+      <div class="flex items-center mb-4">
+        <h3 class="text-lg font-semibold mr-2 dark:text-white"> {{ 'endofdayreporthistory' | translate }}</h3>
+        <div *ngIf="isLoading" class="text-sm text-gray-500 ml-2 flex items-center dark:text-gray-300">
+          <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black dark:border-white !border-l-transparent mr-2"></span>
+          {{ 'Loading' | translate }}...
+        </div>
+        <div class="ml-auto flex space-x-2">
+          <!-- Excel & PDF butonları -->
+          <button (click)="exportToExcel()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+            Excel
+          </button>
+          <button (click)="exportAsPDFfromHTML()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+            {{ 'pdffromhtml' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="text-red-500 mb-3">{{error}}</div>
+
+      <div #reportContent *ngIf="reports && reports.length>0">
+        <table class="table-auto w-full text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-collapse">
+          <thead>
+            <tr class="border-b dark:border-gray-700">
+              <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'store' | translate }}</th>
+              <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'date' | translate }}</th>
+              <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'paymenttype' | translate }}</th>
+              <th class="p-2 text-right dark:bg-gray-700 dark:text-white">{{ 'expected' | translate }}</th>
+              <th class="p-2 text-right dark:bg-gray-700 dark:text-white">{{ 'counted' | translate }}</th>
+              <th class="p-2 text-right dark:bg-gray-700 dark:text-white">{{ 'difference' | translate }}</th>
+              <th class="p-2 text-right dark:bg-gray-700 dark:text-white" *ngIf="userRole === 'admin' || userRole === 'Destek' || userRole === 'User'">{{ 'process' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let report of reports">
+              <tr class="border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700">
+                <td class="p-2 align-top dark:text-white" [attr.rowspan]="report.results.length">
+                    {{findStoreName(report.storeId)}}
+                </td>
+                <td class="p-2 align-top dark:text-white" [attr.rowspan]="report.results.length">
+                  {{report.date}}
+                </td>
+                <td class="p-2 align-top dark:text-white">
+                  {{report.results[0].odemeTipi?.odemeAdi || 'N/A'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{report.results[0].expectedAmount | number:'1.2-2'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{report.results[0].countedAmount | number:'1.2-2'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{report.results[0].difference | number:'1.2-2'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white" [attr.rowspan]="report.results.length"  *ngIf="userRole === 'admin' || userRole === 'Destek' || userRole === 'User'">
+                  <button class="btn btn-outline-secondary text-sm" (click)="revertDailyEnd(report)">{{ 'discard' | translate }}</button>
+                </td>
+              </tr>
+              <tr *ngFor="let result of report.results; let i = index" [hidden]="i === 0" class="border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700">
+                <td class="p-2 align-top dark:text-white">
+                  {{result.odemeTipi?.odemeAdi || 'N/A'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{result.expectedAmount | number:'1.2-2'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{result.countedAmount | number:'1.2-2'}}
+                </td>
+                <td class="p-2 text-right align-top dark:text-white">
+                  {{result.difference | number:'1.2-2'}}
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!isLoading && (!reports || reports.length===0)" class="text-gray-600 dark:text-gray-300 mt-3">
+        {{ 'nodatafoundmatching' | translate }}
+      </div>
+    </div>
+  </div>

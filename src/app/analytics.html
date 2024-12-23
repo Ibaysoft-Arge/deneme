@@ -1,0 +1,262 @@
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen p-4">
+    <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">{{ 'dashboard' | translate }}</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2 text-black dark:text-white">
+            <span>{{ 'sales' | translate }}</span>
+        </li>
+    </ul>
+
+    <!-- Filtreleme Alanı -->
+    <div class="mt-4 mb-5 p-4 bg-white dark:bg-[#1f2937] rounded shadow-md">
+        <div class="flex items-end flex-wrap gap-4">
+
+            <!-- Rapor Tipi Seçimi -->
+            <div class="flex-1">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'reportType' | translate }}</label>
+                <select [(ngModel)]="reportType" class="form-select w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                    <option value="yearly">{{ 'Yearly' | translate }}</option>
+                    <option value="monthly">{{ 'Monthly' | translate }}</option>
+                    <option value="range">{{ 'Date Range' | translate }}</option>
+                </select>
+            </div>
+
+            <!-- Yıl seçimi -->
+            <div *ngIf="reportType === 'yearly' || reportType === 'monthly'">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'year' | translate }}</label>
+                <input type="number" [(ngModel)]="year" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="2024" />
+            </div>
+
+            <!-- Tarih aralığı -->
+            <div *ngIf="reportType === 'range'">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'startdate' | translate }}</label>
+                <input type="date" [(ngModel)]="startDate" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+            </div>
+            <div *ngIf="reportType === 'range'">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'enddate' | translate }}</label>
+                <input type="date" [(ngModel)]="endDate" class="form-input w-full dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+            </div>
+
+            <!-- Mağaza Seçimi -->
+            <div class="flex-1">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'selectstore' | translate }}</label>
+                <ng-select [items]="stores" bindLabel="magazaAdi" bindValue="_id" [(ngModel)]="selectedStores"
+                    [multiple]="true" placeholder="{{ 'Select Stores' | translate }}" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                </ng-select>
+            </div>
+
+            <!-- Uygula Butonu -->
+            <button (click)="fetchReport()" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white rounded py-2 px-4">
+                {{ 'apply' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <div class="pt-5">
+        <div class="mb-6 grid gap-6 xl:grid-cols-3">
+            <div class="panel h-full xl:col-span-2 p-4 bg-white dark:bg-[#1f2937] rounded shadow">
+                <h5 class="text-lg font-semibold mb-2 text-black dark:text-white">{{ 'revenue' | translate }}</h5>
+                <div *ngIf="revenueChart && revenueChart.series && revenueChart.series.length > 0" class="relative overflow-hidden">
+                    <apx-chart [series]="revenueChart?.series" [chart]="revenueChart.chart"
+                        [dataLabels]="revenueChart.dataLabels" [stroke]="revenueChart.stroke"
+                        [colors]="revenueChart.colors" [markers]="revenueChart.markers" [labels]="revenueChart.labels"
+                        [xaxis]="revenueChart.xaxis" [yaxis]="revenueChart.yaxis" [grid]="revenueChart.grid"
+                        [legend]="revenueChart.legend" [tooltip]="revenueChart.tooltip" [fill]="revenueChart.fill"
+                        class="rounded-lg bg-white dark:bg-[#1f2937]">
+                        <div class="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+
+            <div class="panel h-full bg-white dark:bg-[#1f2937] rounded shadow p-4">
+                <div class="mb-5 flex items-center">
+                    <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'salesbyproducts' | translate }}</h5>
+                </div>
+                <div *ngIf="salesByCategory && salesByCategory.series && salesByCategory.series.length > 0">
+                    <apx-chart [series]="salesByCategory.series" [chart]="salesByCategory.chart"
+                        [dataLabels]="salesByCategory.dataLabels" [stroke]="salesByCategory.stroke"
+                        [colors]="salesByCategory.colors" [legend]="salesByCategory.legend"
+                        [plotOptions]="salesByCategory.plotOptions" [labels]="salesByCategory.labels"
+                        [states]="salesByCategory.states" class="rounded-lg bg-white dark:bg-[#1f2937]">
+                        <div class="grid min-h-[460px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6 grid gap-6 sm:grid-cols-2">
+            <div class="panel h-full bg-white dark:bg-[#1f2937] rounded shadow p-4">
+                <div class="mb-5 flex items-center">
+                    <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'dailysales' | translate }}</h5>
+                    <div class="relative ltr:ml-auto rtl:mr-auto">
+                        <div class="grid h-11 w-11 place-content-center rounded-full bg-[#ffeccb] text-warning dark:bg-warning dark:text-[#ffeccb]">
+                            <icon-dollar-sign></icon-dollar-sign>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="dailySales && dailySales.series && dailySales.series.length > 0">
+                    <apx-chart [series]="dailySales.series" [chart]="dailySales.chart"
+                        [dataLabels]="dailySales.dataLabels" [stroke]="dailySales.stroke" [colors]="dailySales.colors"
+                        [responsive]="dailySales.responsive" [xaxis]="dailySales.xaxis" [yaxis]="dailySales.yaxis"
+                        [fill]="dailySales.fill" [plotOptions]="dailySales.plotOptions" [legend]="dailySales.legend"
+                        [grid]="dailySales.grid" class="rounded-lg bg-white dark:bg-[#1f2937]">
+                        <div class="grid min-h-[175px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+
+            <div class="panel h-full bg-white dark:bg-[#1f2937] rounded shadow p-4">
+                <div class="mb-5 flex items-center">
+                    <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'hourly' | translate }}</h5>
+                </div>
+                <div *ngIf="totalOrders && totalOrders.series && totalOrders.series.length > 0">
+                    <apx-chart [series]="totalOrders.series" [chart]="totalOrders.chart" [stroke]="totalOrders.stroke"
+                        [colors]="totalOrders.colors" [labels]="totalOrders.labels" [yaxis]="totalOrders.yaxis"
+                        [grid]="totalOrders.grid" [fill]="totalOrders.fill" [tooltip]="totalOrders.tooltip"
+                        [xaxis]="totalOrders.xaxis" class="rounded-lg bg-white dark:bg-[#1f2937]">
+                        <div class="grid min-h-[290px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div class="panel h-full w-full bg-white dark:bg-[#1f2937] rounded shadow p-4">
+                <div class="mb-5 flex items-center justify-between">
+                    <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'recentorders' | translate }}</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
+                                <th>{{ 'product' | translate }}</th>
+                                <th>{{ 'OrderNo' | translate }}</th>
+                                <th>{{ 'price' | translate }}</th>
+                                <th>{{ 'store' | translate }}</th>
+                                <th>{{ 'source' | translate }}</th>
+                                <th>{{ 'date' | translate }}</th>
+                                <th class="ltr:rounded-r-md rtl:rounded-l-md">{{ 'status' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let order of recentOrders" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="text-primary">{{ order.urunler && order.urunler.length > 0 ? order.urunler[0].urunAdi : 'N/A' }}</td>
+                                <td>
+                                    <a [routerLink]="['/apps/invoice/preview', order.orderId]">#{{ order.orderNo }}</a>
+                                </td>
+                                <td>{{ order.toplamVergiliFiyat }}</td>
+                                <td>{{ order.magazaAdi }}</td>
+                                <td>{{ order.satisKaynak?.kaynakAdi || 'N/A' }}</td>
+                                <td>{{ order.siparisTarihi | date:'short' }}</td>
+                                <td>
+                                    <span class="badge"
+                                        [ngClass]="{
+                                          'bg-success': order.statu === 'siparisOlusturuldu',
+                                          'bg-secondary': order.statu === 'Shipped',
+                                          'bg-warning': order.statu === 'Pending'
+                                        }">
+                                        {{ order.statu }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel h-full w-full bg-white dark:bg-[#1f2937] rounded shadow p-4">
+                <div class="mb-5 flex items-center justify-between">
+                    <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'storewisetodayrevenue' | translate }}</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
+                                <th class="ltr:rounded-l-md rtl:rounded-r-md">{{ 'store' | translate }}</th>
+                                <th>{{ 'type' | translate }}</th>
+                                <th class="text-right">{{ 'todayrevenue' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let store of dailyStoreRevenues" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="text-black dark:text-white">{{ store.magazaAdi }}</td>
+                                <td class="text-black dark:text-white">{{ store.magazaTuru }}</td>
+                                <td class="text-right">{{ store.toplamCiro | number:'1.2-2'  }}</td>
+                            </tr>
+                            <tr *ngFor="let entry of ciroByType | keyvalue" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="text-black dark:text-white">{{ entry.key }}</td>
+                                <td class="text-right" colspan="2">{{ entry.value }}</td>
+                            </tr>
+                            <tr class="font-semibold border-t border-gray-200 dark:border-white/10">
+                                <td class="text-black dark:text-white">{{ 'total' | translate }}</td>
+                                <td class="text-right" colspan="2">{{ totalCiro | number:'1.2-2'  }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-5">
+            <div class="panel h-full w-full p-4 bg-white dark:bg-[#1f2937] rounded shadow">
+                <div class="mb-5 flex items-center justify-between">
+                    <h5 class="text-lg font-semibold dark:text-white-light">{{ 'storeandsourcebasedreport' | translate }}</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
+                                <th rowspan="2">{{ 'row' | translate }}</th>
+                                <th rowspan="2">{{ 'substation' | translate }}</th>
+                                <th rowspan="2">{{ 'tip' | translate }}</th>
+                                <th rowspan="2">{{ 'totalrevenue' | translate }}</th>
+                                <th rowspan="2">{{ 'totalreceipts' | translate }}</th>
+                                <th rowspan="2">{{ 'cartaverage' | translate }}</th>
+
+                                <ng-container *ngFor="let k of distinctKaynaklar">
+                                    <th colspan="2">{{ k }}</th>
+                                </ng-container>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
+                                <ng-container *ngFor="let k of distinctKaynaklar">
+                                    <th>{{ 'ciro' | translate }}</th>
+                                    <th>{{ 'fis' | translate }}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let s of storeSourcesData; let i = index" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ s.magazaAdi }}</td>
+                                <td>{{ s.tip }}</td>
+                                <td>{{ s.toplamCiro }}</td>
+                                <td>{{ s.toplamFis }}</td>
+                                <td>{{ s.sepetOrt }}</td>
+
+                                <ng-container *ngFor="let k of distinctKaynaklar">
+                                    <ng-container *ngIf="getFoundSource(s, k) as found">
+                                        <td>{{ found.toplamCiro }}</td>
+                                        <td>{{ found.fisAdeti }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="!getFoundSource(s, k)">
+                                        <td>0</td><td>0</td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

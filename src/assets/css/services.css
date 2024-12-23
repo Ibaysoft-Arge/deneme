@@ -1,0 +1,314 @@
+/* Custom metallic purple background color */
+.metallic-purple {
+  background: linear-gradient(135deg, #5919ba, #e4075c);
+  /* Adjust the shades as needed */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  /* Optional: add a shadow for more depth */
+}
+
+.metallic-purple:hover {
+  background-color: #5a009d;
+  /* Slightly darker shade for hover effect */
+}
+
+
+/* Başlangıçta navbar'ı gizle */
+.navbar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  /* Header'ın hemen altına yerleşmesi için */
+  left: 0;
+  width: 100%;
+  background-color: #ced2d1;
+  /*background-color: #6e4b8b;  /* Arka plan rengini net bir renk olarak ayarladım */
+  padding: 5px 0;
+  /* Yüksekliği azaltmak için padding'i küçülttüm */
+  opacity: 1;
+  /* Saydamlığı kaldırmak için opaklık */
+}
+
+/* Navbar'ı header üzerine gelince göster */
+header:hover .navbar {
+  display: block;
+}
+
+.navbar div {
+  display: flex;
+  /* Flexbox ile elemanları yan yana diz */
+  justify-content: center;
+  /* Orta hizalama */
+  gap: 1rem;
+  /* Bağlantılar arasındaki boşluğu ayarla */
+}
+
+/* Set the font color of navbar titles to purple */
+.navbar a {
+  padding: 5px 15px;
+  color: #110227;
+  /* Set the color to metallic purple */
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+  color: #e4075c;
+}
+
+.custom-button {
+  background:white; /* Metalik mor esas renk */
+  color: rgb(190, 65, 142);
+  border: none;
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+
+
+
+/* Slider Styles */
+.slider-container {
+position: relative;
+width: 100%;
+height: 380px;
+overflow: hidden;
+margin-bottom: 40px; /* Slider altında boşluk bırakır */
+}
+
+.slider-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.centered-image-container {
+position: absolute; /* Tam konumlandırma sağlar */
+top: 35%; /* Başlık ile slider-image arasında yerleştirir */
+left: 50%; /* Yatay olarak ortalar */
+transform: translate(-50%, -50%); /* Gerçek ortalamayı sağlar */
+z-index: 2; /* Başlık ve slider-image arasında konumlandırır */
+opacity: 0.5; /* Transparanlık ayarı (0 ile 1 arasında değişebilir) */
+}
+
+.centered-image {
+width: 100%; /* Görselin boyutunu ayarlar */
+height: auto; /* Oranları korur */
+border-radius: 8px; /* Köşeleri yuvarlar (isteğe bağlı) */
+}
+
+/* About Us Section */
+.services-container {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+color: white;
+font-family: Arial, sans-serif;
+z-index: 3;
+}
+
+.slider-container .services-container h1 {
+font-size: 5rem;
+font-weight: bold;
+}
+
+
+
+.services-container p {
+font-size: 1.2rem;
+margin-top: 10px;
+}
+
+
+.slider-container .services-container h1 {
+font-size: 5rem; /* Yazı boyutunu büyütüyor */
+font-family: 'Monaco', monospace; /* Fontu Monaco yapıyor */
+font-weight: bold; /* Yazıyı kalınlaştırıyor (isteğe bağlı) */
+color: #ebe4f7;
+}
+
+.relative {
+position: relative;
+}
+
+.text-block {
+margin-bottom: 20px; /* Genel alt boşluğu biraz küçültüldü */
+text-align: center; /* Tüm içerikler için ortalama */
+}
+
+.text-block .relative {
+  margin-bottom: 0; /* Resim ve başlık arasındaki boşluk sıfırlandı */
+}
+
+
+.text-block img {
+margin-bottom: 10px; /* Resim ile başlık arasındaki boşluk */
+width: 100%; /* Resmin genişliği kutusuna sığacak şekilde */
+height: auto; /* Oranını korur */
+}
+
+
+
+.heading-image {
+width: 100%; /* Resmin genişliğini ayarlar */
+height: auto; /* Oranı korur */
+position: absolute; /* Konumlandırmayı sağlar */
+top: -50px; /* Başlığın üzerine çıkarır */
+left: 50%; /* Ortalar */
+transform: translateX(-50%); /* Ortalamayı tam yapar */
+z-index: 0; /* Diğer içeriklerin altında kalır */
+}
+
+.text-block h4 {
+position: relative;
+z-index: 1; /* Resmin üstünde görünmesini sağlar */
+/*  margin-top: 60px; Resimden sonra uygun mesafe bırakır */
+text-align: center; /* Başlığı ortalar */
+margin-top: 2px; /* Resim ile başlık arasındaki boşluğu azalttık */
+font-size: 1.2rem; /* Başlık boyutunu biraz küçülttük */
+  
+
+}
+
+.text-block p, .text-block ul {
+font-size: 1rem; /* Metin boyutunu ayarladık */
+margin: 0 auto; /* Ortalamayı sağlar */
+}
+
+
+.heading-image {
+width: 80px; /* Resmin genişliğini %60 ile sınırlayın */
+height: 80px; /* Orijinal oranını koruyarak yüksekliği ayarlayın */
+position: relative; /* Konumlandırmayı sağlar */
+top: -50px; /* Başlığın üzerine çıkarır */
+left: 50%; /* Ortalar */
+transform: translateX(-50%); /* Ortalamayı tam yapar */
+z-index: 0; /* Diğer içeriklerin altında kalır */
+}
+
+.small-headings-section {
+display: flex;
+flex-wrap: wrap; /* Elemanların küçük ekranlarda alt alta geçmesini sağlar */
+justify-content: center; /* İçeriği ortalar */
+padding: 20px; /* Çevresine boşluk ekler */
+margin-top: 20px; /* Gerekirse üst boşluğu artırır */
+}
+
+
+
+/* Responsive Ayarlar */
+@media (max-width: 1024px) {
+
+ /* Tablet görünümü */
+ header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+header .logo {
+  margin-bottom: 1rem;
+}
+
+header nav {
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.navbar div {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.slider-container .services-container h1 {
+    font-size: 1.8rem;
+}
+
+.services-container p {
+    font-size: 1rem;
+}
+}
+
+@media (max-width: 768px) {
+
+  /* Mobil görünümü */
+  header {
+    padding: 0.5rem;
+  }
+
+  header .logo {
+    width: 6rem;
+  }
+
+  header nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  header nav .nav-link,
+  header nav .btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  header .dropdown ul {
+    grid-template-columns: 1fr;
+  }
+
+
+  .slider-container {
+      height: 300px;
+  }
+
+  .slider-container .services-container h1 {
+      font-size: 1.5rem;
+  }
+
+  .services-container p {
+      font-size: 0.9rem;
+  }
+ 
+}
+
+@media (max-width: 480px) {
+
+
+.heading-image {
+    width: 50px; /* Daha küçük resim boyutu */
+    height: 50px;
+}
+
+.text-block h4 {
+    font-size: 1rem; /* Başlık boyutunu daha da küçült */
+}
+
+.text-block p, .text-block ul {
+    font-size: 0.8rem; /* Metin boyutunu küçült */
+}
+
+.slider-container {
+  height: 250px;
+}
+
+.slider-container .services-container h1 {
+  font-size: 1.2rem;
+}
+
+.services-container p {
+  font-size: 0.8rem;
+}
+
+.navbar div {
+  gap: 0.2rem;
+}
+
+.navbar a {
+  font-size: 0.9rem;
+}
+  
+}
+
+

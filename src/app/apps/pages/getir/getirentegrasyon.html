@@ -1,0 +1,145 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen p-4">
+    <!-- Breadcrumb Navigation -->
+    <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">{{ 'hidden' | translate }}</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2 text-black dark:text-white">
+            <span>{{ 'SETTINGS' | translate }}</span>
+        </li>
+    </ul>
+
+    <!-- Page Title -->
+    <div class="pt-5">
+        <div class="mb-5 flex items-center justify-between">
+            <h5 class="text-lg font-semibold text-black dark:text-white">{{ 'specialdefinitions' | translate }}</h5>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mb-5 flex overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] dark:border-gray-700 font-semibold">
+            <a href="javascript:;"
+                class="flex gap-2 border-b-2 border-transparent p-4 !outline-none hover:border-primary hover:text-primary transition-colors ease-in-out"
+                [ngClass]="{ '!border-primary text-primary': activeTab.toLowerCase() === 'permission' }"
+                (click)="activeTab = 'permission'">
+                <icon-home></icon-home>
+                <span class="text-black dark:text-white">{{ 'integrationsettings' | translate }}</span>
+            </a>
+
+            <a href="javascript:;"
+                class="flex gap-2 border-b-2 border-transparent p-4 !outline-none hover:border-primary hover:text-primary transition-colors ease-in-out"
+                [ngClass]="{ '!border-primary text-primary': activeTab.toLowerCase() === 'supporthours' }"
+                (click)="activeTab = 'supporthours'">
+                <icon-home></icon-home>
+                <span class="text-black dark:text-white">{{ 'workinghours' | translate }}</span>
+            </a>
+        </div>
+
+        <!-- Permission Settings Tab -->
+        <div *ngIf="activeTab.toLowerCase() === 'permission'">
+            <div class="panel p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+                <div class="mb-8 flex items-center justify-between">
+                    <h5 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'getirintegrationsettings' | translate }}</h5>
+                </div>
+                <form [formGroup]="getirBilgileriForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label class="font-medium text-gray-700 dark:text-gray-300">{{ 'appsecretkey' | translate }}<span class="text-red-500">*</span></label>
+                        <input type="text" formControlName="appSecretKey"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="{{ 'appsecretkey' | translate }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-medium text-gray-700 dark:text-gray-300">{{ 'restkey' | translate }}<span class="text-red-500">*</span></label>
+                        <input type="text" formControlName="restKey"
+                            class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                            placeholder="{{ 'restkey' | translate }}" />
+                    </div>
+
+                    <div class="form-group md:col-span-2 text-right">
+                        <button type="submit"
+                            class="btn btn-primary bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition dark:focus:ring-blue-700"
+                            (click)="saveGetirBilgileri()">
+                            {{ 'save' | translate }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Support Hours Tab -->
+        <div *ngIf="activeTab.toLowerCase() === 'supporthours'">
+            <div class="panel p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+                <div class="mb-8 flex items-center justify-between">
+                    <h5 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'workinghours' | translate }}</h5>
+                </div>
+
+                <!-- Support Hours List -->
+                <div class="mb-4">
+                    <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-100 dark:bg-gray-700">
+                            <tr>
+                                <th class="py-2 px-4 text-left font-semibold text-gray-700 dark:text-gray-300">{{ 'day' | translate }}</th>
+                                <th class="py-2 px-4 text-left font-semibold text-gray-700 dark:text-gray-300">{{ 'starttime' | translate }}</th>
+                                <th class="py-2 px-4 text-left font-semibold text-gray-700 dark:text-gray-300">{{ 'endtime' | translate }}</th>
+                                <th class="py-2 px-4 text-left font-semibold text-gray-700 dark:text-gray-300">{{ 'actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let hour of supportHours" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="py-2 px-4 text-gray-800 dark:text-white">{{ hour.dayOfWeek }}</td>
+                                <td class="py-2 px-4 text-gray-800 dark:text-white">{{ hour.startTime }}</td>
+                                <td class="py-2 px-4 text-gray-800 dark:text-white">{{ hour.endTime }}</td>
+                                <td class="py-2 px-4">
+                                    <button type="button"
+                                        class="btn btn-primary bg-blue-500 text-white font-medium py-1 px-4 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-700 transition"
+                                        (click)="editSupportHour(hour)">
+                                        {{ 'edit' | translate }}
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add/Update Support Hours Form -->
+                <form (ngSubmit)="isUpdatingSupport ? updateSupportHour() : addSupportHour()" class="mt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="days" class="font-semibold text-gray-700 dark:text-gray-300">{{ 'selectdays' | translate }}</label>
+                            <select id="days" [(ngModel)]="selectedDay" name="days"
+                                class="form-select w-full p-2 border rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                <option *ngFor="let day of weekDays" [value]="day">{{ day }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="startTime" class="font-semibold text-gray-700 dark:text-gray-300">{{ 'starttime' | translate }}</label>
+                            <input id="startTime" type="time" [(ngModel)]="newSupportHour.startTime" name="startTime"
+                                class="form-input w-full p-2 border rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                                required />
+                        </div>
+                        <div>
+                            <label for="endTime" class="font-semibold text-gray-700 dark:text-gray-300">{{ 'endtime' | translate }}</label>
+                            <input id="endTime" type="time" [(ngModel)]="newSupportHour.endTime" name="endTime"
+                                class="form-input w-full p-2 border rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500"
+                                required />
+                        </div>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <button type="submit"
+                            class="btn btn-primary bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition dark:focus:ring-blue-700">
+                            {{ isUpdatingSupport ? ('updateSupportHour' | translate) : ('addSupportHour' | translate) }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="fixed bottom-4 center-4 z-10">
+                <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                         hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                         hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+                  <icon-help-circle class="h-6 w-6"></icon-help-circle>
+                </a>
+              </div>
+        </div>
+    </div>
+</div>

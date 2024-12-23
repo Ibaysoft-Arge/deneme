@@ -1,0 +1,222 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <h5 class="text-lg font-semibold dark:text-white-light">{{ 'couponmanagement' | translate }}</h5>
+
+    <!-- Mağaza Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+        <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+            <button type="button"
+                    class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+                    [ngClass]="{ '!text-primary': accordians3 === 1 }"
+                    (click)="accordians3 === 1 ? (accordians3 = null) : (accordians3 = 1)">
+                {{ 'addcoupon' | translate }}
+            </button>
+            <div [@slideDownUp]="accordians3 !== 1" class="accordion-content">
+                <div class="space-y-2 border-t border-[#d3d3d3] p-4 text-white-dark dark:text-gray-200 dark:border-[#1b2e4b]">
+
+                    <!-- Sekme Başlangıcı -->
+                    <div class="mb-5">
+                        <div id="step1" class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <a id="step2" href="javascript:;"
+                               class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                               [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                               (click)="setActiveTab('genel')">
+                                {{ 'generalinformation' | translate }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bilgiler Sekmesi -->
+                    <div *ngIf="isActiveTab('genel')">
+                        <!-- Kupon Ekleme Formu -->
+                        <div class="accordion-content">
+                            <form [formGroup]="couponForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'couponname' | translate }}<span style="color:red;">*</span></label>
+                                    <input type="text" formControlName="ad" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'description' | translate }}</label>
+                                    <textarea formControlName="aciklama" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'coupontype' | translate }}<span style="color:red;">*</span></label>
+                                    <select formControlName="kuponTipi" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                        <option value="">{{ 'selecttype' | translate }}</option>
+                                        <option value="bedava">{{ 'free' | translate }}</option>
+                                        <option value="indirim-tl">{{ 'discount-tl' | translate }}</option>
+                                        <option value="indirim-yuzde">{{ 'discount-percent' | translate }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" *ngIf="couponForm.get('kuponTipi')?.value !== 'bedava'">
+                                    <label class="text-black dark:text-gray-200">{{ 'discountamount' | translate }}<span style="color:red;">*</span></label>
+                                    <input type="number" formControlName="indirimMiktari" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                                </div>
+
+                                <!-- Satış Kaynakları -->
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'saleschannels' | translate }}</label>
+                                    <select formControlName="satisKaynaklari" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" multiple>
+                                        <option *ngFor="let kaynak of satisKaynaklari" [ngValue]="kaynak._id">{{ kaynak.kaynakAdi }}</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ödeme Tipi -->
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'paymenttype' | translate }}</label>
+                                    <select formControlName="odemeTipi" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" multiple>
+                                        <option *ngFor="let odeme of odemeTipleri" [ngValue]="odeme._id">{{ odeme.odemeAdi }}</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ürün Seçim Butonu -->
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'products' | translate }}</label>
+                                    <button type="button" class="btn btn-secondary w-full" (click)="openProductSelectionModal()">
+                                        {{ 'chooseproducts' | translate }}
+                                    </button>
+                                </div>
+
+                                <!-- Seçili Ürünler Listesi -->
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'selectedproducts' | translate }}</label>
+                                    <div class="flex flex-wrap gap-2 overflow-y-auto dark:text-black"
+                                         style="max-height: 100px; border: 1px solid #d3d3d3; padding: 10px; background:#f1f1f1;">
+                                        <div *ngFor="let product of selectedProducts"
+                                             class="bg-purple-200 px-2 py-1 rounded-full flex items-center">
+                                            <span class="mr-2">{{ product.urunAdi }}</span>
+                                            <button type="button" class="text-red-500 ml-2" (click)="removeProduct(product._id)">
+                                                <icon-trash class="h-4 w-4"></icon-trash>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'numberofcoupons' | translate }}<span style="color:red;">*</span></label>
+                                    <input type="number" formControlName="kuponOgesiSayisi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'startdate' | translate }}<span style="color:red;">*</span></label>
+                                    <input type="date" formControlName="baslangicTarihi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                           [value]="formatDate( couponForm.get('baslangicTarihi')?.value )" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-black dark:text-gray-200">{{ 'enddate' | translate }}<span style="color:red;">*</span></label>
+                                    <input type="date" formControlName="bitisTarihi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                           [value]="formatDate(couponForm.get('bitisTarihi')?.value)" />
+                                </div>
+
+                                <div class="form-group mt-1">
+                                    <label class="text-xs text-gray-500 dark:text-gray-300">{{ 'magazalar' | translate }}<span style="color:red;">*</span></label>
+                                    <select formControlName="magazalar" class="form-input w-full mt-1 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" multiple>
+                                        <option *ngFor="let magaza of magazalar" [value]="magaza._id">{{ magaza.magazaAdi }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group md:col-span-2 flex justify-end space-x-2">
+                                    <button type="button" class="btn btn-success" (click)="saveCoupon()" [disabled]="couponForm.invalid">
+                                        {{ editMode ? ('editcoupon' | translate) : ('addcoupon' | translate) }}
+                                    </button>
+                                    <button type="button" class="btn btn-secondary px-6 py-2 flex items-center" (click)="resetForm()">
+                                        <icon-refresh class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-refresh>
+                                        {{ 'clearForm' | translate }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step3" class="panel mt-6 p-4 bg-white dark:bg-gray-800 dark:text-white rounded-md shadow">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+            <h5 class="text-lg font-semibold dark:text-white-light"> {{ 'couponlist' | translate }}</h5>
+            <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                <!-- Arama Alanı -->
+                <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..."
+                       class="form-input w-64 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            </div>
+        </div>
+
+        <div class="datatable bg-white dark:bg-gray-800 dark:text-white rounded-md shadow">
+            <ng-datatable [rows]="filteredCoupons" [columns]="cols" [sortable]="true" [search]="searchTerm"
+                          [pageSize]="itemsPerPage" [stickyHeader]="true" class="whitespace-nowrap"
+                          firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                          lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                          previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                          nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'>
+
+                <ng-template slot="actions" let-value="data">
+                    <div class="flex items-center gap-2 ">
+                        <button class="btn btn-danger" (click)="deleteCoupon(value)">
+                            <icon-trash class="h-5 w-5 shrink-0"></icon-trash>
+                        </button>
+                        <button type="button" class="btn btn-warning rounded-full" (click)="editCoupon(value)">
+                            <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                        </button>
+                        <button type="button" class="btn btn-secondary px-6 py-2 flex items-center" (click)="downloadExcel(value)">
+                            <icon-download class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-download>
+                            {{ 'downloadexcel' | translate }}
+                        </button>
+                    </div>
+                </ng-template>
+            </ng-datatable>
+        </div>
+
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500  text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>
+
+<!-- Ürün Arama Modal -->
+<ngx-custom-modal #productModal customClass="modal-top">
+    <ng-template #modalHeader>
+        <h5 class="text-black dark:text-white">{{ 'chooseproducts' | translate }}</h5>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <input type="text" [(ngModel)]="modalSearchTerm" (input)="searchProducts()" placeholder="{{ 'search' | translate }}"
+               class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white mb-3" />
+
+        <div *ngIf="filteredProducts.length === 0" class="text-black dark:text-gray-300">
+            <p>{{ 'noitemsfound' | translate }}</p>
+        </div>
+
+        <table *ngIf="filteredProducts.length > 0" class="table-auto w-full border border-gray-300 dark:border-gray-600 dark:text-white dark:bg-gray-800">
+            <thead>
+                <tr class="bg-gray-100 dark:bg-gray-700">
+                    <th class="px-4 py-2 text-black dark:text-gray-200">{{ 'productname' | translate }}</th>
+                    <th class="px-4 py-2 text-black dark:text-gray-200">{{ 'actions' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of filteredProducts" class="border-b border-gray-300 dark:border-gray-600">
+                    <td class="px-4 py-2 text-black dark:text-gray-200">{{ product.urunAdi }}</td>
+                    <td class="px-4 py-2">
+                        <button class="btn btn-primary" (click)="selectProduct(product)">{{ 'select' | translate }}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button type="button" class="btn btn-outline-danger" (click)="productModal.close()">
+            {{ 'close' | translate }}
+        </button>
+    </ng-template>
+</ngx-custom-modal>

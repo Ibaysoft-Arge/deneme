@@ -1,0 +1,156 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-gray-900">
+    <!-- Adisyonlar Paneli (Sol Taraf) -->
+    <div id="step2" class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl
+        dark:from-purple-900 dark:to-purple-700 dark:text-white">
+        <h3 class="text-lg font-semibold mb-4">{{ 'bills' | translate }}</h3>
+        <div *ngFor="let masa of masalarWithOrders" class="flex justify-between items-center mb-2">
+            <span class="flex-1" >{{ masa.tableName }}</span>
+            <span class="flex-1 text-center">{{ masa.currentOrder.siparisTarihi | date:'shortTime' }}</span>
+            <span class="flex-1 text-right">{{ masa.currentOrder.toplamVergiliFiyat | dynamicCurrency }}</span>
+        </div>
+        <div class="border-t border-white/50 mt-2 pt-2 flex justify-between items-center dark:border-white/20">
+            <span class="font-bold flex-1">{{ 'toplam' | translate }}:</span>
+            <span class="font-bold flex-1 text-right">{{ toplamTutar | dynamicCurrency }}</span>
+        </div>
+    </div>
+
+    <!-- Masalar Paneli (Orta Bölüm) -->
+    <div id="step1" class="flex-1 p-4 bg-white dark:bg-gray-900 overflow-y-auto text-gray-700 dark:text-gray-200">
+        <div class="flex items-center mb-4">
+            <h3 class="text-lg font-semibold mr-2 dark:text-white">{{ 'masalar' | translate }}</h3>
+            <button *ngIf="userRole === 'admin' || userRole === 'User'" (click)="tableModal.open()" class="btn btn-primary flex items-center">
+                <icon-plus class="h-5 w-5 mr-1"></icon-plus> {{ 'addnewtable' | translate }}
+            </button>
+        </div>
+        <div *ngIf="masalar.length === 0" class="text-gray-600 dark:text-gray-400">
+            <p>{{ 'Bu alanda masa bulunmuyor' }}</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div *ngFor="let masa of masalar"
+                 (click)="openOrder(masa,'masa', masa._id,selectedcluster!,selectedStore)"
+                 class="p-4 w-full h-auto min-h-[120px] max-h-[180px] rounded-lg text-white text-center shadow-lg cursor-pointer flex flex-col justify-between items-center transition-transform transform hover:scale-105"
+                 [ngClass]="getMasaClass(masa.status)">
+                <div class="flex justify-between items-center w-full text-white dark:text-gray-200">
+                    <span class="text-sm flex items-center">
+                        <icon-users-group class="mr-1 h-5 w-5"></icon-users-group>
+                        {{ masa.currentOrder?.masaBilgisi?.kisiSayisi || masa.currentGuests || 0 }}
+                    </span>
+                    <span *ngIf="masa.status !== 'available'"  class="text-sm flex items-center">
+                        <icon-clock class="mr-1 h-5 w-5"></icon-clock>
+                        {{ getTimeDifference(masa.currentOrder.siparisTarihi) }}
+                    </span>
+                </div>
+                <h4 class="font-semibold text-lg dark:text-gray-100">{{ masa.tableName }}</h4>
+                <div class="text-sm mt-1 flex items-center text-white dark:text-gray-300">
+                    <ng-container *ngIf="masa.status === 'reserved'">
+                        <icon-clock class="mr-1 h-4 w-4"></icon-clock>
+                    </ng-container>
+                    <span>{{ masa.status | translate }}</span>
+                </div>
+                <div *ngIf="masa.status !== 'available'" class="flex justify-between items-center w-full text-xs mt-4 text-white dark:text-gray-300">
+                    <span class="flex items-center">
+                        <icon-user class="mr-1 h-4 w-4"></icon-user> {{ masa.currentOrder.kullaniciAdi || 'N/A' }}
+                    </span>
+                    <span class="flex items-center">
+                        <icon-clock class="mr-1 h-4 w-4"></icon-clock> {{ masa.currentOrder.siparisTarihi | date:'shortTime' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bölge ve Mağaza Seçim Paneli (Sağ Taraf) -->
+    <div id="step3" class="w-[200px] p-4 bg-gray-800 text-white flex flex-col items-start space-y-4 relative rounded-r-xl
+        dark:bg-gray-900 dark:text-gray-200 border-l border-gray-700">
+        <div class="w-full mb-4">
+            <label class="block text-sm font-semibold mb-2 dark:text-gray-200">{{ 'selectstore' | translate }}</label>
+            <ng-select
+                [items]="stores"
+                bindLabel="magazaAdi"
+                bindValue="_id"
+                [(ngModel)]="selectedStore"
+                (change)="onStoreChange(selectedStore)"
+                placeholder="{{ 'Mağaza Seçiniz' | translate }}"
+                class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+            </ng-select>
+        </div>
+        <h3 class="text-lg font-semibold dark:text-white">{{ 'areas' | translate }}</h3>
+        <div *ngFor="let alan of alanlar" (click)="selectArea(alan)"
+             class="w-full p-3 pl-6 text-center font-medium cursor-pointer transition-all duration-200
+                    relative text-sm rounded-r-full rounded-l-none
+                    dark:bg-gray-900"
+             [ngClass]="{
+                'bg-white text-gray-800 dark:bg-white dark:text-gray-900 -ml-4 pl-6 pr-4': selectedArea === alan,
+                'bg-gray-800 text-gray-200 dark:bg-gray-700 dark:text-gray-200': selectedArea !== alan
+             }">
+            {{ alan }}
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+
+    <!-- Yeni Masa Ekleme Modal -->
+    <ngx-custom-modal #tableModal>
+        <ng-template #modalHeader>
+            <h5 class="dark:text-white">{{ 'addnewtable' | translate }}</h5>
+        </ng-template>
+        <ng-template #modalBody>
+            <div class="form-group">
+                <label class="dark:text-gray-200">{{ 'currentGuests' | translate }}</label>
+                <input type="number" [(ngModel)]="newTable.currentGuests" class="form-input w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="dark:text-gray-200">{{ 'tableName' | translate }}</label>
+                <input type="text" [(ngModel)]="newTable.tableName" class="form-input w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="dark:text-gray-200">{{ 'tableArea' | translate }}</label>
+                <div class="flex">
+                    <select [(ngModel)]="newTable.tableArea" class="form-select w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                        <option *ngFor="let alan of alanlar" [value]="alan">{{ alan }}</option>
+                    </select>
+                    <button type="button" class="btn btn-primary ml-2" (click)="openAddAreaModal()">
+                        <icon-plus class="h-4 w-4"></icon-plus>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label class="dark:text-gray-200">{{ 'position' | translate }} (X, Y)</label>
+                <div class="flex space-x-2">
+                    <input type="number" [(ngModel)]="newTable.position.x" placeholder="X"
+                        class="form-input w-1/2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                    <input type="number" [(ngModel)]="newTable.position.y" placeholder="Y"
+                        class="form-input w-1/2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button type="button" class="btn btn-primary" (click)="addTable()">{{ 'add' | translate }}</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="tableModal.close()">{{ 'close' | translate }}</button>
+        </ng-template>
+    </ngx-custom-modal>
+
+    <!-- Yeni Bölge Ekleme Modal -->
+    <ngx-custom-modal #addAreaModal>
+        <ng-template #modalHeader>
+            <h5 class="dark:text-white">{{ 'addarea' | translate }}</h5>
+        </ng-template>
+        <ng-template #modalBody>
+            <div class="form-group">
+                <label class="dark:text-gray-200">{{ 'areaname' | translate }}</label>
+                <input type="text" [(ngModel)]="newArea" class="form-input w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+            </div>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button type="button" class="btn btn-primary" (click)="addArea()">{{ 'add' | translate }}</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="addAreaModal.close()">{{ 'close' | translate }}</button>
+        </ng-template>
+    </ngx-custom-modal>
+</div>

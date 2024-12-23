@@ -1,0 +1,136 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<form [formGroup]="sayimForm" class="dark:bg-black dark:text-white h-full">
+    <div class="panel dark:bg-gray-800 dark:text-white-light">
+        <div class="mb-5">
+            <h5 class="text-lg font-semibold dark:text-white-light">{{ 'sayim' | translate }}</h5>
+        </div>
+
+        <div class="form-group">
+            <label class="dark:text-white-light">{{ 'SayimTipi' | translate }}<span style="color: red">*</span></label>
+            <select class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white" formControlName="sayimTipi" title="{{ 'sayimTipiSec' | translate }}">
+                <option value="Günlük">{{ 'Günlük' | translate }}</option>
+                <option value="Haftalık">{{ 'Haftalık' | translate }}</option>
+                <option value="Aylık">{{ 'Aylık' | translate }}</option>
+            </select>
+        </div>
+
+        <div class="form-group mt-1">
+            <label class="text-xs text-gray-500 dark:text-gray-300">{{ 'magazalar' | translate }}<span style="color: red">*</span></label>
+            <select formControlName="magaza" class="form-input w-full mt-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option *ngFor="let magaza of magazalar" [value]="magaza._id">{{ magaza.magazaAdi }}</option>
+            </select>
+        </div>
+
+        <br />
+        <br />
+
+        <div class="form-group md:col-span-2 flex justify-end space-x-2">
+            <button type="button" class="btn btn-success dark:bg-green-600 dark:hover:bg-green-700 dark:text-white" (click)="sayimBaslat()" [disabled]="sayimForm.invalid">{{ ('sayimBaslat' | translate) }}</button>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<form [formGroup]="sayimFormListe" class="dark:bg-black dark:text-white h-full">
+<div class="panel dark:bg-gray-800 dark:text-white-light">
+    <div class="form-group">
+        <label class="dark:text-white-light">{{ 'startdate' | translate }}</label>
+        <input type="date" class="form-input dark:bg-gray-700 dark:border-gray-600 dark:text-white" formControlName="baslangicTarihi" />
+    </div>
+
+    <div class="form-group">
+        <label class="dark:text-white-light">{{ 'enddate' | translate }}</label>
+        <input type="date" class="form-input dark:bg-gray-700 dark:border-gray-600 dark:text-white" formControlName="bitisTarihi" />
+    </div>
+
+    <div class="form-group">
+      <label class="dark:text-white-light">{{ 'SayimTipi' | translate }}<span style="color: red">*</span></label>
+      <select class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white" formControlName="sayimTipi" title="{{ 'sayimTipiSec' | translate }}">
+          <option value="Günlük">{{ 'Günlük' | translate }}</option>
+          <option value="Haftalık">{{ 'Haftalık' | translate }}</option>
+          <option value="Aylık">{{ 'Aylık' | translate }}</option>
+      </select>
+  </div>
+
+    <br />
+    <div class="form-group md:col-span-2 flex justify-end space-x-2">
+        <button type="button" class="btn btn-success dark:bg-green-600 dark:hover:bg-green-700 dark:text-white" (click)="sayimlariGetir()" [disabled]="sayimFormListe.invalid">{{ 'sayimlariGetir' | translate }}</button>
+    </div>
+
+    <div class="panel dark:bg-gray-800 dark:text-white-light">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+            <h5 class="text-lg font-semibold dark:text-white-light">{{ 'Aktif' | translate }}</h5>
+            <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..." class="form-input w-64 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+        </div>
+
+        <div class="datatable dark:text-white-light">
+            <ng-datatable
+                [rows]="filteredSayim"
+                [columns]="cols"
+                [sortable]="true"
+                [search]="searchTerm"
+                [pageSize]="itemsPerPage"
+                [stickyHeader]="true"
+                class="whitespace-nowrap dark:bg-gray-800 dark:text-white-light"
+                firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ... class="w-4.5 h-4.5 rtl:rotate-180">...</svg>'
+                lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ... class="w-4.5 h-4.5 rtl:rotate-180">...</svg>'
+                previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ... class="w-4.5 h-4.5 rtl:rotate-180">...</svg>'
+                nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" ... class="w-4.5 h-4.5 rtl:rotate-180">...</svg>'
+            >
+                <ng-template slot="actions" let-value="data">
+                    <div class="flex items-center gap-2">
+                        <button class="btn btn-danger dark:bg-red-600 dark:hover:bg-red-700 dark:text-white" (click)="sayimDetay(value)">
+                            <icon-open-book class="h-5 w-5 shrink-0"></icon-open-book>
+                        </button>
+                    </div>
+                </ng-template>
+            </ng-datatable>
+        </div>  
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>
+</form>
+
+
+<!-- Ürün Seçim Modal -->
+<ngx-custom-modal #sayimDetayModal customClass="modal-top dark:bg-gray-800 dark:text-white">
+  <ng-template #modalHeader> </ng-template>
+
+  <ng-template #modalBody>
+    <br />
+      <input
+          type="text"
+          [(ngModel)]="modalSearchTerm"
+          (input)="searchProducts()"
+          placeholder="{{ 'search' | translate }}"
+          class="form-input mt-1 block w-full rounded-md mb-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+      />
+      <table *ngIf="filteredSayimDetay.length > 0" class="table-auto w-full border border-gray-300 dark:border-gray-600">
+          <thead>
+              <tr class="dark:bg-gray-700 dark:text-white">
+                  <th>{{ 'productName' | translate }}</th>
+                  <th>{{ 'actions' | translate }}</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let product of filteredSayimDetay" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <td>{{ product.urunAdi }}</td>
+                  <td><!-- actions if any --></td>
+              </tr>
+          </tbody>
+      </table>
+  </ng-template>
+
+  <ng-template #modalFooter>
+      <button type="button" class="btn btn-outline-danger dark:border-red-600 dark:text-red-400 dark:hover:bg-red-700 dark:hover:text-white" (click)="sayimDetayModal.close()">{{ 'close' | translate }}</button>
+  </ng-template>
+</ngx-custom-modal>

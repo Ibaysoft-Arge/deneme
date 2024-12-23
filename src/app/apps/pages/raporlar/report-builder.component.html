@@ -1,0 +1,65 @@
+<div class="flex dark:bg-black dark:text-white h-full">
+    <div class="w-1/4 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl dark:from-purple-900 dark:to-purple-700">
+      <h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'reportwizard' | translate }}</h3>
+
+      <div class="mb-4">
+        <label class="block mb-1 font-medium dark:text-white">{{ 'datasource' | translate }}</label>
+        <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                [(ngModel)]="selectedReportType"
+                (change)="onReportSelected($any($event.target).value)">
+          <option *ngFor="let r of availableReports" [value]="r.key">{{r.label}}</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <h4 class="font-medium mb-2 dark:text-white">{{ 'fieldselection' | translate }}</h4>
+        <p class="mb-1 font-semibold dark:text-white">{{ 'selectablefields' | translate }}:</p>
+        <ul class="ml-4 list-disc text-gray-200">
+          <li *ngFor="let field of availableFields">
+            <span (click)="onFieldSelected(field)" class="cursor-pointer hover:text-primary transition-colors">
+              {{field.label}}
+            </span>
+          </li>
+        </ul>
+
+        <p class="mt-2 mb-1 font-semibold dark:text-white">{{ 'selectedfields' | translate }}:</p>
+        <ul class="ml-4 list-disc text-gray-200">
+          <li *ngFor="let field of config?.fields">
+            {{field.label}}
+            <span (click)="removeField(field)" class="text-red-400 cursor-pointer hover:text-red-600 transition-colors">X</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mb-4">
+        <h4 class="font-medium mb-2 dark:text-white">{{ 'filters' | translate }}</h4>
+        <div *ngIf="selectedReportType">
+          <label class="dark:text-white">{{ 'selectstore' | translate }}</label>
+          <ng-select [items]="stores" bindLabel="magazaAdi" bindValue="_id" [(ngModel)]="selectedStores" [multiple]="true"
+                     placeholder="Mağaza Seçiniz" class="w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" (change)="onStoreChange()">
+          </ng-select>
+        </div>
+        <label class="block mb-1 font-medium dark:text-white">{{ 'startdate' | translate }}:</label>
+        <input type="date" class="form-input w-full mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="config.filters.startDate">
+        <label class="block mb-1 font-medium dark:text-white">{{ 'enddate' | translate }}:</label>
+        <input type="date" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="config.filters.endDate">
+      </div>
+
+      <div class="mb-4">
+        <h4 class="font-medium mb-2 dark:text-white">{{ 'arrangement' | translate }}</h4>
+        <p class="dark:text-gray-200">{{ 'selectedfields' | translate }}: {{ printFieldsLabels(config?.fields) }}</p>
+      </div>
+
+      <div class="flex space-x-2">
+        <button (click)="runReport()" class="btn btn-primary dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white">{{ 'runthereport' | translate }}</button>
+        <button (click)="saveReport()" class="btn btn-secondary dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-white">{{ 'savethereport' | translate }}</button>
+      </div>
+    </div>
+
+    <div class="flex-1 p-4 bg-white dark:bg-black overflow-y-auto">
+      <h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'reportresults' | translate }}</h3>
+      <app-report-table *ngIf="reportData?.stores && config?.fields"
+                        [data]="reportData.stores" [fields]="config?.fields"
+                        class="dark:bg-gray-800 dark:text-white"></app-report-table>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+.introjs-nextLabel{
+    color: aquamarine !important;
+    visibility: hidden !important;
+    }
+    
+    .introjs-dprevLabel{
+        color: brown !important ;
+    visibility: visible !important;
+    }

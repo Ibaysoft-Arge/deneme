@@ -1,0 +1,114 @@
+<div class="relative flex h-full gap-0 sm:h-[calc(100vh_-_150px)] sm:min-h-0 dark:bg-black dark:text-white">
+  <!-- Sol Panel (Filtreler) -->
+  <div class="w-1/5 p-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white space-y-4 rounded-l-xl flex flex-col dark:from-purple-900 dark:to-purple-700">
+    <h3 class="text-lg font-semibold mb-4 dark:text-white">{{ 'orderlist' | translate }}</h3>
+
+    <!-- Mağaza Seçimi -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium dark:text-white">{{ 'store' | translate }}</label>
+      <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="selectedStore">
+        <option value="">{{ 'all' | translate }}</option>
+        <option *ngFor="let s of stores" [value]="s._id">{{s.magazaAdi}}</option>
+      </select>
+    </div>
+
+    <!-- Tarih Seçimi (tek gün) -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium dark:text-white">{{ 'date' | translate }}</label>
+      <input type="date" [(ngModel)]="selectedDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+    </div>
+
+    <!-- Durum Seçimi -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium dark:text-white">{{ 'status' | translate }}</label>
+      <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="selectedStatus">
+        <option value="">{{ 'all' | translate }}</option>
+        <option value="siparisOlusturuldu">{{ 'ordercreated' | translate }}</option>
+        <option value="hazirlaniyor">{{ 'preparing' | translate }}</option>
+        <option value="pisiriliyor">{{ 'cooking' | translate }}</option>
+        <option value="teslimEdiliyor">{{ 'delivering' | translate }}</option>
+        <option value="tamamlandi">{{ 'finished' | translate }}</option>
+        <option value="iptalEdildi">{{ 'canceled' | translate }}</option>
+      </select>
+    </div>
+
+    <!-- Satış Kaynağı -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium dark:text-white">{{ 'saleresource' | translate }}</label>
+      <select class="form-select w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" [(ngModel)]="selectedSourceFilter">
+        <option value="">{{ 'all' | translate }}</option>
+        <option *ngFor="let source of uniqueSources" [value]="source">{{source}}</option>
+      </select>
+    </div>
+
+    <button (click)="getOrders()" class="btn btn-primary w-full flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white" [disabled]="loading">
+      {{ 'bring' | translate }}
+    </button>
+  </div>
+
+  <!-- Sağ Panel (Tablo) -->
+  <div class="flex-1 p-4 bg-white dark:bg-black overflow-y-auto">
+    <div class="flex items-center mb-4">
+      <h3 class="text-lg font-semibold mr-2 dark:text-white">{{ 'orderlist' | translate }}</h3>
+      <div *ngIf="loading" class="text-sm text-gray-500 ml-2 flex items-center dark:text-gray-300">
+        <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black dark:border-white !border-l-transparent mr-2"></span>
+        {{ 'Loading' | translate }}...
+      </div>
+      <div class="ml-auto flex space-x-2">
+        <!-- Excel & PDF butonları -->
+        <button (click)="exportToExcel()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+          Excel
+        </button>
+        <button (click)="exportAsPDFfromHTML()" class="btn btn-outline-secondary flex items-center dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+          {{ 'pdffromhtml' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="text-red-500 mb-3">{{error}}</div>
+
+    <!-- Toplam Tutar Gösterimi -->
+    <div *ngIf="filteredOrders && filteredOrders.length > 0" class="mb-4 font-medium dark:text-white">
+      {{ 'totalamount' | translate }}: {{ calculateTotalPrice() | number:'1.2-2' }} TL
+    </div>
+
+    <div #reportContent *ngIf="filteredOrders && filteredOrders.length>0">
+      <table class="table-auto w-full text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-collapse">
+        <thead>
+          <tr class="border-b dark:border-gray-700">
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'store' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'OrderNo' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'orderdate' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'customername' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'tablename' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'saleresource' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'status' | translate }}</th>
+            <th class="p-2 text-right dark:bg-gray-700 dark:text-white">{{ 'amountwithtax' | translate }}</th>
+            <th class="p-2 text-left dark:bg-gray-700 dark:text-white">{{ 'process' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders" class="border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700">
+            <td class="p-2">{{ order.magazaAdi }}</td>
+            <td class="p-2">{{ order.orderNo }}</td>
+            <td class="p-2">{{ order.siparisTarihi | date:'medium' }}</td>
+            <td class="p-2">{{ order.musteriAdi || '-' }}</td>
+            <td class="p-2">{{ order.masaAdi || '-' }}</td>
+            <td class="p-2">{{ order.satisKaynakAdi || '-' }}</td>
+            <td class="p-2">{{ order.statu || '-' }}</td>
+            <td class="p-2 text-right">{{ order.toplamVergiliFiyat | number:'1.2-2' }}</td>
+            <td class="p-2">
+              <button (click)="goToOrderDetails(order)" class="btn bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600">
+                {{ 'detail' | translate }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!loading && (!filteredOrders || filteredOrders.length===0)" class="mt-3 p-4 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-md text-center">
+      {{ 'nodatafoundmatching' | translate }}
+    </div>
+  </div>
+</div>

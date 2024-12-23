@@ -1,0 +1,399 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <div class="mb-5">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'stockmanagement' | translate }}</h5>
+    </div>
+
+    <!-- SKU Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+        <!-- SKU Ekleme Accordion Başlangıcı -->
+        <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+            <button
+                type="button"
+                class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+                [ngClass]="{ '!text-primary': accordians3 === 1 }"
+                (click)="accordians3 === 1 ? (accordians3 = null) : (accordians3 = 1)"
+            >
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 shrink-0 text-primary ltr:mr-2 rtl:ml-2"
+                >
+                    <path
+                        opacity="0.5"
+                        d="M7.142 18.9706C5.18539 18.8995 3.99998 18.6568 3.17157 17.8284C2 16.6569 2 14.7712 2 11C2 7.22876 2 5.34315 3.17157 4.17157C4.34315 3 6.22876 3 10 3H14C17.7712 3 19.6569 3 20.8284 4.17157C22 5.34315 22 7.22876 22 11C22 14.7712 22 16.6569 20.8284 17.8284C20.0203 18.6366 18.8723 18.8873 17 18.965"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                    />
+                    <path
+                        d="M9.94955 16.0503C10.8806 15.1192 11.3461 14.6537 11.9209 14.6234C11.9735 14.6206 12.0261 14.6206 12.0787 14.6234C12.6535 14.6537 13.119 15.1192 14.0501 16.0503C16.0759 18.0761 17.0888 19.089 16.8053 19.963C16.7809 20.0381 16.7506 20.1112 16.7147 20.1815C16.2973 21 14.8648 21 11.9998 21C9.13482 21 7.70233 21 7.28489 20.1815C7.249 20.1112 7.21873 20.0381 7.19436 19.963C6.91078 19.089 7.92371 18.0761 9.94955 16.0503Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    />
+                </svg>
+                {{ 'addsku' | translate }}
+                <div class="ltr:ml-auto rtl:mr-auto" [ngClass]="{ 'rotate-180': accordians3 === 1 }">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" class="h-4 w-4">
+                        <path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </button>
+            <div [@slideDownUp]="accordians3 !== 1" class="accordion-content">
+                <div class="space-y-2 border-t border-[#d3d3d3] p-4 text-white-dark dark:text-gray-200 dark:border-[#1b2e4b]">
+                    <!-- Sekme Başlangıcı -->
+                    <div class="mb-5">
+                        <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <a
+                                id="step2"
+                                href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                                (click)="setActiveTab('genel')"
+                            >
+                                {{ 'generalinformation' | translate }}
+                            </a>
+                            <a
+                                id="step3"
+                                href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('altBirimler') }"
+                                (click)="setActiveTab('altBirimler')"
+                            >
+                                {{ 'subunits' | translate }}
+                            </a>
+                            <a
+                                id="step4"
+                                href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('alisFiyatlari') }"
+                                (click)="setActiveTab('alisFiyatlari')"
+                            >
+                                {{ 'purchaseprices' | translate }}
+                            </a>
+                            <a
+                                id="step5"
+                                href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('satisFiyatlari') }"
+                                (click)="setActiveTab('satisFiyatlari')"
+                            >
+                                {{ 'salesprices' | translate }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bilgiler -->
+                    <div *ngIf="isActiveTab('genel')">
+                        <form [formGroup]="addSkuForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'skucode' | translate }}<span style="color: red">*</span></label>
+                                <input type="text" formControlName="skuKod" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'productname' | translate }}<span style="color: red">*</span></label>
+                                <input type="text" formControlName="urunAdi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'category' | translate }}<span style="color: red">*</span></label>
+                                <div class="flex items-center gap-2">
+                                    <select formControlName="kategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" (change)="onCategoryChange()">
+                                        <option *ngFor="let kategori of kategoriler" [value]="kategori._id">{{ kategori.ad }}</option>
+                                    </select>
+                                    <!-- Kategori Ekle Butonu (Yalnızca İkon) -->
+                                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddKategoriModal()">
+                                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'subcategory' | translate }}</label>
+                                <div class="flex items-center gap-2">
+                                    <select formControlName="altKategori" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                        <option value="">{{ 'choosesubcategory' | translate }}</option>
+                                        <option *ngFor="let altKategori of altKategoriler" [value]="altKategori._id">{{ altKategori.ad }}</option>
+                                    </select>
+                                    <!-- Alt Kategori Ekle Butonu (Yalnızca İkon) -->
+                                    <button type="button" class="btn btn-primary rounded-full" (click)="openAddAltKategoriModal()">
+                                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'shelflife' | translate }}<span style="color: red">*</span></label>
+                                <input type="number" formControlName="rafOmruGun" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'barcode' | translate }}</label>
+                                <input type="text" formControlName="barcode" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'color' | translate }}</label>
+                                <input type="text" formControlName="renk" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'accountingcode' | translate }}</label>
+                                <input type="text" formControlName="muhasebeKodu" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'mainunit' | translate }}<span style="color: red">*</span></label>
+                                <select formControlName="anaBirim" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" required>
+                                    <option value="">{{ 'choosemainunit' | translate }}</option>
+                                    <option *ngFor="let birim of validUnits" [value]="birim">{{ birim }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'purchasetaxrate' | translate }}</label>
+                                <input type="number" formControlName="alisKdvOrani" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'saletaxrate' | translate }}</label>
+                                <input type="number" formControlName="satisKdvOrani" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group flex items-center">
+                                <input type="checkbox" formControlName="aktif" id="aktifCheckbox" class="form-checkbox mr-2 dark:border-gray-600 dark:bg-gray-700" />
+                                <label for="aktifCheckbox" class="font-medium text-black dark:text-gray-200">{{ 'isactive' | translate }}</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'sayimTipi' | translate }}</label>
+                                <select formControlName="sayimTipi" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                    <option value=""></option>
+                                    <option value="Günlük">{{ 'Günlük' | translate }}</option>
+                                    <option value="Haftalık">{{ 'Haftalık' | translate }}</option>
+                                    <option value="Aylık">{{ 'Aylık' | translate }}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'shipmenttype' | translate }}</label>
+                                <select formControlName="sevkiyatTuru" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                    <option value=""></option>
+                                    <option value="+4">{{ '+4' | translate }}</option>
+                                    <option value="-18">{{ '-18' | translate }}</option>
+                                    <option value="Kuru">{{ 'Kuru' | translate }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div *ngIf="isActiveTab('altBirimler')">
+                        <!-- Form Group Tanımlaması -->
+                        <div [formGroup]="addSkuForm">
+                            <div formArrayName="altBirimler">
+                                <div *ngFor="let altBirim of altBirimler.controls; let i = index" [formGroupName]="i" class="card mb-4 p-4 shadow bg-white dark:bg-gray-700">
+                                    <label class="font-medium text-black dark:text-gray-200">{{ 'subunitname' | translate }}</label>
+                                    <select formControlName="birimAdi" class="form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white">
+                                        <option *ngFor="let unit of validUnits" [value]="unit">{{ unit }}</option>
+                                    </select>
+                                    <label class="font-medium text-black dark:text-gray-200 mt-2">{{ 'coefficient' | translate }}</label>
+                                    <input type="number" formControlName="katsayi" class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                    <button class="btn btn-danger mt-2" (click)="removeAltBirim(i)">{{ 'delete' | translate }}</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" (click)="addAltBirim()">{{ 'addsubunit' | translate }}</button>
+                        </div>
+                    </div>
+
+                    <!-- Alış Fiyatları Sekmesi -->
+                    <div *ngIf="isActiveTab('alisFiyatlari')">
+                        <div [formGroup]="addSkuForm">
+                            <!-- Form Group Eklendi -->
+                            <div class="table-responsive">
+                                <table class="w-full border-collapse border border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                                    <thead>
+                                        <tr class="text-left bg-gray-100 dark:bg-[#374151]">
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'startdate' | translate }}</th>
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'enddate' | translate }}</th>
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'price' | translate }}</th>
+                                            <th class="p-2 text-right border-b dark:border-gray-600">{{ 'transactions' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="alisFiyatlari">
+                                        <tr *ngFor="let alisFiyat of alisFiyatlari.controls; let i = index" [formGroupName]="i">
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="date" formControlName="baslangicTarihi" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="date" formControlName="bitisTarihi" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="number" formControlName="fiyat" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 text-right border-b dark:border-gray-600">
+                                                <button type="button" class="btn btn-warning rounded-full" (click)="saveAlisFiyat(i)">
+                                                    <icon-save class="h-5 w-5 shrink-0"></icon-save>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="alisFiyatlari.length === 0">
+                                            <td colspan="4" class="p-4 text-center dark:text-gray-300">{{ 'nopriceadded' | translate }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-4 flex items-center" (click)="addAlisFiyat()">
+                                <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                                {{ 'newpurchasepriceadd' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Satış Fiyatları Sekmesi -->
+                    <div *ngIf="isActiveTab('satisFiyatlari')">
+                        <div [formGroup]="addSkuForm">
+                            <div class="table-responsive">
+                                <table class="w-full border-collapse border border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                                    <thead>
+                                        <tr class="text-left bg-gray-100 dark:bg-[#374151]">
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'startdate' | translate }}</th>
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'enddate' | translate }}</th>
+                                            <th class="p-2 border-b dark:border-gray-600">{{ 'price' | translate }}</th>
+                                            <th class="p-2 text-right border-b dark:border-gray-600">{{ 'transactions' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="satisFiyatlari">
+                                        <tr *ngFor="let satisFiyat of satisFiyatlari.controls; let i = index" [formGroupName]="i">
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="date" formControlName="baslangicTarihi" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="date" formControlName="bitisTarihi" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 border-b dark:border-gray-600">
+                                                <input type="number" formControlName="fiyat" class="form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white" />
+                                            </td>
+                                            <td class="p-2 text-right border-b dark:border-gray-600">
+                                                <button type="button" class="btn btn-warning rounded-full" (click)="saveSatisFiyat(i)">
+                                                    <icon-save class="h-5 w-5 shrink-0"></icon-save>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="satisFiyatlari.length === 0">
+                                            <td colspan="4" class="p-4 text-center dark:text-gray-300">{{ 'nosalepriceadded' | translate }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-4 flex items-center" (click)="addSatisFiyat()">
+                                <icon-plus class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-plus>
+                                {{ 'addnewsaleprice' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+                        <!-- Güncelle Butonu -->
+                        <button
+                            type="button"
+                            class="btn btn-success px-6 py-2 flex items-center"
+                            (click)="saveSku()"
+                            [disabled]="addSkuForm.invalid"
+                            *ngIf="editingSkuId"
+                        >
+                            <icon-pencil class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-pencil>
+                            {{ 'update' | translate }}
+                        </button>
+
+                        <!-- Kaydet Butonu -->
+                        <button
+                            type="button"
+                            class="btn btn-primary px-6 py-2 flex items-center"
+                            (click)="saveSku()"
+                            [disabled]="addSkuForm.invalid"
+                            *ngIf="!editingSkuId"
+                        >
+                            <icon-save class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-save>
+                            {{ 'save' | translate }}
+                        </button>
+
+                        <!-- Formu Temizle Butonu -->
+                        <button type="button" class="btn btn-secondary px-6 py-2 flex items-center" (click)="resetForm()">
+                            <icon-refresh class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-refresh>
+                            {{ 'clearForm' | translate }}
+                        </button>
+
+                        <!-- Excel Template İndir Butonu -->
+                        <button type="button" class="btn btn-info px-6 py-2 flex items-center" (click)="downloadExcelTemplate()">
+                            <icon-download class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-download>
+                            {{ 'downloadexceltemplate' | translate }}
+                        </button>
+
+                        <!-- Excel ile Yükle Butonu -->
+                        <label class="btn btn-warning px-6 py-2 flex items-center cursor-pointer">
+                            <icon-send class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"></icon-send>
+                            {{ 'uploadExcel' | translate }}
+                            <input type="file" hidden (change)="onExcelUpload($event)" accept=".xlsx, .xls" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SKU Listesi -->
+    <div id="step6" class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow mt-6">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+            <h5 class="text-lg font-semibold dark:text-white-light">{{ 'skulist' | translate }}</h5>
+            <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                <!-- Arama Alanı -->
+                <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..."
+                       class="form-input w-64 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+
+                <!-- Pasifleri Göster Checkbox -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium dark:text-white-light">{{ 'showpassives' | translate }}</label>
+                    <label class="relative h-4 w-8">
+                        <input
+                            type="checkbox"
+                            class="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                            [(ngModel)]="showPassive"
+                            (change)="applyFilter()"
+                        />
+                        <span
+                            class="block h-full rounded-full bg-[#ebedf2] dark:bg-gray-600 before:absolute before:bottom-0.5 before:left-0.5 before:h-3 before:w-3 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-4"
+                        ></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="step6" class="datatable bg-white dark:bg-gray-700 rounded-md">
+            <ng-datatable [rows]="filteredSkus" [columns]="cols" [sortable]="true" [search]="searchTerm"
+                [pageSize]="itemsPerPage" [stickyHeader]="true" class="whitespace-nowrap"
+                firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            >
+                <ng-template slot="anaBirim" let-value="data"> {{ value.anaBirim || 'Ana Birim Yok' }} </ng-template>
+                <ng-template slot="altBirimler" let-value="data">
+                    <ul class="list-disc ml-5">
+                        <li *ngFor="let altBirim of value.altBirimler">{{ altBirim.birimAdi }} - {{ 'coefficient' | translate }}: {{ altBirim.katsayi }}</li>
+                    </ul>
+                </ng-template>
+                <ng-template slot="aktif" let-value="data"> {{ value.aktif === true ? 'Aktif' : 'Pasif' }} </ng-template>
+                <ng-template slot="actions" let-value="data">
+                    <div class="flex items-center gap-2 justify-end">
+                        <button type="button" class="btn btn-warning rounded-full" (click)="editSKU(value)">
+                            <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                        </button>
+                    </div>
+                </ng-template>
+            </ng-datatable>
+        </div>
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+</div>

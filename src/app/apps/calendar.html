@@ -1,0 +1,138 @@
+<div>
+    <div class="panel">
+        <div class="mb-5">
+            <div class="mb-4 flex flex-col items-center justify-center sm:flex-row sm:justify-between">
+                <div class="mb-4 sm:mb-0">
+                    <div class="text-center text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">
+                        {{ 'calendar' | translate }}
+                    </div>
+                    <div class="mt-2 flex flex-wrap items-center justify-center sm:justify-start">
+                        <div class="flex items-center ltr:mr-4 rtl:ml-4 text-gray-700 dark:text-gray-300">
+                            <div class="h-2.5 w-2.5 rounded-sm bg-danger ltr:mr-2 rtl:ml-2"></div>
+                            <div>Cancelled</div>
+                        </div>
+                        <div class="flex items-center ltr:mr-4 rtl:ml-4 text-gray-700 dark:text-gray-300">
+                            <div class="h-2.5 w-2.5 rounded-sm bg-info ltr:mr-2 rtl:ml-2"></div>
+                            <div>Pending</div>
+                        </div>
+                        <div class="flex items-center ltr:mr-4 rtl:ml-4 text-gray-700 dark:text-gray-300">
+                            <div class="h-2.5 w-2.5 rounded-sm bg-success ltr:mr-2 rtl:ml-2"></div>
+                            <div>Confirmed</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mağaza Seçim Dropdown'ı -->
+                <div class="form-group">
+                    <label for="magaza" class="font-semibold text-gray-700 dark:text-gray-300">Mağaza Seçin</label>
+                    <select [(ngModel)]="selectedMagazaId" (change)="onMagazaChange()"
+                        class="form-select p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white">
+                        <option *ngFor="let magaza of magazalar" [value]="magaza._id">
+                            {{ magaza.magazaAdi }}
+                        </option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="editEvent()">
+                    <icon-plus class="ltr:mr-2 rtl:ml-2" />
+                    {{ 'createevent' | translate }}
+                </button>
+            </div>
+            <div class="calendar-wrapper dark:text-gray-300">
+                <full-calendar #calendar [options]="calendarOptions" [deepChangeDetection]="true">
+                    <ng-template #eventContent let-arg>
+                        <div class="fc-event-main-frame flex items-center px-1 py-0.5 text-white">
+                            <div class="fc-event-time px-0.5 font-semibold">{{ arg.timeText }}</div>
+                            <div class="fc-event-title-container">
+                                <div class="fc-event-title fc-sticky px-0.5 !font-medium">{{ arg.event.title }}</div>
+                                <div class="fc-event-description px-0.5">{{ arg.event.extendedProps.description }}</div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </full-calendar>
+            </div>
+        </div>
+    </div>
+
+    <ngx-custom-modal #isAddEventModal class="no-footer dark:bg-gray-800">
+        <ng-template #modalHeader>
+            <div class="!font-medium dark:text-white">{{ params.value.id ? 'Edit Event' : 'Add Event' }}</div>
+        </ng-template>
+
+        <ng-template #modalBody>
+            <form [formGroup]="params" class="text-sm" (ngSubmit)="addOrUpdateReservation()" ngNativeValidate>
+                <div class="mb-5">
+                    <label for="table" class="font-semibold text-gray-700 dark:text-gray-300">Select Table:</label>
+                    <select id="table" class="form-select p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="table" required (change)="onTableChange()">
+                        <option *ngFor="let table of tables" [value]="table._id">{{ table.tableName }}</option>
+                    </select>
+                </div>
+
+                <div class="mb-5">
+                    <label for="reservationDate" class="font-semibold text-gray-700 dark:text-gray-300">Event Start Date:</label>
+                    <input id="reservationDate" type="date" class="form-input p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="reservationDate" required />
+                </div>
+
+                <div class="mb-5">
+                    <label for="startTime" class="font-semibold text-gray-700 dark:text-gray-300">Start Time:</label>
+                    <input id="startTime" type="time" class="form-input p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="startTime" required />
+                </div>
+
+                <div class="mb-5">
+                    <label for="reservationDateEnd" class="font-semibold text-gray-700 dark:text-gray-300">Event End Date:</label>
+                    <input id="reservationDateEnd" type="date" class="form-input p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="reservationDateEnd" required />
+                </div>
+
+                <div class="mb-5">
+                    <label for="endTime" class="font-semibold text-gray-700 dark:text-gray-300">End Time:</label>
+                    <input id="endTime" type="time" class="form-input p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="endTime" required />
+                </div>
+
+                <div class="mb-5">
+                    <label for="notes" class="font-semibold text-gray-700 dark:text-gray-300">Event Description:</label>
+                    <textarea id="notes" class="form-textarea min-h-[130px] p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="notes" placeholder="Enter Event Description"></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="clientCount" class="font-semibold text-gray-700 dark:text-gray-300">Number of Clients:</label>
+                    <input id="clientCount" type="number" class="form-input p-2 border rounded-md dark:bg-gray-700 dark:border-gray-500 dark:text-white"
+                        formControlName="clientCount" placeholder="Enter number of clients" [max]="selectedTableCapacity" />
+                </div>
+
+                <div class="mb-5" *ngIf="params.value.id">
+                    <label class="font-semibold text-gray-700 dark:text-gray-300">Status:</label>
+                    <div>
+                        <label class="inline-flex items-center mr-4 text-gray-700 dark:text-gray-300">
+                            <input type="radio" formControlName="status" [value]="'confirmed'" class="form-radio dark:bg-gray-700 dark:border-gray-500" />
+                            <span class="ml-2">Confirmed</span>
+                        </label>
+                        <label class="inline-flex items-center mr-4 text-gray-700 dark:text-gray-300">
+                            <input type="radio" formControlName="status" [value]="'pending'" class="form-radio dark:bg-gray-700 dark:border-gray-500" />
+                            <span class="ml-2">Pending</span>
+                        </label>
+                        <label class="inline-flex items-center text-gray-700 dark:text-gray-300">
+                            <input type="radio" formControlName="status" [value]="'cancelled'" class="form-radio dark:bg-gray-700 dark:border-gray-500" />
+                            <span class="ml-2">Cancelled</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center justify-end">
+                    <button type="button" class="btn btn-outline-danger" (click)="isAddEventModal.close()">Cancel</button>
+
+                    <button *ngIf="params.value.id" type="button" class="btn btn-outline-danger ltr:ml-4 rtl:mr-4"
+                        (click)="deleteReservation()">Delete Event</button>
+
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
+                        {{ params.value.id ? 'Update Event' : 'Create Event' }}
+                    </button>
+                </div>
+            </form>
+        </ng-template>
+    </ngx-custom-modal>
+
+</div>

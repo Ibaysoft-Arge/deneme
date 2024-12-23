@@ -1,0 +1,232 @@
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen p-4">
+    <div class="mb-5 bg-white dark:bg-[#1f2937] rounded shadow-md p-4">
+        <div class="flex flex-wrap items-end gap-4">
+            <!-- Tarih seçimi -->
+            <div>
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'date' | translate }}</label>
+                <input type="date" [(ngModel)]="selectedDate" class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Mağaza Seçimi (multiple) -->
+            <div class="flex-1 min-w-[200px]">
+                <label class="block mb-1 font-medium text-black dark:text-white">{{ 'selectstoreoptional' | translate }}</label>
+                <ng-select [items]="stores"
+                           bindLabel="magazaAdi"
+                           bindValue="_id"
+                           [(ngModel)]="selectedStores"
+                           [multiple]="true"
+                           placeholder="Select one or more stores or leave empty"
+                           class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                </ng-select>
+            </div>
+
+            <!-- Apply Butonu -->
+            <button (click)="fetchOdbData()" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white rounded py-2 px-4">
+                Apply
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Sütun 1: ODB + Operasyon Süreleri -->
+        <div class="flex flex-col space-y-2 min-h-[350px]">
+            <!-- ODB Paneli -->
+            <div class="bg-white dark:bg-[#1f2937] rounded shadow p-2 flex flex-col flex-grow">
+                <h5 class="text-base font-semibold mb-2 text-black dark:text-white">ODB</h5>
+                <div *ngIf="isLoading" class="text-center py-2 text-xs text-gray-500 dark:text-gray-400">
+                    {{ 'Loading' | translate }}...
+                </div>
+                <div *ngIf="!isLoading && !odbData" class="text-center py-2 text-gray-500 text-xs flex-grow dark:text-gray-400">
+                    {{ 'nodatadisplay' | translate }}
+                </div>
+                <div *ngIf="odbData" class="overflow-x-auto flex-grow">
+                    <table class="w-full text-xs text-gray-700 dark:text-gray-300">
+                        <thead>
+                            <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+                                <th class="py-1 font-semibold text-left">{{ 'period' | translate }}</th>
+                                <th class="py-1 font-semibold text-center">{{ 'revenue' | translate }}</th>
+                                <th class="py-1 font-semibold text-center">{{ '.sip' | translate }}</th>
+                                <th class="py-1 font-semibold text-center">{{ 'o.a.t' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200 dark:border-gray-700">
+                                <td class="py-1 font-medium">{{ 'TODAY' | translate }}</td>
+                                <td class="py-1 text-center text-red-500 font-medium">{{ odbData?.bCiro || '0' }}</td>
+                                <td class="py-1 text-center text-red-500 font-medium">{{ odbData?.bSiparis || '0' }}</td>
+                                <td class="py-1 text-center text-red-500 font-medium">{{ odbData?.bOrtAdTutar || '0' }}</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-700">
+                                <td class="py-1 font-medium">{{ 'lastweek' | translate }}</td>
+                                <td class="py-1 text-center">{{ odbData?.bHCiro || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.gHSiparis || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.gHOrtAdTutar || '0' }}</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-700">
+                                <td class="py-1 font-medium">{{ 'lastyear' | translate }}</td>
+                                <td class="py-1 text-center">{{ odbData?.gYCiro || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.gYSiparis || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.gYOrtAdTutar || '0' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="py-1 font-medium">{{ 'startofthemonth' | translate }}</td>
+                                <td class="py-1 text-center">{{ odbData?.aCiro || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.aSiparis || '0' }}</td>
+                                <td class="py-1 text-center">{{ odbData?.aOrtAdTutar || '0' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Operasyon Süreleri Paneli -->
+            <div class="bg-gradient-to-b from-purple-700 to-purple-500 text-white text-[12px] p-1 rounded flex justify-evenly items-center h-[60px] shadow">
+                <div class="flex flex-col items-center">
+                    <icon-shopping-cart class="h-5 w-5 mb-2 text-white/90"></icon-shopping-cart>
+                    <div>{{ odbData?.ortSipAlmaSure || '0' }}</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <icon-edit class="h-5 w-5 mb-2 text-white/90"></icon-edit>
+                    <div>{{ odbData?.ortHazSure || '0' }}</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <icon-coffee class="h-5 w-5 mb-2 text-white/90"></icon-coffee>
+                    <div>{{ odbData?.ortPisirmeSure || '0' }}</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <icon-send class="h-5 w-5 mb-2 text-white/90"></icon-send>
+                    <div>{{ odbData?.ortCikisSure || '0' }}</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <icon-home class="h-5 w-5 mb-2 text-white/90"></icon-home>
+                    <div>{{ odbData?.ortTeslimSure || '0' }}</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <icon-refresh class="h-5 w-5 mb-2 text-white/90"></icon-refresh>
+                    <div>{{ odbData?.ortDonusSure || '0' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sütun 2: Kaynak Bazında Sipariş (Donut) -->
+        <div class="bg-white dark:bg-[#1f2937] rounded shadow flex flex-col items-center p-2 min-h-[350px]">
+            <h5 class="text-base font-semibold mb-2 text-black dark:text-white">{{ 'basedonresources' | translate }}</h5>
+            <div *ngIf="isLoadingSource" class="text-center py-2 text-xs text-gray-500 dark:text-gray-400">
+                {{ 'Loading' | translate }}...
+            </div>
+            <div *ngIf="!isLoadingSource && (!sourceOrders || sourceOrders.length === 0)" class="text-center py-2 text-gray-500 text-xs flex-grow dark:text-gray-400">
+                {{ 'nodatadisplay' | translate }}
+            </div>
+            <div *ngIf="sourceOrders && sourceOrders.length > 0" class="flex-grow flex flex-col items-center justify-center">
+                <div style="width:300px;height:300px;">
+                    <apx-chart
+                        [series]="orderCountChart.series"
+                        [chart]="orderCountChart.chart"
+                        [labels]="orderCountChart.labels"
+                        [legend]="orderCountChart.legend"
+                        [colors]="orderCountChart.colors"
+                        [dataLabels]="orderCountChart.dataLabels"
+                        [tooltip]="orderCountChart.tooltip">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sütun 3: Kaynak Bazında Ciro (Donut) -->
+        <div class="bg-white dark:bg-[#1f2937] rounded shadow flex flex-col items-center p-2 min-h-[350px]">
+            <h5 class="text-base font-semibold mb-2 text-black dark:text-white">{{ 'basedonresourcesrevenue' | translate }}</h5>
+            <div *ngIf="isLoadingSource" class="text-center py-2 text-xs text-gray-500 dark:text-gray-400">
+                {{ 'Loading' | translate }}...
+            </div>
+            <div *ngIf="!isLoadingSource && (!sourceOrders || sourceOrders.length === 0)" class="text-center py-2 text-gray-500 text-xs flex-grow dark:text-gray-400">
+                {{ 'nodatadisplay' | translate }}
+            </div>
+            <div *ngIf="sourceOrders && sourceOrders.length > 0" class="flex-grow flex flex-col items-center justify-center">
+                <div style="width:300px;height:300px;">
+                    <apx-chart
+                        [series]="totalTaxFreeChart.series"
+                        [chart]="totalTaxFreeChart.chart"
+                        [labels]="totalTaxFreeChart.labels"
+                        [legend]="totalTaxFreeChart.legend"
+                        [colors]="totalTaxFreeChart.colors"
+                        [dataLabels]="totalTaxFreeChart.dataLabels"
+                        [tooltip]="totalTaxFreeChart.tooltip">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ek Bölüm: İdeal Maliyet, Saatlik Sipariş ve Ciro -->
+    <div class="mt-4 bg-gray-50 dark:bg-gray-900 p-4 rounded shadow">
+        <div class="grid grid-cols-1 md:grid-cols-10 gap-4">
+          <!-- İdeal Maliyet -->
+          <div class="bg-gradient-to-r from-violet-500 to-violet-400 text-white p-4 min-h-[150px] col-span-2 rounded shadow">
+            <h5 class="font-semibold text-lg">{{ 'idealcostpercentage' | translate }}</h5>
+            <div class="text-2xl font-bold">{{ idealCost }}%</div>
+          </div>
+
+          <!-- Saatlik Sipariş -->
+          <div class="bg-white dark:bg-[#1f2937] rounded shadow p-2 flex flex-col min-h-[150px] col-span-4">
+            <h5 class="text-base font-semibold mb-2 text-black dark:text-white">{{ 'hourlyorder' | translate }}</h5>
+            <div *ngIf="isLoadingHourly" class="text-center text-xs text-gray-500 dark:text-gray-400 py-2">{{ 'Loading' | translate }}...</div>
+            <div *ngIf="!isLoadingHourly && hourlyData.length === 0" class="text-center text-xs text-gray-500 dark:text-gray-400 py-2">{{ 'nodatadisplay' | translate }}</div>
+            <div *ngIf="hourlyData.length > 0" class="flex-grow">
+              <apx-chart
+                [series]="hourlyOrdersChart.series"
+                [chart]="hourlyOrdersChart.chart"
+                [xaxis]="hourlyOrdersChart.xaxis">
+              </apx-chart>
+            </div>
+          </div>
+
+          <!-- Saatlik Ciro -->
+          <div class="bg-white dark:bg-[#1f2937] rounded shadow p-2 flex flex-col min-h-[150px] col-span-4">
+            <h5 class="text-base font-semibold mb-2 text-black dark:text-white">{{ 'hourlyrevenue' | translate }}</h5>
+            <div *ngIf="isLoadingHourly" class="text-center text-xs text-gray-500 dark:text-gray-400 py-2">{{ 'Loading' | translate }}...</div>
+            <div *ngIf="!isLoadingHourly && hourlyData.length === 0" class="text-center text-xs text-gray-500 dark:text-gray-400 py-2">{{ 'nodatadisplay' | translate }}</div>
+            <div *ngIf="hourlyData.length > 0" class="flex-grow">
+              <apx-chart
+                [series]="hourlyRevenueChart.series"
+                [chart]="hourlyRevenueChart.chart"
+                [xaxis]="hourlyRevenueChart.xaxis"
+                [tooltip]="hourlyRevenueChart.tooltip">
+              </apx-chart>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Mağaza Bazında Günlük Ciro Tablosu -->
+    <div class="mt-4 bg-white dark:bg-[#1f2937] rounded shadow p-4">
+      <div class="mb-5 flex items-center justify-between">
+          <h5 class="text-lg font-semibold dark:text-white">{{ 'storewisetodayrevenue' | translate }}</h5>
+      </div>
+      <div class="table-responsive">
+          <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+              <thead>
+                  <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+                      <th class="py-1 font-semibold text-left">{{ 'store' | translate }}</th>
+                      <th class="py-1 font-semibold text-left">{{ 'type' | translate }}</th>
+                      <th class="py-1 font-semibold text-right">{{ 'todayrevenue' | translate }}</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let store of dailyStoreRevenues" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <td class="py-1 font-medium">{{ store.magazaAdi }}</td>
+                      <td class="py-1">{{ store.magazaTuru }}</td>
+                      <td class="py-1 text-right font-medium">{{ store.toplamCiro | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr *ngFor="let entry of ciroByType | keyvalue" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <td class="py-1 font-medium">{{ entry.key }}</td>
+                      <td class="py-1 text-right" colspan="2">{{ entry.value }}</td>
+                  </tr>
+                  <tr class="font-semibold border-t border-gray-200 dark:border-gray-700">
+                      <td class="py-1">{{ 'total' | translate }}</td>
+                      <td colspan="2" class="py-1 text-right">{{ totalCiro | number:'1.2-2' }}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+</div>

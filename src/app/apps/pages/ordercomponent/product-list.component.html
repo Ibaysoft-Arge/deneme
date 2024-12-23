@@ -1,0 +1,42 @@
+<div *ngIf="groupedProducts">
+    <div *ngFor="let group of groupedProducts | keepOriginalOrder; trackBy: trackByGroupKey" class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 border-b pb-2 mb-4 dark:border-gray-700">
+        {{ group.key }}
+      </h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div
+          *ngFor="let product of group.value; trackBy: trackByProductId"
+          (click)="onProductClick(product)"
+          class="p-4 bg-white dark:bg-gray-800 dark:text-gray-200 shadow rounded-lg relative cursor-pointer hover:shadow-lg transition-transform duration-200 flex flex-col items-center"
+        >
+          <!-- Ürün Resmi -->
+          <div
+            class="product-image w-full h-24 bg-gray-100 dark:bg-gray-700 rounded-md mb-2 flex items-center justify-center overflow-hidden"
+          >
+            <ng-container *ngIf="getImageUrl(product); else noImage">
+              <img [src]="getImageUrl(product)" alt="Ürün Resmi" class="w-auto h-full object-cover" />
+            </ng-container>
+            <ng-template #noImage>
+              <span class="text-gray-400 text-xs dark:text-gray-300">Resim Yok</span>
+            </ng-template>
+          </div>
+
+          <!-- Ürün Adı -->
+          <h4 class="text-lg font-bold dark:text-gray-100">{{ product.urunAdi | capitalize }}</h4>
+
+          <!-- Fiyat Bilgisi -->
+          <p class="mt-2">
+            <span *ngIf="product.isOzelFiyat" class="text-gray-400 dark:text-gray-300 line-through mr-2">
+              {{ product.standartFiyat | dynamicCurrency }}
+            </span>
+            <span *ngIf="product.isOzelFiyat" class="text-green-600 font-semibold dark:text-green-400">
+              {{ product.ozelFiyat | dynamicCurrency }}
+            </span>
+            <span *ngIf="!product.isOzelFiyat" class="text-gray-600 dark:text-gray-300">
+              {{ product.standartFiyat | dynamicCurrency }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

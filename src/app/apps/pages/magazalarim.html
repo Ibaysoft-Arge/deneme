@@ -1,0 +1,323 @@
+<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<div class="panel bg-white dark:bg-gray-800 dark:text-white p-4 rounded-md shadow">
+    <div class="mb-5">
+        <h5 class="text-lg font-semibold dark:text-white-light">{{ 'magazamanagement' | translate }}</h5>
+    </div>
+
+    <!-- Mağaza Ekleme Formu -->
+    <div class="space-y-2 font-semibold">
+        <div id="step1" class="rounded border border-[#d3d3d3] dark:border-[#1b2e4b]">
+            <button type="button"
+                class="flex w-full items-center p-4 text-white-dark dark:text-gray-100 dark:bg-[#1b2e4b]"
+                [ngClass]="{ '!text-primary': accordians3 === 1 }"
+                (click)="accordians3 === 1 ? (accordians3 = null) : (accordians3 = 1)">
+                {{ 'addmagaza' | translate }}
+            </button>
+            <div [@slideDownUp]="accordians3 !== 1" class="accordion-content">
+                <div
+                    class="space-y-2 border-t border-[#d3d3d3] dark:border-[#1b2e4b] p-4 text-white-dark dark:text-gray-200">
+
+                    <!-- Sekme Başlangıcı -->
+                    <div class="mb-5">
+                        <div class="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                            <a id="step2" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('genel') }"
+                                (click)="setActiveTab('genel')">
+                                {{ 'generalinformation' | translate }}
+                            </a>
+                            <a id="step3" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('detay') }"
+                                (click)="setActiveTab('detay')">
+                                {{ 'details' | translate }}
+                            </a>
+                            <a id="step4" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('odemetipi') }"
+                                (click)="setActiveTab('odemetipi')">
+                                {{ 'Ödeme Tipleri' | translate }}
+                            </a>
+                            <a id="stepLokasyon" href="javascript:;"
+                                class="-mb-[1px] block border border-transparent p-3.5 py-2 !outline-none transition duration-300 hover:text-primary dark:hover:border-b-black"
+                                [ngClass]="{ '!border-white-light !border-b-white text-primary dark:!border-[#191e3a] dark:!border-b-black': isActiveTab('lokasyon') }"
+                                (click)="setActiveTab('lokasyon')">
+                                {{ 'location' | translate }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bilgiler Sekmesi -->
+                    <div *ngIf="isActiveTab('genel')">
+                        <form [formGroup]="addMagazaForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'storename' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="magazaAdi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'brandname' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="markaAdi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'ADDRESS' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <textarea formControlName="adres"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'applydate' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="date" formControlName="basvurutarihi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'employeenumber' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="number" formControlName="calisansayisi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'mobilephone' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="tel" formControlName="ceptel"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'companyowner' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="firmasahip"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'province' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="il"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'town' | translate }}<span
+                                        style="color:red;">*</span></label>
+                                <input type="text" formControlName="ilce"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'email' | translate }}<span
+                                        style="color:red;">*</span></label>
+                                <input type="email" formControlName="mail"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'phone' | translate }}<span
+                                        style="color:red;">*</span></label>
+                                <input type="tel" formControlName="tel"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'degree' | translate }}<span
+                                        style="color:red;">*</span></label>
+                                <input type="text" formControlName="unvan"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'storecode' | translate
+                                    }}<span style="color:red;">*</span></label>
+                                <input type="text" formControlName="verilenmagazakodu"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'type' | translate
+                                    }}</label>
+                                <select formControlName="tur"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                    <option value="Franchise">Franchise</option>
+                                    <option value="Corporate">Corporate</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Detaylar Sekmesi -->
+                    <div *ngIf="isActiveTab('detay')">
+                        <form [formGroup]="addMagazaForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'cluster' | translate
+                                    }}</label>
+                                <div class="flex items-center gap-2">
+                                    <select formControlName="cluster"
+                                        class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                        <option value="">{{ 'chooseclusteroptional' | translate }}</option>
+                                        <option *ngFor="let cluster of clusters" [value]="cluster._id">{{ cluster.ad }}
+                                        </option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary rounded-full"
+                                        (click)="openAddClusterModal()">
+                                        <icon-plus class="h-5 w-5 shrink-0"></icon-plus>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'otherjobs' | translate
+                                    }}</label>
+                                <textarea formControlName="digerisler"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'otherjobsfoundingdate' |
+                                    translate }}</label>
+                                <input type="date" formControlName="digerislerkurulustarihi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'fax' | translate }}</label>
+                                <input type="text" formControlName="fax"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'traderegistrynumber' |
+                                    translate }}</label>
+                                <input type="text" formControlName="ticsicilno"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'taxoffice' | translate
+                                    }}</label>
+                                <input type="text" formControlName="verdairesi"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div class="form-group">
+                                <label class="font-medium text-black dark:text-gray-200">{{ 'taxnumber' | translate
+                                    }}</label>
+                                <input type="text" formControlName="verno"
+                                    class="form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Odeme Tipi Sekmesi -->
+                    <div *ngIf="isActiveTab('odemetipi')">
+                        <form [formGroup]="addMagazaForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <ng-select [items]="odemetip" bindLabel="odemeAdi" bindValue="_id"
+                                formControlName="odemeTipleri" [multiple]="true" [appendTo]="'body'"
+                                placeholder="{{ 'selectpaymenttype' | translate }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                            </ng-select>
+                        </form>
+                    </div>
+                    <!-- Lokasyon Sekmesi İçeriği -->
+                    <div *ngIf="isActiveTab('lokasyon')">
+                        <!-- Excel İçe Aktar Butonu ve Dosya Input'u -->
+                        <div class="flex items-center space-x-4 mb-4">
+                            <button type="button" (click)="openFileSelector()" class="btn btn-primary">
+                                {{ 'importexcel' | translate }}
+                            </button>
+                            <input type="file" #fileInput style="display:none" (change)="onFileSelected($event)" />
+                        </div>
+
+                        <!-- Lokasyon Listesi Tablosu -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300 dark:border-gray-600">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-2">{{ 'roadid' | translate }}</th>
+                                        <th class="px-4 py-2">{{ 'roadname' | translate }}</th>
+                                        <th class="px-4 py-2">{{ 'street' | translate }}</th>
+                                        <th class="px-4 py-2">{{ 'district' | translate }}</th>
+                                        <th class="px-4 py-2">{{ 'PROVINCE' | translate }}</th>
+                                        <th class="px-4 py-2">{{ 'branchcode' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let lok of lokasyonList">
+                                        <td class="border px-4 py-2">{{ lok.yolID }}</td>
+                                        <td class="border px-4 py-2">{{ lok.yolAdi }}</td>
+                                        <td class="border px-4 py-2">{{ lok.mahalle }}</td>
+                                        <td class="border px-4 py-2">{{ lok.ilce }}</td>
+                                        <td class="border px-4 py-2">{{ lok.il }}</td>
+                                        <td class="border px-4 py-2">{{ lok.SubeKodu }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <!-- Form Eylemleri -->
+                    <div class="form-group flex justify-end space-x-2 mt-4 md:col-span-2">
+                        <button type="button" class="btn btn-success px-6 py-2 flex items-center" (click)="saveMagaza()"
+                            [disabled]="addMagazaForm.invalid" *ngIf="editingMagazaId">
+                            {{ 'update' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-primary px-6 py-2 flex items-center" (click)="saveMagaza()"
+                            [disabled]="addMagazaForm.invalid" *ngIf="!editingMagazaId">
+                            {{ 'save' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-secondary px-6 py-2 flex items-center"
+                            (click)="resetForm()">
+                            {{ 'Yeni Mağaza' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step5" class="panel mt-6 p-4 bg-white dark:bg-gray-800 dark:text-white rounded-md shadow">
+        <div class="mb-5 flex flex-wrap gap-5 md:flex-row md:items-center">
+            <h5 class="text-lg font-semibold dark:text-white-light"> {{ 'magazamanagement' | translate }}</h5>
+            <div class="flex items-center ltr:ml-auto rtl:mr-auto gap-4">
+                <!-- Arama Alanı -->
+                <input [(ngModel)]="searchTerm" type="text" placeholder="{{ 'search' | translate }}..."
+                    class="form-input w-64 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+
+                <!-- Pasifleri Göster Dropdown -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium dark:text-white-light">
+                        {{ 'showpassives' | translate }}
+                    </label>
+                    <select
+                        class="custom_select w-full cursor-pointer border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        [(ngModel)]="selectedStatus" (change)="applyFilter()">
+                        <option value="all">{{ 'Tümü' | translate }}</option>
+                        <option value="aktif">{{ 'Aktif' | translate }}</option>
+                        <option value="pasif">{{ 'Pasif' | translate }}</option>
+                        <option value="beklemede">{{ 'Beklemede' | translate }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="datatable bg-white dark:bg-gray-800 dark:text-white rounded-md shadow">
+            <ng-datatable [rows]="filteredMagazalar" [columns]="cols" [sortable]="true" [search]="searchTerm"
+                [pageSize]="itemsPerPage" [stickyHeader]="true" class="whitespace-nowrap"
+                firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5 rtl:rotate-180"><path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'>
+
+                <ng-template slot="aktif" let-value="data">
+                    {{ value.statu === true ? 'Aktif' : 'Pasif' }}
+                </ng-template>
+                <ng-template slot="actions" let-value="data">
+                    <div class="flex items-center gap-2 justify-end">
+                        <button type="button" class="btn btn-warning rounded-full" (click)="editMagaza(value)">
+                            <icon-pencil class="h-5 w-5 shrink-0"></icon-pencil>
+                        </button>
+                    </div>
+                </ng-template>
+            </ng-datatable>
+        </div>
+
+    </div>
+    <div class="fixed bottom-4 center-4 z-10">
+        <a href="https://www.youtube.com/watch?v=UeW3a7EmHRA" class="btn rounded-full shadow-lg p-3 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                 hover:from-yellow-500 hover:via-red-600 hover:to-orange-500 text-white transition-transform transform
+                 hover:scale-105 flex items-center justify-center animate-bounce glightbox"style="border:none;">
+          <icon-help-circle class="h-6 w-6"></icon-help-circle>
+        </a>
+      </div>
+
+</div>
